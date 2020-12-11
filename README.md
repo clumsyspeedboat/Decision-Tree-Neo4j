@@ -42,7 +42,7 @@ The goal of this project is to accelerated the analysis of highly interlinked cl
 
 ```
 * Survey of Decision Tree algorithms in Java - Nasim, Danny
-* Prospects of Decision Tree algorithms being implemented on a graph database like Neo4j
+* Prospects of Decision Tree algorithms being implemented on a graph database like Neo4j - Nasim, Danny
 
 ```
 
