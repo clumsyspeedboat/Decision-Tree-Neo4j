@@ -41,7 +41,7 @@ public class CrossValidation {
 		this.attributes = input.getAttributeSet();
 
 		this.target = input.getTargetAttribute();
-
+		
 
 		this.testBundles = new ArrayList<ArrayList<Instance>>();
 
@@ -74,9 +74,7 @@ public class CrossValidation {
 		for(int i = 0; i < totalInstances.size(); i++) {
 			lastBundle.add(totalInstances.get(i));
 		}
-		
 		testBundles.add(lastBundle);
-
 	}
 	
 	/**
@@ -136,7 +134,6 @@ public class CrossValidation {
 		shuffle(crossValidationN);
 		scores = new ArrayList<Double>();
 
-
 		for(int i = 0; i < testBundles.size(); i++) {
 			trainInstances = new ArrayList<Instance>();
 
@@ -152,7 +149,7 @@ public class CrossValidation {
 					trainInstances.addAll(testBundles.get(j));
 				}
 			}
-
+            
 
 			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 			root = tree.construct();

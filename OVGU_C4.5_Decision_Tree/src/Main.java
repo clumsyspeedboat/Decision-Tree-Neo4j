@@ -8,11 +8,11 @@ import ProcessOutput.PrintTree;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-    	
-    	long startTime = System.nanoTime();
 
         Scanner in = new Scanner(System.in);
         System.out.println("===============================================================");
+        
+        long startTime = System.nanoTime();
         CrossValidation cv = new CrossValidation("heart_failure_clinical_records_dataset.csv");
         CrossValidationWithPruning cvP = new CrossValidationWithPruning("heart_failure_clinical_records_dataset.csv");
 
@@ -32,6 +32,13 @@ public class Main {
         System.out.println("**********************");
         System.out.println("Cross Validation Accuracy before Pruning: " + r / 10);
         System.out.println("Cross Validation Accuracy after Pruning: " + rP / 10);
+        
+        // Calculate and print total time taken.
+        
+        long endTime = System.nanoTime();
+        long elapsedTime = endTime - startTime;
+        double msTime = (double) elapsedTime / 1000000.0;
+        System.out.println("Time elapsed: " + msTime + " ms\n");
         	
 		System.out.println("**********************");
 		System.out.println("Do you want to see the tree before pruning? (y/n)");
@@ -46,15 +53,8 @@ public class Main {
 			System.out.println("Tree after Pruning: \n" + print.printDFS(cvP.getRoot()));
 		}
 		
-
-
         in.close();
         
-        // Calculate and print total time taken.
         
-        long endTime = System.nanoTime();
-        long elapsedTime = endTime - startTime;
-        double msTime = (double) elapsedTime / 1000000.0;
-        System.out.println("Time elapsed: " + msTime + " ms\n");
     }
 }

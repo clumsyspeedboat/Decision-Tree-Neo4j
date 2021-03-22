@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3237f574-592c-4796-9d3e-cbcd2264f1dc" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1nLFlcZGZE6Cw9AGL79cyaR8zvU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/data" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="Pruning" />
+      <recent name="CV" />
+      <recent name="ProcessOutput" />
+      <recent name="ProcessInput" />
+      <recent name="TreeDefination" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/data" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="OVGU_C4.5_Decision_Tree" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3237f574-592c-4796-9d3e-cbcd2264f1dc" name="Default Changelist" comment="" />
+      <created>1611161615878</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611161615878</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1538" height="111" key="GridCell.Tab.0.bottom" timestamp="1611310273414">
+      <screen x="1280" y="25" width="1920" height="1055" />
+    </state>
+    <state width="1868" height="596" key="GridCell.Tab.0.bottom/0.25.1280.702/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611184759475" />
+    <state width="1868" height="447" key="GridCell.Tab.0.bottom/0.25.1280.703/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611164805629" />
+    <state width="1538" height="111" key="GridCell.Tab.0.bottom/0.25.1280.709/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611310273414" />
+    <state width="1538" height="111" key="GridCell.Tab.0.center" timestamp="1611310273413">
+      <screen x="1280" y="25" width="1920" height="1055" />
+    </state>
+    <state width="1868" height="596" key="GridCell.Tab.0.center/0.25.1280.702/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611184759472" />
+    <state width="1868" height="447" key="GridCell.Tab.0.center/0.25.1280.703/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611164805627" />
+    <state width="1538" height="111" key="GridCell.Tab.0.center/0.25.1280.709/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611310273413" />
+    <state width="1538" height="111" key="GridCell.Tab.0.left" timestamp="1611310273412">
+      <screen x="1280" y="25" width="1920" height="1055" />
+    </state>
+    <state width="1868" height="596" key="GridCell.Tab.0.left/0.25.1280.702/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611184759472" />
+    <state width="1868" height="447" key="GridCell.Tab.0.left/0.25.1280.703/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611164805626" />
+    <state width="1538" height="111" key="GridCell.Tab.0.left/0.25.1280.709/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611310273412" />
+    <state width="1538" height="111" key="GridCell.Tab.0.right" timestamp="1611310273414">
+      <screen x="1280" y="25" width="1920" height="1055" />
+    </state>
+    <state width="1868" height="596" key="GridCell.Tab.0.right/0.25.1280.702/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611184759474" />
+    <state width="1868" height="447" key="GridCell.Tab.0.right/0.25.1280.703/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611164805628" />
+    <state width="1538" height="111" key="GridCell.Tab.0.right/0.25.1280.709/1280.25.1920.1055@1280.25.1920.1055" timestamp="1611310273414" />
+    <state x="253" y="25" key="NewModule_or_Project.wizard" timestamp="1611613266638">
+      <screen x="0" y="25" width="1280" height="702" />
+    </state>
+    <state x="253" y="25" key="NewModule_or_Project.wizard/0.25.1280.702@0.25.1280.702" timestamp="1611613266638" />
+    <state x="0" y="25" key="SettingsEditor" timestamp="1611944546642">
+      <screen x="0" y="25" width="1280" height="702" />
+    </state>
+    <state x="0" y="25" key="SettingsEditor/0.25.1280.702@0.25.1280.702" timestamp="1611944546642" />
+  </component>
+</project>
