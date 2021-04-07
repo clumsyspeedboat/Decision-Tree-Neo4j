@@ -12,7 +12,8 @@ rm(list=ls())   # Clear all variables
 
 if(!require("ggplot2")) install.packages("ggplot2")
 if(!require("factoextra")) install.packages("factoextra")
-if(!require("dplyr")) install.packages("dplyr")
+if(!require("FSelector")) install.packages("FSelector")
+if(!require("DescTools")) install.packages("DescTools")
 if(!require("rpart")) install.packages("rpart") 
 if(!require("rpart.plot")) install.packages("rpart.plot")
 if(!require("caret")) install.packages("caret") 
@@ -22,7 +23,8 @@ if(!require("RWeka")) install.packages("RWeka")
 
 library("ggplot2")
 library("factoextra")
-library("dplyr")
+library("FSelector")
+library("DescTools")
 library("rpart")
 library("rpart.plot")
 library("caret")
@@ -188,10 +190,25 @@ print(h_clust)
 summary(h_clust)
 
 
+## Information Gain & Gain Ratio of variables ##
+
+ig_entropy <- information.gain(DEATH_EVENT~., data_matrix, unit = "log2")
+colnames(ig_entropy) <- "Information Gain"
+
+gr_entropy <- gain.ratio(DEATH_EVENT~., data_matrix, unit = "log2")
+colnames(gr_entropy) <- "Gain Ratio"
+
+## Gini Index of variables ##
+
+gini_ind <- as.data.frame(lapply(data_matrix, Gini))
+gini_ind <- as.data.frame(t(gini_ind))
+colnames(gini_ind) <- "Gini Index"
+
+
+
 ###################
 ## Decision Tree ##
 ###################
-
 
 # Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
 
