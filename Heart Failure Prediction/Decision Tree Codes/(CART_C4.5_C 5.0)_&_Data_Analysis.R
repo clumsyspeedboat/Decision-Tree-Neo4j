@@ -190,7 +190,7 @@ print(h_clust)
 summary(h_clust)
 
 
-## Information Gain & Gain Ratio of variables ##
+## Entropy, Information Gain & Gain Ratio of variables ##
 
 ig_entropy <- information.gain(DEATH_EVENT~., data_matrix, unit = "log2")
 colnames(ig_entropy) <- "Information Gain"
