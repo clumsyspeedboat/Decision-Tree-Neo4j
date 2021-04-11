@@ -120,7 +120,7 @@ fviz_pca_biplot(pca1, repel = F,
 
 ## Hierarchical Clustering ##
 
-h_clust <- eclust(data_matrix_new[,1:2969], "hclust", 3 , hc_metric = "euclidean", hc_method = "ward.D", graph = TRUE)
+h_clust <- eclust(data_matrix_new[,1:2969], "hclust", 3 , hc_metric = "manhattan", hc_method = "ward.D", graph = TRUE)
 
 fviz_dend(h_clust, show_labels = TRUE, palette = "jco", as.ggplot= TRUE)
 
@@ -129,12 +129,6 @@ fviz_dend(h_clust, show_labels = TRUE, palette = "jco", as.ggplot= TRUE)
 
 dbscan <- fpc::dbscan(data_matrix_new[,1:2969], eps = 2000, MinPts =3)  
 fviz_cluster(dbscan, data_matrix_new[,1:2969], stand = FALSE, ellipse = TRUE, geom = "point")
-
-
-## K-Means Clustering ##
-
-k_means <- eclust(data_matrix_new[,1:2969], "kmeans", hc_metric = "euclidean", 3 , nstart = 25, graph = TRUE)
-print(fviz_cluster(k_means, geom = "text", ellipse.type = "norm", palette = "jco", ggtheme = theme_minimal()))
 
 
 ## Entropy, Information Gain & Gain Ratio of variables ##
@@ -157,20 +151,29 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-#------------------------------------------------
-"Train-Test Data Split"
-#------------------------------------------------
-training_size <- 0.7 #extracting Percentage
-n = nrow(data_matrix_new)
-smp_size <- floor(training_size * n)  #ask from the user
-index<- sample(seq_len(n),size = smp_size)
+# Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
 
-#Breaking into Training and Testing Sets:
-TrainingSet <- data_matrix_new[index,]
-TestingSet <- data_matrix_new[-index,]
+TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
+TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 
 
-###########################################
+TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
+
+for (i in 1:2969) {
+  
+  TrainingSet[,i] <- as.numeric(TrainingSet[,i])
+  
+}
+
+TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
+
+for (i in 1:2969) {
+  
+  TestingSet[,i] <- as.numeric(TestingSet[,i])
+  
+}
+
+##########################################
 # CART #
 ########
 
