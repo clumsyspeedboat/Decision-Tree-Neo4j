@@ -205,7 +205,6 @@ gini_ind <- as.data.frame(t(gini_ind))
 colnames(gini_ind) <- "Gini Index"
 
 
-
 ###################
 ## Decision Tree ##
 ###################
