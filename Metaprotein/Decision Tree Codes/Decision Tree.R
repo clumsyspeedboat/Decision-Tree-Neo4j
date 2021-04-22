@@ -17,6 +17,8 @@ if(!require("rpart.plot")) install.packages("rpart.plot")
 if(!require("caret")) install.packages("caret") 
 if(!require("C50")) install.packages("C50")
 if(!require("RWeka")) install.packages("RWeka")
+if(!require("tidyr")) install.packages("tidyr")
+if(!require("dplyr")) install.packages("dplyr")
 
 
 library("ggplot2")
@@ -28,6 +30,8 @@ library("rpart.plot")
 library("caret")
 library("C50")
 library("RWeka")
+library("tidyr")
+library("dplyr")
 
 
 # Creating a data matrix #
@@ -95,6 +99,14 @@ for (i in 34:48) {
   
 }
 
+## Directly upload pre-processed file ##
+
+data2 <- file.choose()
+data2
+data_matrix_new <- read.csv(data2, header = TRUE, sep = ",")
+
+
+## Transforming variables and factorizing class labels ##
 
 data_matrix_new$Patient.Type <- as.factor(data_matrix_new$Patient.Type)
 
@@ -103,6 +115,7 @@ for (i in 1:2969) {
   data_matrix_new[,i] <- as.numeric(data_matrix_new[,i])
   
 }
+
 
 ###########################
 ## Unsupervised Learning ##
@@ -146,15 +159,88 @@ gini_ind <- as.data.frame(lapply(data_matrix_new, Gini))
 gini_ind <- as.data.frame(t(gini_ind))
 colnames(gini_ind) <- "Gini Index"
 
+## Finding abundant columns/meta proteins ##
+
+metadata <- summary(data_matrix_new)
+metadata <- as.data.frame.matrix(metadata)
+
+metadata <- as.data.frame(t(metadata))
+
+metadata1 <- separate(metadata,
+         col = "X.3",
+         into = c("Function", "Mean Values"),
+         sep = " :")
+
+metadata1$`Mean Values` <- as.numeric(metadata1$`Mean Values`)
+
+metadata1$ID <- seq.int(nrow(metadata1))
+
+ab_c <- metadata1 %>% filter(`Mean Values` > 0)
+
+ab_c <- row.names(ab_c)
+
+ab_c <- as.data.frame(ab_c)
+
+ab_c <- separate(ab_c, col = "ab_c", into = c("X","Values"), sep = "X")
+
+ab_c$Values <- as.numeric(ab_c$Values)
+
+data_matrix_new_abc <- data_matrix_new[,ab_c$Values]
+
+
+##  Generating a class label - Control. CD & UC Patients labelled accordingly ##
+
+Patient.Type <- matrix("C",)
+data_matrix_new_abc <- cbind(data_matrix_new_abc, Patient.Type) 
+
+for (i in 21:33) {
+  
+  data_matrix_new_abc[i,2330] <- "CD"
+  
+}
+
+for (i in 34:48) {
+  
+  data_matrix_new_abc[i,2330] <- "UC"
+  
+}
+
+## Transforming variables and factorizing class labels ##
+
+data_matrix_new_abc$Patient.Type <- as.factor(data_matrix_new_abc$Patient.Type)
+
+for (i in 1:2329) {
+  
+  data_matrix_new_abc[,i] <- as.numeric(data_matrix_new_abc[,i])
+  
+}
+
+
 
 ###################
 ## Decision Tree ##
 ###################
 
+#------------------------------------------------
+"Train-Test Data Split"
+#------------------------------------------------
+####################
+training_size <- 0.6 #extracting Percentage
+n = nrow(data_matrix_new_abc)
+smp_size <- floor(training_size * n)  #ask from the user
+index<- sample(seq_len(n),size = smp_size)
+
+#Breaking into Training and Testing Sets:
+TrainingSet <- data_matrix_new_abc[index,]
+TestingSet <- data_matrix_new_abc[-index,]
+
+######   or   ######  
+
 # Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
 
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
+#####################
 
 
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
