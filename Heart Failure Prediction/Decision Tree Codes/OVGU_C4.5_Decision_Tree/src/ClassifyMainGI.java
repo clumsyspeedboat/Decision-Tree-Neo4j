@@ -5,15 +5,16 @@
 import java.io.IOException;
 import java.util.Scanner;
 import MineData.C45MineData;
+import GiniIndex.C45MineDataGI;
 import ProcessOutput.PrintTree;
 
-public class ClassifyMain {
+public class ClassifyMainGI{
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
 		
-		C45MineData mine = new C45MineData("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/train.csv", "/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/test.csv");
+		C45MineDataGI mine = new C45MineDataGI("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/train.csv", "/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/test.csv");
 		
 		mine.calculateAccuracy();
 		
@@ -24,6 +25,7 @@ public class ClassifyMain {
 		
 	    PrintTree tree = new PrintTree();
 	    System.out.println(tree.printDFS(mine.getRoot()));
+	    
 	    
 		in.close();
 	}

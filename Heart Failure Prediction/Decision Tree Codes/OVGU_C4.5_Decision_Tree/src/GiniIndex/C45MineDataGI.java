@@ -2,7 +2,7 @@
  * This class is used for mining data.
  */
 
-package MineData;
+package GiniIndex;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,11 +10,12 @@ import java.util.HashMap;
 import ProcessInput.ProcessInputData;
 import TreeDefination.TreeNode;
 import C45CoreAlgorithm.ConstructTree;
+import MineData.C45MineData;
 import GiniIndex.ConstructTreeGI;
 import DataDefination.Attribute;
 import DataDefination.Instance;
 
-public class C45MineData {
+public class C45MineDataGI{
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
 	private ArrayList<Instance> trainInstances;
@@ -23,24 +24,28 @@ public class C45MineData {
 	private ArrayList<Instance> result;
 	private Double score = 0.0;
 	
-	public C45MineData(String trainData, String testData) throws IOException {
-		result = new ArrayList<Instance>();
-		ProcessInputData train = new ProcessInputData(trainData);
-		ProcessInputData test = new ProcessInputData(testData);	
+	public C45MineDataGI(String trainData, String testData) throws IOException {
 		
-		this.attributes = train.getAttributeSet();
-		this.target = train.getTargetAttribute();
+		//super(trainData,testData);
 		
-		target = train.getTargetAttribute();
-		trainInstances = train.getInstanceSet();
-		testInstances = test.getInstanceSet();		
-		result.addAll(testInstances);
+		  result = new ArrayList<Instance>(); ProcessInputData train = new
+		  ProcessInputData(trainData); ProcessInputData test = new
+		  ProcessInputData(testData);
+		  
+		  this.attributes = train.getAttributeSet(); this.target =
+		  train.getTargetAttribute();
+		  
+		  target = train.getTargetAttribute(); trainInstances = train.getInstanceSet();
+		  testInstances = test.getInstanceSet(); result.addAll(testInstances);
+		 
 		
 	}
 	
 	/**
 	 * After constructing 
 	 */
+	
+	
 	private void mine() {
 		for (int i = 0; i < testInstances.size(); i++) {
 			TreeNode node = root;
@@ -90,7 +95,7 @@ public class C45MineData {
 	 */
 	
 	public void calculateAccuracy() throws IOException {
-		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
+		ConstructTreeGI tree = new ConstructTreeGI(trainInstances, attributes, target);
 		root = tree.construct();
 		
 		int correct = 0;

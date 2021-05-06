@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="OVGU_C4.5_Decision_Tree/src"/>
+	<classpathentry kind="src" path="OVGU_CART_DT/src"/>
+	<classpathentry kind="output" path="OVGU_C4.5_Decision_Tree/out/production/OVGU_C4.5_Decision_Tree"/>
+</classpath>
