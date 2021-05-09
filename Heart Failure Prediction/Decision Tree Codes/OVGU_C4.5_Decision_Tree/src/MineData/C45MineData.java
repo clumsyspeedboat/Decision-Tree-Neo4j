@@ -15,13 +15,13 @@ import DataDefination.Attribute;
 import DataDefination.Instance;
 
 public class C45MineData {
-	private ArrayList<Attribute> attributes;
-	private ArrayList<Instance> testInstances;
-	private ArrayList<Instance> trainInstances;
-	private Attribute target;
-	private TreeNode root;
-	private ArrayList<Instance> result;
-	private Double score = 0.0;
+	protected ArrayList<Attribute> attributes;
+	protected ArrayList<Instance> testInstances;
+	protected ArrayList<Instance> trainInstances;
+	protected Attribute target;
+	protected TreeNode root;
+	public ArrayList<Instance> result;
+	protected Double score = 0.0;
 	
 	public C45MineData(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();
@@ -41,7 +41,7 @@ public class C45MineData {
 	/**
 	 * After constructing 
 	 */
-	private void mine() {
+	protected void mine() {
 		for (int i = 0; i < testInstances.size(); i++) {
 			TreeNode node = root;
 			Instance currInstance = testInstances.get(i);
@@ -95,6 +95,8 @@ public class C45MineData {
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
+		
+		System.out.print("this is minec45");
 		
 		for (Instance item : res) {				
 			String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());

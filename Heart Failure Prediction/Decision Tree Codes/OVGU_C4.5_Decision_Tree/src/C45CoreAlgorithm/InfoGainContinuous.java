@@ -16,10 +16,10 @@ import java.util.HashMap;
 
 public class InfoGainContinuous {
 	
-	private Attribute attribute;
-	private double threshold;
-	private double infoGain = -1;
-	private HashMap<String, ArrayList<Instance>> subset;
+	protected Attribute attribute;
+	protected double threshold;
+	protected double infoGain = -1;
+	protected HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain

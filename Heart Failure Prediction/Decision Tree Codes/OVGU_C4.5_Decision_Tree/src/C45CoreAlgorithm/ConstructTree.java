@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ConstructTree {
-	private ArrayList<Attribute> attributes;
-	private ArrayList<Instance> instances;
-	private Attribute target;
+	protected ArrayList<Attribute> attributes;
+	protected ArrayList<Instance> instances;
+	protected Attribute target;
 	
 	
 	public ConstructTree(String fileName) throws IOException {

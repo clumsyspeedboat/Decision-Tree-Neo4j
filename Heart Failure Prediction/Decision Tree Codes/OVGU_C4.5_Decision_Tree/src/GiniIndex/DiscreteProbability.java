@@ -8,16 +8,12 @@ package GiniIndex;
 import DataDefination.Attribute;
 import DataDefination.Instance;
 import C45CoreAlgorithm.Entropy;
-
+import C45CoreAlgorithm.InfoGainDiscrete;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DiscreteProbability {
-	
-	private Attribute attribute;
-	private double infoGain;
-	private HashMap<String, ArrayList<Instance>> subset;
+public class DiscreteProbability extends InfoGainDiscrete{
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain for
@@ -29,6 +25,7 @@ public class DiscreteProbability {
 	 */
 	public DiscreteProbability(Attribute target, Attribute attribute, ArrayList<Instance> instances)
 			throws IOException {
+		super(target,attribute,instances);
 		
 		
 		this.attribute = attribute;
@@ -39,6 +36,7 @@ public class DiscreteProbability {
 		String attributeName = attribute.getName();
 		
 		subset = new HashMap<String, ArrayList<Instance>>();
+		
 		
 		for (String s : valuesOfAttribute) {
 			subset.put(s, new ArrayList<Instance>());

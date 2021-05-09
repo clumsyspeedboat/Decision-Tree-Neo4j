@@ -4,7 +4,7 @@
 
 import java.io.IOException;
 import java.util.Scanner;
-import MineData.C45MineData;
+
 import GiniIndex.C45MineDataGI;
 import ProcessOutput.PrintTree;
 

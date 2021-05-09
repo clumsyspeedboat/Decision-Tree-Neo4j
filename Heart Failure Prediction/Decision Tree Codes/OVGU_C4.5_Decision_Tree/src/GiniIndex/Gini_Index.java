@@ -8,11 +8,11 @@ package GiniIndex;
 
 import DataDefination.Attribute;
 import DataDefination.Instance;
+import C45CoreAlgorithm.Entropy;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import C45CoreAlgorithm.Entropy;
 
 
 public class Gini_Index extends Entropy{
@@ -49,6 +49,7 @@ public class Gini_Index extends Entropy{
 		int totalN = instances.size();
 		double entropy = 0;
 		
+		
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;
@@ -79,6 +80,8 @@ public class Gini_Index extends Entropy{
 		ArrayList<String> valuesOfTarget = target.getValues();
 		String targetName = target.getName();
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
+		
+		
 		for (String s : valuesOfTarget) {
 			countValueOfTarget.put(s, 0);
 		}
@@ -94,7 +97,7 @@ public class Gini_Index extends Entropy{
 		
 		int totalN = instances.size();
 		double entropy = 0;
-		
+				
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;

@@ -8,6 +8,7 @@ package GiniIndex;
 import DataDefination.Attribute;
 import DataDefination.Instance;
 import C45CoreAlgorithm.Entropy;
+import C45CoreAlgorithm.InfoGainContinuous;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,12 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class ContinuousProbability {
-	
-	private Attribute attribute;
-	private double threshold;
-	private double infoGain = -1;
-	private HashMap<String, ArrayList<Instance>> subset;
+public class ContinuousProbability extends InfoGainContinuous{
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain
@@ -33,6 +29,7 @@ public class ContinuousProbability {
 	 */
 	public ContinuousProbability(Attribute attribute, Attribute target, 
 			ArrayList<Instance> instances) throws IOException {
+		super(attribute,target,instances);
 		
 		this.attribute = attribute;
 		
@@ -62,6 +59,7 @@ public class ContinuousProbability {
 		    find the maximum position value to be the threshold 		
 		 */		 
 		int thresholdPos = 0;
+		
 		for (int i = 0; i < instances.size() - 1; i++) {
 			HashMap<String, String> instancePair = instances.get(i).getAttributeValuePairs();
 			String instanceValue = instancePair.get(attributeName);

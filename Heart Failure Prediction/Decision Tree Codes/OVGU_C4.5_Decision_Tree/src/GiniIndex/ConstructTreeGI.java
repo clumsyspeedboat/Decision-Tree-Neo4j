@@ -4,32 +4,23 @@
 package GiniIndex;
 
 import DataDefination.Attribute;
-import C45CoreAlgorithm.Entropy;
-import GiniIndex.Gini_Index;
+import C45CoreAlgorithm.ConstructTree;
 import DataDefination.Instance;
-import ProcessInput.ProcessInputData;
 import TreeDefination.TreeNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ConstructTreeGI {
-	private ArrayList<Attribute> attributes;
-	private ArrayList<Instance> instances;
-	private Attribute target;
-	
-	
-	public ConstructTreeGI(String fileName) throws IOException {
-		ProcessInputData input = new ProcessInputData(fileName);
-		attributes = input.getAttributeSet();
-		instances = input.getInstanceSet();
-		target = input.getTargetAttribute();
-	}
+public class ConstructTreeGI extends ConstructTree{
+
 
 	
 	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
                          Attribute target) {
+		
+		super(instances,attributes,target);
+		
 		this.instances = instances;
 		this.attributes = attributes;
 		this.target = target;
@@ -60,6 +51,7 @@ public class ConstructTreeGI {
 		 *  Stop when (1) entropy is zero
 		 *  (2) no attribute left
 		 */
+		
 		if (Gini_Index.calculate(target, instances) == 0 || attributes.size() == 0) {
 			String leafLabel = "";
 			if (Gini_Index.calculate(target, instances) == 0) {

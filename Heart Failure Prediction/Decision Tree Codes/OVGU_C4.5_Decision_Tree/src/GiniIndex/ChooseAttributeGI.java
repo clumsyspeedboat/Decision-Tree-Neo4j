@@ -8,11 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import C45CoreAlgorithm.InfoGainContinuous;
-import C45CoreAlgorithm.InfoGainDiscrete;
 import C45CoreAlgorithm.ChooseAttribute;
-import GiniIndex.ContinuousProbability;
-import GiniIndex.DiscreteProbability;
 import DataDefination.Attribute;
 import DataDefination.Instance;
 
@@ -40,11 +36,13 @@ public class ChooseAttributeGI extends ChooseAttribute{
 	 */
 	public ChooseAttributeGI(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
+		super(target,attributes,instances);
 		
 		// Initialize variables
 		chosen = null;
 		infoGain = -1;
 		subset = null;
+		
 		
 		// Iterate to find the attribute with the largest information gain
 		for (Attribute currAttribute : attributes) {

@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 public class InfoGainDiscrete {
 	
-	private Attribute attribute;
-	private double infoGain;
-	private HashMap<String, ArrayList<Instance>> subset;
+	protected Attribute attribute;
+	protected double infoGain;
+	protected HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain for
