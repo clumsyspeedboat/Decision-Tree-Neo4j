@@ -14,13 +14,13 @@ import DataDefination.Attribute;
 import DataDefination.Instance;
 
 public class C45MineData {
-	private ArrayList<Attribute> attributes;
-	private ArrayList<Instance> testInstances;
-	private ArrayList<Instance> trainInstances;
-	private Attribute target;
-	private TreeNode root;
-	private ArrayList<Instance> result;
-	private Double score = 0.0;
+	protected ArrayList<Attribute> attributes;
+	protected ArrayList<Instance> testInstances;
+	protected ArrayList<Instance> trainInstances;
+	protected Attribute target;
+	protected TreeNode root;
+	protected ArrayList<Instance> result;
+	protected Double score = 0.0;
 	
 	public C45MineData(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();
@@ -107,4 +107,5 @@ public class C45MineData {
 		System.out.println("Accuracy:" + score*100 + "%");
 
 	}
+	
 }

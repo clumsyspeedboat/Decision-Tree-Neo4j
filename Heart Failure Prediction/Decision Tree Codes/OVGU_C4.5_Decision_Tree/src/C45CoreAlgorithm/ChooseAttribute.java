@@ -15,10 +15,10 @@ import ProcessInput.ProcessInputData;
 
 public class ChooseAttribute {
 	
-	private Attribute chosen;
-	private HashMap<String, ArrayList<Instance>> subset;
-	private double infoGain;
-	private double threshold;
+	protected Attribute chosen;
+	protected HashMap<String, ArrayList<Instance>> subset;
+	protected double infoGain;
+	protected double threshold;
 	
 	
 	public ChooseAttribute() {

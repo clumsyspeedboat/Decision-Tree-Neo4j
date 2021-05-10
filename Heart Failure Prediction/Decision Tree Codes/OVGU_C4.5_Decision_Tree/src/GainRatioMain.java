@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.util.Scanner;
 import MineData.C45MineData;
 import ProcessOutput.PrintTree;
+import GainRatio.GainRatioMineData;
 
-public class ClassifyMain {
+public class GainRatioMain {
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
-		C45MineData mine = new C45MineData("G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\train.csv", "G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\test.csv");
+		GainRatioMineData mine = new GainRatioMineData("G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\train.csv", "G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\test.csv");
 		
 		mine.calculateAccuracy();
 		

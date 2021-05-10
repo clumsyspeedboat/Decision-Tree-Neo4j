@@ -1,33 +1,25 @@
 /** 
  * This class is used to construct tree
  */
-package C45CoreAlgorithm;
+package GainRatio;
 
 import DataDefination.Attribute;
 import DataDefination.Instance;
 import ProcessInput.ProcessInputData;
 import TreeDefination.TreeNode;
+import C45CoreAlgorithm.ConstructTree;
+import GainRatio.EntropyGR;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ConstructTree {
-	protected ArrayList<Attribute> attributes;
-	protected ArrayList<Instance> instances;
-	protected Attribute target;
+public class ConstructTreeGR extends ConstructTree{
 	
 	
-	public ConstructTree(String fileName) throws IOException {
-		ProcessInputData input = new ProcessInputData(fileName);
-		attributes = input.getAttributeSet();
-		instances = input.getInstanceSet();
-		target = input.getTargetAttribute();
-	}
-
-	
-	public ConstructTree(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
+	public ConstructTreeGR(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
                          Attribute target) {
+		super(instances,attributes,target);
 		this.instances = instances;
 		this.attributes = attributes;
 		this.target = target;
@@ -58,9 +50,9 @@ public class ConstructTree {
 		 *  Stop when (1) entropy is zero
 		 *  (2) no attribute left
 		 */
-		if (Entropy.calculate(target, instances) == 0 || attributes.size() == 0) {
+		if (EntropyGR.calculate(target, instances) == 0 || attributes.size() == 0) {
 			String leafLabel = "";
-			if (Entropy.calculate(target, instances) == 0) {
+			if (EntropyGR.calculate(target, instances) == 0) {
 				leafLabel = instances.get(0).getAttributeValuePairs().get(target.getName());
 			} else {
 				leafLabel = getMajorityLabel(target, instances);
@@ -70,7 +62,7 @@ public class ConstructTree {
 		}
 		
 		// Choose the root attribute
-		GainRatio.ChooseAttribute choose = new GainRatio.ChooseAttribute(target, attributes, instances);
+		ChooseAttributeGR choose = new GainRatio.ChooseAttributeGR(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
 		
 		// Remove the chosen attribute from attribute set
