@@ -12,7 +12,7 @@ public class ClassifyMain {
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
-		C45MineData mine = new C45MineData("train.csv", "test.csv");
+		C45MineData mine = new C45MineData("data/train.csv", "data/test.csv");
 		
 		mine.calculateAccuracy();
 		
