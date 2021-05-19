@@ -13,7 +13,7 @@ public class GainRatioMain {
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
-		GainRatioMineData mine = new GainRatioMineData("G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\train.csv", "G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\test.csv");
+		GainRatioMineData mine= new GainRatioMineData("/data/train.csv", "/data/test.csv");
 		
 		mine.calculateAccuracy();
 		

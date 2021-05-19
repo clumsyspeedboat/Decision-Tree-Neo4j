@@ -70,7 +70,7 @@ public class ConstructTree {
 		}
 		
 		// Choose the root attribute
-		GainRatio.ChooseAttribute choose = new GainRatio.ChooseAttribute(target, attributes, instances);
+		ChooseAttribute choose = new ChooseAttribute(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
 		
 		// Remove the chosen attribute from attribute set

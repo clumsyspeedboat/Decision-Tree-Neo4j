@@ -7,11 +7,12 @@ package GainRatio;
 
 import DataDefination.Attribute;
 import DataDefination.Instance;
+import C45CoreAlgorithm.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import C45CoreAlgorithm.*;
+
 
 public class SplitInfoDiscrete extends InfoGainDiscrete{
 	
@@ -20,7 +21,7 @@ public class SplitInfoDiscrete extends InfoGainDiscrete{
 	private HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
-	 * Constructor: initialize fields. This class is for calculating the splitinfo for
+	 * Constructor: initialize fields. This class is for calculating the Splitinfo for
 	 * discrete attribute.
 	 * @param target
 	 * @param attribute
@@ -31,7 +32,14 @@ public class SplitInfoDiscrete extends InfoGainDiscrete{
 			throws IOException {
 		super(target,attribute,instances);
 		
-				int totalN = instances.size();
+		this.attribute = attribute;
+		
+		
+		subset = new HashMap<String, ArrayList<Instance>>();
+		
+		
+		
+		int totalN = instances.size();
 		splitinfo = 0;
 		
 		

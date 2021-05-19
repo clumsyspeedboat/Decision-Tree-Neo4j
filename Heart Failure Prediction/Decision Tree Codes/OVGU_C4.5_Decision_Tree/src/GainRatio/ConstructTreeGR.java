@@ -9,6 +9,7 @@ import ProcessInput.ProcessInputData;
 import TreeDefination.TreeNode;
 import C45CoreAlgorithm.ConstructTree;
 import GainRatio.EntropyGR;
+import GainRatio.ChooseAttributeGR;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class ConstructTreeGR extends ConstructTree{
 		}
 		
 		// Choose the root attribute
-		ChooseAttributeGR choose = new GainRatio.ChooseAttributeGR(target, attributes, instances);
+		ChooseAttributeGR choose = new ChooseAttributeGR(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
 		
 		// Remove the chosen attribute from attribute set

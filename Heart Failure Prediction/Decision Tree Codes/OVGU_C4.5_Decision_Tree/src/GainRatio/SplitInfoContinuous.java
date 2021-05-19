@@ -33,7 +33,7 @@ public class SplitInfoContinuous extends InfoGainContinuous {
 	 */
 	public SplitInfoContinuous(Attribute attribute, Attribute target, 
 			ArrayList<Instance> instances) throws IOException {
-			super(target,attribute,instances);
+			super(attribute,target,instances);
 		
 	}
 	

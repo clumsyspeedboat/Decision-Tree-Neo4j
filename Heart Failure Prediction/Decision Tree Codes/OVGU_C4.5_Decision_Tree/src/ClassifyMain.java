@@ -12,7 +12,7 @@ public class ClassifyMain {
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
-		C45MineData mine = new C45MineData("G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\train.csv", "G:\\JavaCode\\Graph-Database-Learning-Algorithms-Neo4j-\\Heart Failure Prediction\\Decision Tree Codes\\OVGU_C4.5_Decision_Tree\\data\\test.csv");
+		C45MineData mine = new C45MineData("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/train.csv", "/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/test.csv");
 		
 		mine.calculateAccuracy();
 		
