@@ -1,6 +1,6 @@
 
 /**
- * This class calculates entropy
+ * This class calculates Gini Index
  */
 
 
@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class Gini_Index extends Entropy{
 	
 	/**
-	 * Calculate entropy of instances for the target attribute.
+	 * Calculate gini index of instances for the target attribute.
 	 * Only for discrete attribute.
 	 * @param target
 	 * @param instances
@@ -47,7 +47,7 @@ public class Gini_Index extends Entropy{
 		}
 		
 		int totalN = instances.size();
-		double entropy = 0;
+		double giniindex = 0;
 		
 		
 		for (String s : valuesOfTarget) {
@@ -55,25 +55,15 @@ public class Gini_Index extends Entropy{
 			if (countSingleValue == 0) continue;
 			if (countSingleValue == totalN) return 0;
 			double pValue = ((double) countSingleValue) / ((double)totalN);
-			//double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
 			double itemRes = - Math.pow(pValue,2);
-			entropy += itemRes;
+			giniindex += itemRes;
 		}
-		return entropy;
+		return giniindex;
 	}
 	
 	/**
-	 * Calculate entropy of instances for the target attribute.
+	 * Calculate gini index of instances for the target attribute.
 	 * Only for continuous attribute.
-	 * Reason: arguments of methods are different. The arguments of this method has start and 
-	 * end. Such arguments can reuse instances without separating them into different arrayLists,
-	 * saving time and space.
-	 * @param target
-	 * @param instances
-	 * @param start
-	 * @param end
-	 * @return double
-	 * @throws IOException
 	 */
 	public static double calculateConti(Attribute target, ArrayList<Instance> instances,
                                         int start, int end) throws IOException {
@@ -96,17 +86,16 @@ public class Gini_Index extends Entropy{
 		}
 		
 		int totalN = instances.size();
-		double entropy = 0;
+		double giniindex = 0;
 				
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;
 			if (countSingleValue == totalN) return 0;
 			double pValue = ((double) countSingleValue) / ((double)totalN);
-			//double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
 			double itemRes = - Math.pow(pValue,2);
-			entropy += itemRes;
+			giniindex += itemRes;
 		}
-		return entropy;
+		return giniindex;
 	}
 }

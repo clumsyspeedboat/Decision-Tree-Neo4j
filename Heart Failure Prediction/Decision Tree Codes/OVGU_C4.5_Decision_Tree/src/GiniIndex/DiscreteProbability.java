@@ -1,5 +1,5 @@
 /**
- * Calculates the information gain of discrete attribute
+ * Calculates the probabilities of discrete attribute
  */
 
 
@@ -7,7 +7,6 @@ package GiniIndex;
 
 import DataDefination.Attribute;
 import DataDefination.Instance;
-import C45CoreAlgorithm.Entropy;
 import C45CoreAlgorithm.InfoGainDiscrete;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.HashMap;
 public class DiscreteProbability extends InfoGainDiscrete{
 	
 	/**
-	 * Constructor: initialize fields. This class is for calculating the information gain for
+	 * Constructor: initialize fields. This class is for calculating the probabilities for
 	 * discrete attribute.
 	 * @param target
 	 * @param attribute
@@ -51,22 +50,18 @@ public class DiscreteProbability extends InfoGainDiscrete{
 				throw new IOException("Invalid input data");
 			subset.get(valueOfInstanceAtAttribute).add(instance);
 		}
-	
-//		for (String key : subset.keySet()) {
-//		    System.out.println(key + subset.get(key).size());
-//		}
-		
+			
 
 		int totalN = instances.size();
-		infoGain = Entropy.calculate(target, instances);
+		gini = Gini_Index.calculate(target, instances);
 		
 		
 		for (String s : subset.keySet()) {
 			ArrayList<Instance> currSubset = subset.get(s);
 			int subN = currSubset.size();
 			double subRes = ((double) subN) / ((double) totalN) * 
-					(1-Entropy.calculate(target, currSubset));
-			infoGain -= subRes;
+					(1-Gini_Index.calculate(target, currSubset));
+			gini -= subRes;
 		}
 
 	}
@@ -76,7 +71,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 	}
 	
 	public double getInfoGain() {
-		return infoGain;
+		return gini;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
@@ -85,7 +80,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 	
 	public String toString() {
 		return "Attribute: " + attribute + "\n"  
-				+ "InfoGain: " + infoGain + "\n" + "Subset: " + subset;
+				+ "InfoGain: " + gini + "\n" + "Subset: " + subset;
 	}
 	
 	

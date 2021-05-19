@@ -1,14 +1,13 @@
 /.DS_Store
 /C45CoreAlgorithm/
-/CART/
 /CV/
 /ClassifyMain.class
+/ClassifyMainGI.class
 /DataDefination/
+/GiniIndex/
 /Main.class
 /MineData/
 /ProcessInput/
 /ProcessOutput/
 /Pruning/
 /TreeDefination/
-/GiniIndex/
-/ClassifyMainGI.class

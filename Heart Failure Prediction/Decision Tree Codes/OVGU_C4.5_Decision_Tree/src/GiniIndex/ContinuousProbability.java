@@ -7,7 +7,6 @@ package GiniIndex;
 
 import DataDefination.Attribute;
 import DataDefination.Instance;
-import C45CoreAlgorithm.Entropy;
 import C45CoreAlgorithm.InfoGainContinuous;
 
 import java.io.IOException;
@@ -55,7 +54,7 @@ public class ContinuousProbability extends InfoGainContinuous{
 		
 		/*
 		 (3) Get each position that target value change,
-			then calculate information gain of each position
+			then calculate continuous probability of each position
 		    find the maximum position value to be the threshold 		
 		 */		 
 		int thresholdPos = 0;
@@ -67,9 +66,9 @@ public class ContinuousProbability extends InfoGainContinuous{
 			String instanceValue2 = instancePair2.get(attributeName);
 					
 			if (!instanceValue.equals(instanceValue2)) {
-				double currInfoGain = calculateConti(attribute, target, instances, i);
-				if (currInfoGain - infoGain > 0) {
-					infoGain = currInfoGain;
+				double currGini = calculateConti(attribute, target, instances, i);
+				if (currGini - infoGain > 0) {
+					infoGain = currGini;
 					thresholdPos = i;
 				}
 			}
@@ -102,13 +101,13 @@ public class ContinuousProbability extends InfoGainContinuous{
 			ArrayList<Instance> instances, int index) throws IOException {
 		
 		int totalN = instances.size();
-		double infoGain = Entropy.calculate(target, instances);
+		double infoGain = Gini_Index.calculate(target, instances);
 		int subL = index + 1;
 		int subR = instances.size() - index - 1;
 		double subResL = ((double) subL) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, 0, index);
+				Gini_Index.calculateConti(target, instances, 0, index);
 		double subResR = ((double) subR) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, index + 1, totalN - 1);
+				Gini_Index.calculateConti(target, instances, index + 1, totalN - 1);
 		infoGain -= (subResL + subResR);
 		return infoGain;
 	}
