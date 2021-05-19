@@ -175,7 +175,7 @@ metadata1$`Mean Values` <- as.numeric(metadata1$`Mean Values`)
 
 metadata1$ID <- seq.int(nrow(metadata1))
 
-ab_c <- metadata1 %>% filter(`Mean Values` > 0)
+ab_c <- metadata1 %>% filter(`Mean Values` > 1)
 
 ab_c <- row.names(ab_c)
 
@@ -188,20 +188,33 @@ ab_c$Values <- as.numeric(ab_c$Values)
 data_matrix_new_abc <- data_matrix_new[,ab_c$Values]
 
 
-##  Generating a class label - Control. CD & UC Patients labelled accordingly ##
+df <- as.data.frame(48 - colSums(data_matrix_new==0))
+colnames(df)[1] <- "Value.Cells"
+df$ID <- seq.int(nrow(df))
+df <- df[-2970,]
+df <- df %>% arrange(desc(Value.Cells))
+rownames(df) = seq(length=nrow(df))
+
+data_matrix_new_abc <- data_matrix_new[,df[1:100,2]]
+
+
+
+##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
+
+n <- NCOL(data_matrix_new_abc)+1
 
 Patient.Type <- matrix("C",)
 data_matrix_new_abc <- cbind(data_matrix_new_abc, Patient.Type) 
 
 for (i in 21:33) {
   
-  data_matrix_new_abc[i,2330] <- "CD"
+  data_matrix_new_abc[i,n] <- "CD"
   
 }
 
 for (i in 34:48) {
   
-  data_matrix_new_abc[i,2330] <- "UC"
+  data_matrix_new_abc[i,n] <- "UC"
   
 }
 
@@ -209,9 +222,9 @@ for (i in 34:48) {
 
 data_matrix_new_abc$Patient.Type <- as.factor(data_matrix_new_abc$Patient.Type)
 
-for (i in 1:2329) {
+for (i in 1:NCOL(data_matrix_new_abc)) {
   
-  data_matrix_new_abc[,i] <- as.numeric(data_matrix_new_abc[,i])
+  data_matrix_new_abc[,n-1] <- as.numeric(data_matrix_new_abc[,n-1])
   
 }
 
@@ -225,7 +238,7 @@ for (i in 1:2329) {
 "Train-Test Data Split"
 #------------------------------------------------
 ####################
-training_size <- 0.6 #extracting Percentage
+training_size <- 0.5 #extracting Percentage
 n = nrow(data_matrix_new_abc)
 smp_size <- floor(training_size * n)  #ask from the user
 index<- sample(seq_len(n),size = smp_size)
@@ -245,7 +258,7 @@ TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
 
-for (i in 1:2969) {
+for (i in 1:NCOL(TrainingSet)) {
   
   TrainingSet[,i] <- as.numeric(TrainingSet[,i])
   
@@ -253,7 +266,7 @@ for (i in 1:2969) {
 
 TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
-for (i in 1:2969) {
+for (i in 1:NCOL(TestingSet)) {
   
   TestingSet[,i] <- as.numeric(TestingSet[,i])
   
