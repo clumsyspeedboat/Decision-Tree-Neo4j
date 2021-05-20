@@ -82,7 +82,7 @@ data_matrix_new <- t(data_matrix)
 data_matrix_new <- as.data.frame(data_matrix_new)
 
 
-##  Generating a class label - Control. CD & UC Patients labelled accordingly ##
+##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
 
 Patient.Type <- matrix("C",)
 data_matrix_new <- cbind(data_matrix_new, Patient.Type) 
