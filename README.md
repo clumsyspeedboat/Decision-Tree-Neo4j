@@ -36,13 +36,19 @@ The goal of this project is to accelerated the analysis of highly interlinked cl
 ```
 * Survey of Graph Databases - Yumna, Seles
 * Prospects of Neo4j - Yumna, Seles
+* Neo4j focussing on Data Access - Seles
+* GPU Computing - Danny
 
 ```
 ### Milestone 3 - Survey of implementations for decision tree learning and neuronal networks (40 hours), Implementation of decision tree learning algorithm in Java (80 hours), Evaluation of decision tree learning algorithm against the results of a standard library  (40 hours) 
 
 ```
+* Deadline for Milestone 3: 06/05/2021
+
+Task in Milestone 3:
 * Finding suitable dataset for Decision Tree Algorithm - Rahul
 * Survey of Decision Tree algorithms in Java - Nasim, Danny
+* Implementation of Decision Tree in WEKA - Seles
 * Prospects of Decision Tree algorithms being implemented on a graph database like Neo4j - Nasim, Danny
 
 ```
@@ -50,7 +56,10 @@ The goal of this project is to accelerated the analysis of highly interlinked cl
 ### Milestone 4 - Apply decision tree learning algorithm directly on graph and compare the performance
 
 ```
+* Deadline for Milestone 4: 20/05/2021
 
+Task in Milestone 4:
+Will be discuss more later
 ```
 
 ### Milestone 5 - Sum up results in a 8-10 page paper (100 hours)
