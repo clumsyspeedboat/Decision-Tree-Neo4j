@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="259dbcf7-fa5c-477a-a0cc-c39830187b04" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/ChooseAttribute.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/ChooseAttribute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/ConstructTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/ConstructTree.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/Entropy.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/Entropy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainContinuous$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainContinuous$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainContinuous.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainContinuous.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainDiscrete.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/InfoGainDiscrete.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/JUnitTesting.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/C45CoreAlgorithm/JUnitTesting.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/CV/CrossValidation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/CV/CrossValidation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/CV/CrossValidationWithPruning.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/CV/CrossValidationWithPruning.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ClassifyMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ClassifyMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/DataDefination/Attribute.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/DataDefination/Attribute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/DataDefination/Instance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/DataDefination/Instance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/META-INF/OVGU_C4.5_Decision_Tree.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/MineData/C45MineData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/MineData/C45MineData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ProcessInput/ProcessInputData.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ProcessInput/ProcessInputData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ProcessOutput/PrintTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/ProcessOutput/PrintTree.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/Pruning/Pruning.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/Pruning/Pruning.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/TreeDefination/TreeNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/OVGU_C4.5_Decision_Tree/TreeDefination/TreeNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ClassifyMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ClassifyMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ProcessInput/ProcessInputData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProcessInput/ProcessInputData.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="ProjectId" id="1rnz2LKIlhwSktJSsHsIKyx8Yjc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager" selected="Application.C5Main">
+    <configuration name="C5Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="C5Main" />
+      <module name="OVGU_C4.5_Decision_Tree" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="OVGU_C4.5_Decision_Tree" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="OVGU_C4.5_Decision_Tree" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.C5Main" />
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="259dbcf7-fa5c-477a-a0cc-c39830187b04" name="Default Changelist" comment="" />
+      <created>1619626434476</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1619626434476</updated>
+    </task>
+    <servers />
+  </component>
+</project>
