@@ -19,9 +19,13 @@ public class JUnitTesting {
 		return x*x;
 	}
 	
+	public int divide(int y, int z) {
+		return y/z;
+	}
+	
 	public void addGolfAttributeSet() throws IOException {
 		Attribute attr1 = new Attribute("Outlook","{Sunny,Overcast,Rain}");
-		attributeSet.add(attr1);
+		attributeSet.add(attr1); 
 		Attribute attr2 = new Attribute("Temperature","real");
 		attributeSet.add(attr2);
 		Attribute attr3 = new Attribute("Humidity","real");
