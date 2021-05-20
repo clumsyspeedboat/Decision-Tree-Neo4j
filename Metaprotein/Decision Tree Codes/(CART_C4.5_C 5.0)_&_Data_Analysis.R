@@ -188,7 +188,7 @@ ab_c$Values <- as.numeric(ab_c$Values)
 data_matrix_new_abc <- data_matrix_new[,ab_c$Values]
 
 
-##  Generating a class label - Control. CD & UC Patients labelled accordingly ##
+##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
 
 Patient.Type <- matrix("C",)
 data_matrix_new_abc <- cbind(data_matrix_new_abc, Patient.Type) 

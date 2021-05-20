@@ -5,5 +5,17 @@
 		<item key="SmartImportRootWizardPage.STORE_CLOSE_IMPORTED" value="false"/>
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
+		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\49171\Desktop\Graph-Database-Learning-Algorithms-Neo4j-\Heart Failure Prediction\Decision Tree Codes"/>
+			<item value="C:\Users\49171\Desktop\Graph-Database-Learning-Algorithms-Neo4j-\Heart Failure Prediction\Decision Tree Codes\OVGU_C4.5_Decision_Tree"/>
+		</list>
+	</section>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item key="DIALOG_X_ORIGIN" value="487"/>
+		<item key="DIALOG_Y_ORIGIN" value="239"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
 	</section>
 </section>

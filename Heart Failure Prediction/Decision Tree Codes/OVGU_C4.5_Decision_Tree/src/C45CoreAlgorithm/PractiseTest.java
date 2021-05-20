@@ -11,8 +11,6 @@ public class PractiseTest {
 		Practise p = new Practise();
 		int answer = p.multiply(2, 3);
 		assertEquals(6, answer);
-		
-		
 	}
 
 }
