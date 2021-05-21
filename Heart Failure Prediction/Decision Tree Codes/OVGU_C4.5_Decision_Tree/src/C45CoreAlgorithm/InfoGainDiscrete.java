@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class InfoGainDiscrete {
 	
 	protected Attribute attribute;
-	protected double gini;
+	protected double infoGain;
 	protected HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
@@ -59,7 +59,7 @@ public class InfoGainDiscrete {
 		
 
 		int totalN = instances.size();
-		gini = Entropy.calculate(target, instances);
+		infoGain = Entropy.calculate(target, instances);
 		
 		
 		for (String s : subset.keySet()) {
@@ -67,7 +67,7 @@ public class InfoGainDiscrete {
 			int subN = currSubset.size();
 			double subRes = ((double) subN) / ((double) totalN) * 
 					Entropy.calculate(target, currSubset);
-			gini -= subRes;
+			infoGain -= subRes;
 		}
 
 	}
@@ -77,7 +77,7 @@ public class InfoGainDiscrete {
 	}
 	
 	public double getInfoGain() {
-		return gini;
+		return infoGain;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
@@ -86,7 +86,7 @@ public class InfoGainDiscrete {
 	
 	public String toString() {
 		return "Attribute: " + attribute + "\n"  
-				+ "InfoGain: " + gini + "\n" + "Subset: " + subset;
+				+ "InfoGain: " + infoGain + "\n" + "Subset: " + subset;
 	}
 	
 	

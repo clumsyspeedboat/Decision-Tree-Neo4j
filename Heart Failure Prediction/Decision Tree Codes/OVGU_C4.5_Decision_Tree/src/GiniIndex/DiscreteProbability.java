@@ -53,7 +53,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 			
 
 		int totalN = instances.size();
-		gini = Gini_Index.calculate(target, instances);
+		infoGain = Gini_Index.calculate(target, instances);
 		
 		
 		for (String s : subset.keySet()) {
@@ -61,7 +61,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 			int subN = currSubset.size();
 			double subRes = ((double) subN) / ((double) totalN) * 
 					(1-Gini_Index.calculate(target, currSubset));
-			gini -= subRes;
+			infoGain -= subRes;
 		}
 
 	}
@@ -71,7 +71,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 	}
 	
 	public double getInfoGain() {
-		return gini;
+		return infoGain;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
@@ -80,7 +80,7 @@ public class DiscreteProbability extends InfoGainDiscrete{
 	
 	public String toString() {
 		return "Attribute: " + attribute + "\n"  
-				+ "InfoGain: " + gini + "\n" + "Subset: " + subset;
+				+ "InfoGain: " + infoGain + "\n" + "Subset: " + subset;
 	}
 	
 	
