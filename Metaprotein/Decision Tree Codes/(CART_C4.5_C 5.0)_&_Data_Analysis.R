@@ -110,7 +110,7 @@ data_matrix_new <- read.csv(data2, header = TRUE, sep = ",")
 
 data_matrix_new$Patient.Type <- as.factor(data_matrix_new$Patient.Type)
 
-for (i in 1:2969) {
+for (i in 1:(NCOL(data_matrix_new)-1)) {
   
   data_matrix_new[,i] <- as.numeric(data_matrix_new[,i])
   
@@ -195,7 +195,7 @@ df <- df[-2970,]
 df <- df %>% arrange(desc(Value.Cells))
 rownames(df) = seq(length=nrow(df))
 
-data_matrix_new_abc <- data_matrix_new[,df[1:100,2]]
+data_matrix_new_abc <- data_matrix_new[,df[1:500,2]]
 
 
 
@@ -228,7 +228,9 @@ for (i in 1:NCOL(data_matrix_new_abc)) {
   
 }
 
+write.csv(data_matrix_new_abc, file = "Metaprotein_500.csv", row.names = FALSE)
 
+getwd()
 
 ###################
 ## Decision Tree ##
