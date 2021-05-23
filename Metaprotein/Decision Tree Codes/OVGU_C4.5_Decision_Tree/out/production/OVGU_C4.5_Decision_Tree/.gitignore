@@ -1,9 +1,12 @@
+/ClassifyMain.class
+/Main.class
 /.DS_Store
+/.classpath
+/.gitignore
+/.project
 /C45CoreAlgorithm/
 /CV/
-/ClassifyMain.class
 /DataDefination/
-/Main.class
 /MineData/
 /ProcessInput/
 /ProcessOutput/

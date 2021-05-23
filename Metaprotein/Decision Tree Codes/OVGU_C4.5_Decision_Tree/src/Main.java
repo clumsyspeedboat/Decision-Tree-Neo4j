@@ -13,8 +13,8 @@ public class Main {
         System.out.println("===============================================================");
         
         long startTime = System.nanoTime();
-        CrossValidation cv = new CrossValidation("data/heart_failure_clinical_records_dataset.csv");
-        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure_clinical_records_dataset.csv");
+        CrossValidation cv = new CrossValidation("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Metaprotein/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/Metaprotein_10.csv");
+        CrossValidationWithPruning cvP = new CrossValidationWithPruning("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Metaprotein/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/Metaprotein_10.csv");
 
         ArrayList<Double> final_score = cv.validate(10);
         ArrayList<Double> final_score_P = cvP.validate(10);
