@@ -24,6 +24,8 @@ public class Entropy {
 	 * @throws IOException
 	 */
 	public static double calculate(Attribute target, ArrayList<Instance> instances) throws IOException{
+		
+		System.out.println(target);
 
 		ArrayList<String> valuesOfTarget = target.getValues();
 		String targetName = target.getName();

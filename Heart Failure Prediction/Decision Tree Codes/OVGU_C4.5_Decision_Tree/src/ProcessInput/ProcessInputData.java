@@ -66,7 +66,7 @@ public class ProcessInputData {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(new File(fileName));
 
-		addToAttributeSet();
+		addToCustomAtrributeSet();
 
 		targetAttribute = attributeSet.get(attributeSet.size() - 1);
 
@@ -80,6 +80,19 @@ public class ProcessInputData {
 			}
 			instanceSet.add(item);
 		}
+	}
+	
+	public void addToCustomAtrributeSet() throws IOException{
+		Attribute attr1 = new Attribute("id","real");
+		attributeSet.add(attr1);
+		Attribute attr2 = new Attribute("var_1","real");
+		attributeSet.add(attr2);
+		Attribute attr3 = new Attribute("var_2","{0,1}");
+		attributeSet.add(attr3);
+		Attribute attr4 = new Attribute("var_3","{0,1}");
+		attributeSet.add(attr4);
+		Attribute attr5 = new Attribute("class_label", "{0,1}");
+		attributeSet.add(attr5);
 	}
 
 
@@ -110,7 +123,7 @@ public class ProcessInputData {
 		attributeSet.add(attr12);
 		Attribute attr13 = new Attribute("DEATH_EVENT","{0,1}");
 		attributeSet.add(attr13);
-	}
+	} 
 	
 	public ArrayList<Attribute> getAttributeSet() {
 		attributeSet.remove(attributeSet.size() - 1);
