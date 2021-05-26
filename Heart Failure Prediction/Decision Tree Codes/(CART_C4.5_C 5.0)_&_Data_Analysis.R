@@ -2,8 +2,6 @@
 ## Heart Failure Prediction ### ---> DATA ANALYSIS + DECISION TREE ALGORITHMS
 ###############################
 
-
-
 # Cleaning the work space #
 
 cat("\f")       # Clear old outputs
