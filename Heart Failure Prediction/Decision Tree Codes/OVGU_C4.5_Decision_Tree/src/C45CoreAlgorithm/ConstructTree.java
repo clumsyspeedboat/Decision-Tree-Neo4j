@@ -54,6 +54,8 @@ public class ConstructTree {
 	private TreeNode constructTree(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
 		
+		
+		
 		/*
 		 *  Stop when (1) entropy is zero
 		 *  (2) no attribute left
