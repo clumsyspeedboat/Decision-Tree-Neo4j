@@ -1,5 +1,5 @@
 /**
- * This class is wused to choose the attribute based on information gain
+ * This class is used to choose the attribute based on information gain
  */
 
 package C45CoreAlgorithm;
