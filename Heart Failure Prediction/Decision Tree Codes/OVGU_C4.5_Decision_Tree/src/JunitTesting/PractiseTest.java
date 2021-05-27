@@ -60,5 +60,5 @@ public class PractiseTest {
 		
 		assertEquals( s , igAttr.getName());
 	}
-
+ 
 }
