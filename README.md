@@ -58,8 +58,18 @@ Task in Milestone 3:
 ```
 * Deadline for Milestone 4: 20/05/2021
 
-Task in Milestone 4:
-Will be discuss more later
+Possibility 1 procedures: Java Plugin in Neo4j
+- Setup plugin project in eclipse using Maven.
+- Add the complile jar file into Neo4j project plugin directory.
+- Using Cypher to send the csv file path to the Java plugin.
+- The Java plugin then return the necessary node and relationship that need to create the Decision Tree.
+- Neo4j will read the return of the Java plugin and visualise the Decision Tree with node and relationship.
+
+
+Possibility 2 procedures: Pure Neo4j cypher
+- Using Cypher to input the dataset (csv file) into Neo4j to create the Graph Database.
+- Traversal through the Graph Database to calculate the information gain/Gini-entropy.
+- Create the Decision Tree with node and relationship.
 ```
 
 ### Milestone 5 - Sum up results in a 8-10 page paper (100 hours)
