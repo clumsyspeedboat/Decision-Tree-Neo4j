@@ -8,58 +8,57 @@ import ProcessInput.ProcessInputData;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class PractiseTest {
 
 
-	public ArrayList<Attribute> attributeSet;
-	public ArrayList<Instance> instanceSet;
-	public Attribute targetAttribute;
+	public static final String filePath = "C:/Users/49171/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/"
+			+ "Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/junit_test.csv";
+	
+	public ArrayList<Attribute> attributes = new ArrayList<Attribute>();
+	public ArrayList<Instance> instances = new ArrayList<Instance>();
+	public Attribute targets = new Attribute();
+	
 	
 	@Test
 	public void testProcessInputData() throws IOException {
 				 
-		ProcessInputData input = new ProcessInputData("C:/Users/49171/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/"
-				+ "Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/junit_test.csv");
-		this.attributeSet = input.getAttributeSet();
-		this.instanceSet = input.getInstanceSet();
-		this.targetAttribute = input.getTargetAttribute();
-		
-		System.out.println(this.attributeSet);
-		System.out.println(this.instanceSet);
-		System.out.println(this.targetAttribute);
+		ProcessInputData input = new ProcessInputData(filePath);
+		attributes = input.getAttributeSet();
+		instances = input.getInstanceSet();
+		targets = input.getTargetAttribute();
 		
 		String firstAttr = "id"; 
 		String secondAttr = "var_1";
-		String thirdAttr = "var_3";
-		String fourthAttr = "var_4";
+		String thirdAttr = "var_2";
+		String fourthAttr = "var_3";
 
-		assertEquals( firstAttr , attributeSet.get(0).getName());
-		assertEquals( secondAttr , attributeSet.get(1).getName());
-		assertEquals( thirdAttr , attributeSet.get(2).getName());
-		assertEquals( fourthAttr , attributeSet.get(3).getName());
+		assertEquals( firstAttr , attributes.get(0).getName());
+		assertEquals( secondAttr , attributes.get(1).getName());
+		assertEquals( thirdAttr , attributes.get(2).getName());
+		assertEquals( fourthAttr , attributes.get(3).getName());
 		
-		assertEquals( 8 , instanceSet.size());
-		 
-		
+		assertEquals( 8 , instances.size());
+		 		
 	}
 	
 
 	@Test
 	public void testChooseAttribute() throws IOException {
 		
+		ProcessInputData input = new ProcessInputData(filePath);
+		
 		Attribute igAttr;
 		
-		ChooseAttribute attr = new ChooseAttribute(targetAttribute, attributeSet, instanceSet);
+		ChooseAttribute attr = new ChooseAttribute(input.getTargetAttribute(), input.getAttributeSet(), input.getInstanceSet());
 		igAttr = attr.getChosen();
 		
-		System.out.println(igAttr.getName());
-		String s = "var_3";
-
+		String s = "id";
 		
-		assertEquals( s , igAttr);
+		assertEquals( s , igAttr.getName());
 	}
 
 }
