@@ -116,7 +116,7 @@ colnames(gini_ind) <- "Gini Index"
 "Train-Test Data Split"
 #------------------------------------------------
 ####################
-training_size <- 0.7 #extracting Percentage
+training_size <- 0.75 #extracting Percentage
 n = nrow(data_matrix)
 smp_size <- floor(training_size * n)  #ask from the user
 index<- sample(seq_len(n),size = smp_size)
@@ -134,7 +134,7 @@ TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 #####################
 
 
-TrainingSet$target <- as.factor(TrainingSet$target)
+TrainingSet$target <- as.factor(TrainingSet$Diagnosis)
 
 for (i in 6:13) {
   
@@ -142,7 +142,7 @@ for (i in 6:13) {
   
 }
 
-TestingSet$target <- as.factor(TestingSet$target)
+TestingSet$target <- as.factor(TestingSet$Diagnosis)
 
 for (i in 6:13) {
   
@@ -188,15 +188,15 @@ cm2
 # C5.0 #
 ########
 
-tree3 <- C5.0(Patient.Type~., data = TrainingSet)
+tree3 <- C5.0(Diagnosis~., data = TrainingSet[,c(1,2,13)])
 plot(tree3)
 
-Prediction3 <- predict(tree3, newdata = TestingSet, type = "class")
+Prediction3 <- predict(tree3, newdata = TestingSet[,c(1,2,13)], type = "class")
 
 # Confusion Matrix #
 
 levels3 <- levels(Prediction3)
 levels3 <- levels[order(levels3)]    
-cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Patient.Type, levels3))
+cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Diagnosis, levels3))
 cm3
 ###########################################
