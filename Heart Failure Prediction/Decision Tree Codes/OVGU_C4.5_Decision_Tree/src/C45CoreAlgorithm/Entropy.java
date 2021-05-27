@@ -28,10 +28,15 @@ public class Entropy {
 		ArrayList<String> valuesOfTarget = target.getValues();
 		String targetName = target.getName();
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
+		
+		
+		
+		//instances.forEach((temp) -> System.out.println(temp));
 
 		for (String s : valuesOfTarget) {
 			countValueOfTarget.put(s, 0);
 		}
+		
 		for (Instance instance : instances) {
 			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
 			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
@@ -55,6 +60,7 @@ public class Entropy {
 			double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
 			entropy += itemRes;
 		}
+		
 		return entropy;
 	}
 	
