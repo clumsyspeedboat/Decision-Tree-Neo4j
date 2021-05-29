@@ -68,7 +68,7 @@ Possibility 1 procedures: Java Plugin in Neo4j
 
 Possibility 2 procedures: Pure Neo4j cypher
 - Using Cypher to input the dataset (csv file) into Neo4j to create the Graph Database.
-- Traversal through the Graph Database to calculate the information gain/Gini-entropy.
+- Traverse through the Graph Database to calculate the information gain/Gini-entropy.
 - Create the Decision Tree with node and relationship.
 ```
 
