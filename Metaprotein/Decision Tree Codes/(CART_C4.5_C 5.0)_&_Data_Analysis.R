@@ -195,7 +195,7 @@ df <- df[-2970,]
 df <- df %>% arrange(desc(Value.Cells))
 rownames(df) = seq(length=nrow(df))
 
-data_matrix_new_abc <- data_matrix_new[,df[1:8,2]]
+data_matrix_new_abc <- data_matrix_new[,df[1:300,2]]
 
 
 ##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
@@ -276,13 +276,15 @@ for (i in 1:NCOL(TestingSet)) {
   
 }
 
+write.csv(TrainingSet, file = "maxAccTrainSet.csv")
+
 ###################################################################
 # 1-Cross Validation + Conditional Random Forest #
 ##################################################
 
 train.control <- trainControl(method = "LOOCV")
 
-tree1 <- train(Patient.Type ~., data = TrainingSet, method = "cforest", trControl = train.control)
+tree1 <- train(Patient.Type ~., data = TrainingSet, method = "rf", trControl = train.control)
 print(tree1)
 plot(tree1)
 
