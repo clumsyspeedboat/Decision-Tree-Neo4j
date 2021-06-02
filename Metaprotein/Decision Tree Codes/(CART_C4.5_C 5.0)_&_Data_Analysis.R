@@ -195,8 +195,7 @@ df <- df[-2970,]
 df <- df %>% arrange(desc(Value.Cells))
 rownames(df) = seq(length=nrow(df))
 
-data_matrix_new_abc <- data_matrix_new[,df[1:500,2]]
-
+data_matrix_new_abc <- data_matrix_new[,df[1:8,2]]
 
 
 ##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
@@ -222,15 +221,14 @@ for (i in 34:48) {
 
 data_matrix_new_abc$Patient.Type <- as.factor(data_matrix_new_abc$Patient.Type)
 
-for (i in 1:NCOL(data_matrix_new_abc)) {
+for (i in 1: (n-1)) {
   
-  data_matrix_new_abc[,n-1] <- as.numeric(data_matrix_new_abc[,n-1])
+  data_matrix_new_abc[,i] <- as.numeric(data_matrix_new_abc[,i])
   
 }
 
-write.csv(data_matrix_new_abc, file = "Metaprotein_500.csv", row.names = FALSE)
+barchart(as.factor(data_matrix_new_abc$Patient.Type))
 
-getwd()
 
 ###################
 ## Decision Tree ##
@@ -249,6 +247,9 @@ index<- sample(seq_len(n),size = smp_size)
 TrainingSet <- data_matrix_new_abc[index,]
 TestingSet <- data_matrix_new_abc[-index,]
 
+barchart(TrainingSet$Patient.Type)
+barchart(TestingSet$Patient.Type)
+
 ######   or   ######  
 
 # Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
@@ -259,10 +260,11 @@ TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 
 
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
+TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
 for (i in 1:NCOL(TrainingSet)) {
   
-  TrainingSet[,i] <- as.numeric(TrainingSet[,i])
+  TrainingSet[,n-1] <- as.numeric(TrainingSet[,n-1])
   
 }
 
@@ -270,9 +272,29 @@ TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
 for (i in 1:NCOL(TestingSet)) {
   
-  TestingSet[,i] <- as.numeric(TestingSet[,i])
+  TestingSet[,n-1] <- as.numeric(TestingSet[,i])
   
 }
+
+###################################################################
+# 1-Cross Validation + Conditional Random Forest #
+##################################################
+
+train.control <- trainControl(method = "LOOCV")
+
+tree1 <- train(Patient.Type ~., data = TrainingSet, method = "cforest", trControl = train.control)
+print(tree1)
+plot(tree1)
+
+Prediction1 <- predict(tree1, newdata = TestingSet)
+
+# Confusion Matrix #
+
+levels <- levels(Prediction1)
+levels <- levels[order(levels)]    
+cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Patient.Type, levels))
+cm1
+###########################################
 
 ##########################################
 # CART #
