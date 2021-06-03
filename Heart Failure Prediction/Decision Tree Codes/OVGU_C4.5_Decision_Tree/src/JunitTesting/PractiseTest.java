@@ -4,11 +4,11 @@ import C45CoreAlgorithm.ChooseAttribute;
 import DataDefination.Attribute;
 import DataDefination.Instance;
 import ProcessInput.ProcessInputData;
+import TreeDefination.TreeNode;
+import C45CoreAlgorithm.ConstructTree;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -56,9 +56,23 @@ public class PractiseTest {
 		ChooseAttribute attr = new ChooseAttribute(input.getTargetAttribute(), input.getAttributeSet(), input.getInstanceSet());
 		igAttr = attr.getChosen();
 		
-		String s = "id";
-		
-		assertEquals( s , igAttr.getName());
+		assertEquals( "id" , igAttr.getName());
 	}
+	
+	
+	@Test
+	public void testConstructTree() throws IOException {
+		
+		ProcessInputData input = new ProcessInputData(filePath);
+		
+		ConstructTree tree = new ConstructTree(input.getInstanceSet(), input.getAttributeSet(), input.getTargetAttribute());
+		
+		TreeNode nodes = tree.construct();
+		
+		assertEquals( "id" , nodes.getAttribute().getName());
+        
+
+	}
+
  
 }
