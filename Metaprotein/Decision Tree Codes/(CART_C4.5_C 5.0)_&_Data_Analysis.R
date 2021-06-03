@@ -256,27 +256,29 @@ barchart(TestingSet$Patient.Type)
 
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
+
 #####################
 
 
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
 TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
-for (i in 1:NCOL(TrainingSet)) {
+n <- NCOL(TrainingSet)
+
+for (i in 1:(n-1)) {
   
-  TrainingSet[,n-1] <- as.numeric(TrainingSet[,n-1])
+  TrainingSet[,i] <- as.numeric(TrainingSet[,i])
   
 }
 
 TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
-for (i in 1:NCOL(TestingSet)) {
+for (i in 1:(n-1)) {
   
-  TestingSet[,n-1] <- as.numeric(TestingSet[,i])
+  TestingSet[,i] <- as.numeric(TestingSet[,i])
   
 }
 
-write.csv(TrainingSet, file = "maxAccTrainSet.csv")
 
 ###################################################################
 # 1-Cross Validation + Conditional Random Forest #
