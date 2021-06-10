@@ -1,13 +1,3 @@
-/.DS_Store
-/C45CoreAlgorithm/
-/CV/
-/ClassifyMain.class
-/ClassifyMainGI.class
-/DataDefination/
-/GiniIndex/
-/Main.class
-/MineData/
+/ClassifyMetaProtein.class
 /ProcessInput/
-/ProcessOutput/
-/Pruning/
-/TreeDefination/
+/CV/
