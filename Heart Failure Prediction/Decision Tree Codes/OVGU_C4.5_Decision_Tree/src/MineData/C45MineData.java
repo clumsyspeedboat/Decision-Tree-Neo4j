@@ -84,11 +84,12 @@ public class C45MineData {
 	
 	/**
 	 * Evaluate the decision tree on the test set 
+	 * @return 
 	 * 
 	 * @throws IOException
 	 */
 	
-	public void calculateAccuracy() throws IOException {
+	public Double calculateAccuracy() throws IOException {
 		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 		root = tree.construct();
 		
@@ -105,6 +106,7 @@ public class C45MineData {
 		score = correct * 1.0 / res.size();
 		
 		System.out.println("Accuracy:" + score*100 + "%");
+		return score*100;
 
 	}
 }
