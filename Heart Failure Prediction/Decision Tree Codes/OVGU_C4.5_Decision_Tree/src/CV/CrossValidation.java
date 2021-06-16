@@ -8,6 +8,7 @@ package CV;
 import C45CoreAlgorithm.ConstructTree;
 import DataDefination.Attribute;
 import DataDefination.Instance;
+import GainRatio.ConstructTreeGR;
 import ProcessInput.ProcessInputData;
 import TreeDefination.TreeNode;
 
@@ -151,7 +152,7 @@ public class CrossValidation {
 			}
             
 
-			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
+			ConstructTreeGR tree = new ConstructTreeGR(trainInstances, attributes, target);
 			root = tree.construct();
 
 
