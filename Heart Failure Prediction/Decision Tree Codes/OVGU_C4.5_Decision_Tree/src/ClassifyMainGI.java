@@ -14,7 +14,7 @@ public class ClassifyMainGI{
 		long startTime = System.nanoTime();
 		
 		
-		C45MineDataGI mine = new C45MineDataGI("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/train.csv", "/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/test.csv");
+		C45MineDataGI mine = new C45MineDataGI("/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/maxAccTrain.csv", "/Users/tahab/Desktop/Graph-Database-Learning-Algorithms-Neo4j-/Heart Failure Prediction/Decision Tree Codes/OVGU_C4.5_Decision_Tree/data/maxAccTest.csv");
 		
 		mine.calculateAccuracy();
 		
