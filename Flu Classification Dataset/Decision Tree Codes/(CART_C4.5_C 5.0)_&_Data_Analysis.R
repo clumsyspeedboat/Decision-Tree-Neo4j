@@ -94,10 +94,10 @@ fviz_cluster(dbscan, data_matrix[,c(3,4,6,7,8,9,10,11,12,13)], stand = FALSE, el
 
 ## Entropy, Information Gain & Gain Ratio of variables ##
 
-ig_entropy <- information.gain(target~., data_matrix, unit = "log2")
+ig_entropy <- information.gain(Diagnosis~., data_matrix, unit = "log2")
 colnames(ig_entropy) <- "Information Gain"
 
-gr_entropy <- gain.ratio(target~. , data_matrix, unit = "log2")
+gr_entropy <- gain.ratio(Diagnosis~. , data_matrix, unit = "log2")
 colnames(gr_entropy) <- "Gain Ratio"
 
 
@@ -131,6 +131,9 @@ TestingSet <- data_matrix[-index,]
 
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
+
+write.csv(TrainingSet, file = "Training Set.csv", row.names = FALSE)
+write.csv(TestingSet, file = "Testing Set.csv", row.names = FALSE)
 #####################
 
 
