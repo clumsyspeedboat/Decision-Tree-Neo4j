@@ -157,6 +157,8 @@ for (i in 6:13) {
 # CART #
 ########
 
+start.time <- Sys.time()
+
 tree1 <- rpart(Diagnosis ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
 rpart.plot(tree1)
 
@@ -168,11 +170,17 @@ levels <- levels(Prediction1)
 levels <- levels[order(levels)]    
 cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Diagnosis, levels))
 cm1
+
+end.time <- Sys.time()
+time_taken <- end.time -start.time
+
 ###########################################
 
 ###########################################
 # C4.5 #
 ########
+
+start.time <- Sys.time()
 
 tree2 <- J48(Diagnosis~., data = TrainingSet[,c(1,2,13)])
 plot(tree2)
@@ -185,6 +193,10 @@ levels2 <- levels(Prediction2)
 levels2 <- levels[order(levels2)]    
 cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$Diagnosis, levels2))
 cm2
+
+end.time <- Sys.time()
+time_taken <- end.time -start.time
+
 ###########################################
 
 ###########################################
