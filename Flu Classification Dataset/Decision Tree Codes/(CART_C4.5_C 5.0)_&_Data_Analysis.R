@@ -118,8 +118,8 @@ colnames(gini_ind) <- "Gini Index"
 ####################
 training_size <- 0.75 #extracting Percentage
 n = nrow(data_matrix)
-smp_size <- floor(training_size * n)  #ask from the user
-index<- sample(seq_len(n),size = smp_size)
+smp_size <- floor(training_size * n)  
+index<- sample(seq_len(n),size = smp_size, replace = FALSE)
 
 #Breaking into Training and Testing Sets:
 TrainingSet <- data_matrix[index,]
