@@ -14,11 +14,28 @@ public class TreeNode {
 	private String type;
 	private Attribute attribute;
 	private HashMap<String, TreeNode> children;
+	
 	private String targetLabel;
 	
+	private int parentLevel;
+	private int currentLevel;
+	
+	/*
+	 * private enum Index{ LeftSubTree(0), RightSubTree(1);
+	 * 
+	 * private final int value;
+	 * 
+	 * Index(final int newValue) { value = newValue; } public int getValue() {
+	 * return value;} };
+	 */
+	
+	private int index;
+	
+
 	public TreeNode(Attribute attribute) {
 		type = "root";
 		this.attribute = attribute;
+		
 		children = new HashMap<String, TreeNode>();
 	}
 	
@@ -26,6 +43,7 @@ public class TreeNode {
 		type = "leaf";
 		this.targetLabel = targetLabel;
 	}
+	
 	public Attribute getAttribute() {
 		return attribute;
 	}
@@ -45,7 +63,7 @@ public class TreeNode {
 		this.targetLabel = targetLabel;
 	}
 	
-	public String getType() {
+	public String getType(){
 		return type;
 	}
 	
@@ -53,9 +71,42 @@ public class TreeNode {
 		this.type = type;
 	}
 	
+	public int getParentLevel() {
+		return parentLevel;
+	}
+
+	public void setParentLevel(int parentLevel) {
+		this.parentLevel = parentLevel;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
+	}
+	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	
+	
 	@Override
 	public String toString() {
 		if (type.equals("root")) return "Root attribute: " + attribute.getName() + "; Children: " + children;
 		else return "Leaf label: " + targetLabel;
 	}
+	
+	public static void main(String[] args) {
+		//int val = TreeNode.Index.RightSubTree.getValue();
+		//System.out.println(val);
+	}
+
+	
 }

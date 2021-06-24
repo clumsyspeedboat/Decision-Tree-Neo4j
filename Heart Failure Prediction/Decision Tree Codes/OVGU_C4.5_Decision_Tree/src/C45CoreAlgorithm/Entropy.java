@@ -30,7 +30,6 @@ public class Entropy {
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
 		
 		
-		
 		//instances.forEach((temp) -> System.out.println(temp));
 
 		for (String s : valuesOfTarget) {
@@ -45,6 +44,7 @@ public class Entropy {
 			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) {
 				throw new IOException("Invalid input data");
 			}
+			
 			countValueOfTarget.put(valueOfInstanceAtTarget, 
 					countValueOfTarget.get(valueOfInstanceAtTarget) + 1);
 		}

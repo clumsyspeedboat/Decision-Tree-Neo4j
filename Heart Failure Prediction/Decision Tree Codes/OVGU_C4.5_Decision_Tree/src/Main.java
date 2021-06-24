@@ -13,8 +13,8 @@ public class Main {
         System.out.println("===============================================================");
         
         long startTime = System.nanoTime();
-        CrossValidation cv = new CrossValidation("data/heart_failure_clinical_records_dataset.csv");
-        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure_clinical_records_dataset.csv");
+        CrossValidation cv = new CrossValidation("data/Metaprotein_100.csv");
+        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/Metaprotein_100.csv");
 
         ArrayList<Double> final_score = cv.validate(10);
         ArrayList<Double> final_score_P = cvP.validate(10);

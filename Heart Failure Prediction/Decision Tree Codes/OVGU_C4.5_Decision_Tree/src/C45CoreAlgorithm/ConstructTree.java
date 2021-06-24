@@ -16,6 +16,8 @@ public class ConstructTree {
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> instances;
 	private Attribute target;
+	private int level = 0;
+	private int parentLevel = 0; 
 	
 	
 	public ConstructTree(String fileName) throws IOException {
@@ -54,8 +56,6 @@ public class ConstructTree {
 	private TreeNode constructTree(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
 		
-		
-		
 		/*
 		 *  Stop when (1) entropy is zero
 		 *  (2) no attribute left
@@ -68,6 +68,7 @@ public class ConstructTree {
 				leafLabel = getMajorityLabel(target, instances);
 			}
 			TreeNode leaf = new TreeNode(leafLabel);
+			
 			return leaf;
 		}
 		
@@ -78,15 +79,19 @@ public class ConstructTree {
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
+		
 		// Make a new root
 		TreeNode root = new TreeNode(rootAttr);
-		
+	    
+	    
+	    
 		// Get value subsets of the root attribute to construct branches
 		HashMap<String, ArrayList<Instance>> valueSubsets = choose.getSubset();
 		
 		if (valueSubsets == null || valueSubsets.size() == 0) {
 			String leafLabel = getMajorityLabel(target, instances);
 			TreeNode leaf = new TreeNode(leafLabel);
+			
 			return leaf;
 			
 		}else {
@@ -96,6 +101,7 @@ public class ConstructTree {
 					String leafLabel = getMajorityLabel(target, instances);
 					TreeNode leaf = new TreeNode(leafLabel);
 					root.addChild(valueName, leaf);
+					
 				} else {
 					TreeNode child = constructTree(target, attributes, subset);
 					root.addChild(valueName, child);
@@ -103,9 +109,7 @@ public class ConstructTree {
 			}	
 		}
 		
-			
 		
-		// Remember to add it again!
 		attributes.add(rootAttr);
 		
 		return root;

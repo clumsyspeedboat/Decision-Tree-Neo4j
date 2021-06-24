@@ -157,6 +157,7 @@ public class CrossValidation {
 
 			int correct = 0;
 			ArrayList<Instance> res = getResult();
+			
 			for (Instance item : res) {				
 				String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
 				String label = item.getAttributeValuePairs().get(target.getName());

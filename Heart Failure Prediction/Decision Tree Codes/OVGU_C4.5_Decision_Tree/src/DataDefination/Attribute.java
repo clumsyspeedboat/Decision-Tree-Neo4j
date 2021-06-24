@@ -18,6 +18,7 @@ public class Attribute {
 	
 	// Field values: values. If discrete, stores values; if continuous, stores "real"
 	private ArrayList<String> values;
+	
 
 	//empty constructor
 	public Attribute(){}

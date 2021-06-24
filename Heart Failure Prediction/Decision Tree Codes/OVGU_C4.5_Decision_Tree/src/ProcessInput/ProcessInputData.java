@@ -59,61 +59,59 @@ public class ProcessInputData {
 
 	
 	
-	public ProcessInputData(String fileName) throws IOException {
-		attributeSet = new ArrayList<Attribute>();
-		instanceSet = new ArrayList<Instance>();
-
-		Scanner in = new Scanner(new File(fileName));
-		String line = in.nextLine();
-		String[] lineArr = line.split(",");
-		int lengthAttributes = lineArr.length;
-
-		for (int i = 0; i < lengthAttributes; i++) {
-			if (i == lengthAttributes - 1) {
-				Attribute target = new Attribute(lineArr[i], "{C,CD,UC}");
-				attributeSet.add(target);
-			} else {
-				Attribute attr1 = new Attribute(lineArr[i], "real");
-				attributeSet.add(attr1);
-			}
-		}
-
-		targetAttribute = attributeSet.get(attributeSet.size() - 1);
-
-		while (in.hasNextLine()) {
-			String instance = in.nextLine();
-			String[] instanceArr = instance.split(",");
-			Instance item = new Instance();
-			for (int i = 0; i < instanceArr.length; i++) {
-				item.addAttribute(attributeSet.get(i).getName(), instanceArr[i]);
-			}
-			instanceSet.add(item);
-		}
-		
-	}
-	
-	 
-	
 	/*
-	 * public ProcessInputData(String fileName) throws IOException {
+	 * public ProcessInputData(String fileName) throws IOException { attributeSet =
+	 * new ArrayList<Attribute>(); instanceSet = new ArrayList<Instance>();
 	 * 
-	 * attributeSet = new ArrayList<Attribute>(); instanceSet = new
-	 * ArrayList<Instance>();
+	 * Scanner in = new Scanner(new File(fileName)); String line = in.nextLine();
+	 * String[] lineArr = line.split(","); int lengthAttributes = lineArr.length;
 	 * 
-	 * @SuppressWarnings("resource") Scanner in = new Scanner(new File(fileName));
-	 * 
-	 * addToAttributeSet();
+	 * for (int i = 0; i < lengthAttributes; i++) { if (i == lengthAttributes - 1) {
+	 * Attribute target = new Attribute(lineArr[i], "{C,CD,UC}");
+	 * attributeSet.add(target); } else { Attribute attr1 = new
+	 * Attribute(lineArr[i], "real"); attributeSet.add(attr1); } }
 	 * 
 	 * targetAttribute = attributeSet.get(attributeSet.size() - 1);
 	 * 
-	 * // Put all instances into instanceSet while (in.hasNextLine()) { String line
-	 * = in.nextLine(); String[] lineArr = line.split(","); Instance item = new
-	 * Instance(); for (int i = 0; i < lineArr.length; i++) {
-	 * item.addAttribute(attributeSet.get(i).getName(), lineArr[i]); }
+	 * while (in.hasNextLine()) { String instance = in.nextLine(); String[]
+	 * instanceArr = instance.split(","); Instance item = new Instance(); for (int i
+	 * = 0; i < instanceArr.length; i++) {
+	 * item.addAttribute(attributeSet.get(i).getName(), instanceArr[i]); }
 	 * instanceSet.add(item); }
 	 * 
-	 * instanceSet.forEach((temp) -> { System.out.println(temp); }); }
+	 * //attributeSet.forEach((n) -> System.out.println(n)); instanceSet.forEach((n)
+	 * -> System.out.println(n));
+	 * 
+	 * System.out.println(instanceSet.size()); }
 	 */
+	 
+	
+	
+	public ProcessInputData(String fileName) throws IOException {
+
+		attributeSet = new ArrayList<Attribute>();
+		instanceSet = new ArrayList<Instance>();
+
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(new File(fileName));
+
+		addToAttributeSet();
+
+		targetAttribute = attributeSet.get(attributeSet.size() - 1);
+
+		// Put all instances into instanceSet
+		while (in.hasNextLine()) {
+			String line = in.nextLine();
+			String[] lineArr = line.split(",");
+			Instance item = new Instance();
+			for (int i = 0; i < lineArr.length; i++) {
+				item.addAttribute(attributeSet.get(i).getName(), lineArr[i]);
+			}
+			instanceSet.add(item);
+		}
+
+	}
+	 
 	 
 
 	public void addToAttributeSet() throws IOException {

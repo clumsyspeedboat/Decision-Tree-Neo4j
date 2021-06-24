@@ -32,16 +32,17 @@ public class C45MineData {
 		
 		target = train.getTargetAttribute();
 		trainInstances = train.getInstanceSet();
-		testInstances = test.getInstanceSet();		
-		result.addAll(testInstances);
+		testInstances = test.getInstanceSet();	
 		
+		result.addAll(testInstances);
 	}
+	
 	
 	/**
 	 * After constructing 
 	 */
-	private void mine() {
-		for (int i = 0; i < testInstances.size(); i++) {
+	private void mine(){
+		for(int i = 0; i < testInstances.size(); i++){
 			TreeNode node = root;
 			Instance currInstance = testInstances.get(i);
 			Instance resInstance = result.get(i);
@@ -50,44 +51,50 @@ public class C45MineData {
 				String attributeType = node.getAttribute().getType();
 				HashMap<String, String> attributeValuePairs = currInstance.getAttributeValuePairs();
 				String value = attributeValuePairs.get(attributeName);
-				if (attributeType.equals("continuous")) {
+	
+				if (attributeType.equals("continuous")){
 					HashMap<String, TreeNode> children = node.getChildren();
+					
 					String tmp = "";
+					
 					for (String s : children.keySet()) {
 						String threshold = s.substring(4);
-						if (Double.parseDouble(value) < Double.parseDouble(threshold)) {
+						
+						if (Double.parseDouble(value) < Double.parseDouble(threshold)){
 							tmp = "less";
 						} else {
 							tmp = "more";
 						}
+						
 						String curLabel = s.substring(0, 4);
 						if (tmp.equals(curLabel)) node = children.get(s);
 					}
-				} else {
+				}else{
 					HashMap<String, TreeNode> children = node.getChildren();
 					node = children.get(value);
 				}
 			}
+			
 			HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
 			pairs.put("Test" + target.getName(), node.getTargetLabel());
 		}
 	}
 	
-	public ArrayList<Instance> getResult() {
+	public ArrayList<Instance> getResult(){
 		mine();
 		return result;
 	}
 	
-	public TreeNode getRoot() {
+	public TreeNode getRoot(){
 		return root;
 	}
+	
 	
 	/**
 	 * Evaluate the decision tree on the test set 
 	 * 
 	 * @throws IOException
 	 */
-	
 	public void calculateAccuracy() throws IOException {
 		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 		root = tree.construct();
@@ -105,6 +112,5 @@ public class C45MineData {
 		score = correct * 1.0 / res.size();
 		
 		System.out.println("Accuracy:" + score*100 + "%");
-
 	}
 }
