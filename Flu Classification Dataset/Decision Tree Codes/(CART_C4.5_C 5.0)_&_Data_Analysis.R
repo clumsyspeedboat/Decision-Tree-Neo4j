@@ -3,35 +3,24 @@
 ###################
 
 # Cleaning the work space #
-
 cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
+if(!require("factoextra")) install.packages("factoextra") # PCA
+if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
+if(!require("DescTools")) install.packages("DescTools")   # Gini Index
+if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART
+if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
+if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0
+if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
 
-if(!require("ggplot2")) install.packages("ggplot2")
-if(!require("factoextra")) install.packages("factoextra")    # PCA
-if(!require("FSelector")) install.packages("FSelector")
-if(!require("DescTools")) install.packages("DescTools")
-if(!require("rpart")) install.packages("rpart") 
-if(!require("rpart.plot")) install.packages("rpart.plot")
-if(!require("caret")) install.packages("caret") 
-if(!require("C50")) install.packages("C50")
-if(!require("RWeka")) install.packages("RWeka")
-if(!require("tidyr")) install.packages("tidyr")
-if(!require("dplyr")) install.packages("dplyr")
-
-
-library("ggplot2")
 library("factoextra")
 library("FSelector")
 library("DescTools")
 library("rpart")
 library("rpart.plot")
-library("caret")
 library("C50")
 library("RWeka")
-library("tidyr")
-library("dplyr")
 
 
 # Creating a data matrix #
