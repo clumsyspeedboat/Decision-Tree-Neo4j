@@ -34,34 +34,34 @@ library("tidyr")
 library("dplyr")
 
 
-
 # Creating a data matrix #
-
 data <- file.choose()
-data1
+data_matrix <- read.csv(data, header = TRUE, sep = ",", na.strings=c("","NA"))
+# data_matrix[data_matrix == ""] <- NA
 
-data_matrix <- read.csv(data, header = TRUE, sep = ",")
-
-data_matrix[is.na(data_matrix)] <- 0
-data_matrix[data_matrix == ""] <- 0
-
-info1_data <- str(data_matrix)
-
+# Selecting necessary columns for Decision Tree Implementation #
 data_matrix <- data_matrix[,c(1,3,4,26,32,33,34,35,36,37,42,47,50)]
+data_matrix <- data_matrix[,c(2,11,3,4,5,6,7,8,9,10,12,13,1)]
+
+# Information about the variables #
+info1_data <- str(data_matrix)
 info_data <- as.data.frame.matrix(summary(data_matrix))
 
-data_matrix <- data_matrix[,c(2,11,3,4,5,6,7,8,9,10,12,13,1)]
-  
+# Handling null values in the data set #
+data1 <- data_matrix[,1:2]
+data2 <- data_matrix[,3:13]
+
+data1[is.na(data1)] <- 0          # for numeric variables
+data2[is.na(data2)] <- "unknown"  # for categorical variables
+data_matrix <- cbind(data1,data2)
+
+# Transforming Variables #
 for (i in 1:2) {
-  
-  data_matrix[,i] <- as.numeric(data_matrix[,i])
-  
+    data_matrix[,i] <- as.numeric(data_matrix[,i])
 }
   
 for (i in 3:13) {
-  
   data_matrix[,i] <- as.factor(data_matrix[,i])
-  
 }
 
 
@@ -70,30 +70,23 @@ for (i in 3:13) {
 ###########################
 
 ## Principal Component Analysis (Numeric Variables) ##
-
 pca1 <- prcomp(data_matrix[,c(2,11)], scale = TRUE, center = TRUE)
-
 fviz_pca_biplot(pca1, repel = F,
                 col.var = "black", # Variables color
                 addEllipses = T  # add ellipse around individuals
 )
 
-
 ## Hierarchical Clustering ##
-
 h_clust <- eclust(data_matrix[,c(3,4,6,7,8,9,10,11,12,13)], "hclust", 3 , hc_metric = "manhattan", hc_method = "ward.D", graph = TRUE)
-
 fviz_dend(h_clust, show_labels = TRUE, palette = "jco", as.ggplot= TRUE)
 
 
 ## DBSCAN ##
-
 dbscan <- fpc::dbscan(data_matrix[,c(3,4,6,7,8,9,10,11,12,13)], eps = 20, MinPts =3)  
 fviz_cluster(dbscan, data_matrix[,c(3,4,6,7,8,9,10,11,12,13)], stand = FALSE, ellipse = TRUE, geom = "point")
 
 
 ## Entropy, Information Gain & Gain Ratio of variables ##
-
 ig_entropy <- information.gain(Diagnosis~., data_matrix, unit = "log2")
 colnames(ig_entropy) <- "Information Gain"
 
@@ -102,7 +95,6 @@ colnames(gr_entropy) <- "Gain Ratio"
 
 
 ## Gini Index of variables ##
-
 gini_ind <- as.data.frame(lapply(data_matrix, Gini))
 gini_ind <- as.data.frame(t(gini_ind))
 colnames(gini_ind) <- "Gini Index"
@@ -125,32 +117,27 @@ index<- sample(seq_len(n),size = smp_size, replace = FALSE)
 TrainingSet <- data_matrix[index,]
 TestingSet <- data_matrix[-index,]
 
+# Export CSV #
+# write.csv(TrainingSet, file = "Training Set.csv", row.names = FALSE)
+# write.csv(TestingSet, file = "Testing Set.csv", row.names = FALSE)
+
 ######   or   ######  
 
 # Choosing pre-partitioned Training Set and Testing Set #
-
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-
-write.csv(TrainingSet, file = "Training Set.csv", row.names = FALSE)
-write.csv(TestingSet, file = "Testing Set.csv", row.names = FALSE)
 #####################
 
+# Transform Variables #
 
-TrainingSet$target <- as.factor(TrainingSet$Diagnosis)
-
+TrainingSet$Diagnosis <- as.factor(TrainingSet$Diagnosis)
 for (i in 6:13) {
-  
   TrainingSet[,i] <- as.numeric(TrainingSet[,i])
-  
 }
 
-TestingSet$target <- as.factor(TestingSet$Diagnosis)
-
+TestingSet$Diagnosis <- as.factor(TestingSet$Diagnosis)
 for (i in 6:13) {
-  
   TestingSet[,i] <- as.numeric(TestingSet[,i])
-  
 }
 
 ##########################################
