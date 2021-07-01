@@ -97,6 +97,8 @@ colnames(gini_ind) <- "Gini Index"
 "Train-Test Data Split"
 #------------------------------------------------
 ####################
+
+# Split the original data_matrix #
 training_size <- 0.75 #extracting Percentage
 n = nrow(data_matrix)
 smp_size <- floor(training_size * n)  
@@ -115,18 +117,27 @@ TestingSet <- data_matrix[-index,]
 # Choosing pre-partitioned Training Set and Testing Set #
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-#####################
 
 # Transform Variables #
 
-TrainingSet$Diagnosis <- as.factor(TrainingSet$Diagnosis)
-for (i in 6:13) {
+# Training data #
+
+for (i in 1:2) {
   TrainingSet[,i] <- as.numeric(TrainingSet[,i])
 }
 
-TestingSet$Diagnosis <- as.factor(TestingSet$Diagnosis)
-for (i in 6:13) {
+for (i in 3:13) {
+  TrainingSet[,i] <- as.factor(TrainingSet[,i])
+}
+
+# Testing data #
+
+for (i in 1:2) {
   TestingSet[,i] <- as.numeric(TestingSet[,i])
+}
+
+for (i in 3:13) {
+  TestingSet[,i] <- as.factor(TestingSet[,i])
 }
 
 ##########################################
@@ -135,10 +146,10 @@ for (i in 6:13) {
 
 start.time <- Sys.time()
 
-tree1 <- rpart(Diagnosis ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+tree1 <- rpart(Diagnosis ~.,data=TrainingSet[,-4], method = 'class', parms = list(split = "gini"))
 rpart.plot(tree1)
 
-Prediction1 <- predict(tree1, newdata=TestingSet,type = 'class')
+Prediction1 <- predict(tree1, newdata=TestingSet[,-4],type = 'class')
 
 # Confusion Matrix #
 
@@ -158,10 +169,10 @@ time_taken <- end.time -start.time
 
 start.time <- Sys.time()
 
-tree2 <- J48(Diagnosis~., data = TrainingSet[,c(1,2,13)])
-plot(tree2)
+tree2 <- J48(Diagnosis~., data = TrainingSet[,-4])
+plot(tree2, type = "simple")
 
-Prediction2 <- predict(tree2, newdata = TestingSet[,c(1,2,13)], type = "class")
+Prediction2 <- predict(tree2, newdata = TestingSet[,-4], type = "class")
 
 # Confusion Matrix #
 
@@ -179,10 +190,10 @@ time_taken <- end.time -start.time
 # C5.0 #
 ########
 
-tree3 <- C5.0(Diagnosis~., data = TrainingSet[,c(1,2,13)])
-plot(tree3)
+tree3 <- C5.0(Diagnosis~., data = TrainingSet[,-4], trials = 100)
+plot(tree3, type = "simple")
 
-Prediction3 <- predict(tree3, newdata = TestingSet[,c(1,2,13)], type = "class")
+Prediction3 <- predict(tree3, newdata = TestingSet[,-4], type = "class")
 
 # Confusion Matrix #
 
