@@ -13,6 +13,7 @@ if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART
 if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
 if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
+if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
 
 library("factoextra")
 library("FSelector")
@@ -144,6 +145,7 @@ for (i in 3:13) {
 # CART #
 ########
 
+options(digits.secs = 6)
 start.time <- Sys.time()
 
 tree1 <- rpart(Diagnosis ~.,data=TrainingSet[,-4], method = 'class', parms = list(split = "gini"))
@@ -160,6 +162,7 @@ cm1
 
 end.time <- Sys.time()
 time_taken <- end.time -start.time
+time_taken
 
 ###########################################
 
@@ -167,6 +170,7 @@ time_taken <- end.time -start.time
 # C4.5 #
 ########
 
+options(digits.secs = 6)
 start.time <- Sys.time()
 
 tree2 <- J48(Diagnosis~., data = TrainingSet[,-4])
@@ -183,12 +187,16 @@ cm2
 
 end.time <- Sys.time()
 time_taken <- end.time -start.time
+time_taken
 
 ###########################################
 
 ###########################################
 # C5.0 #
 ########
+
+options(digits.secs = 6)
+start.time <- Sys.time()
 
 tree3 <- C5.0(Diagnosis~., data = TrainingSet[,-4], trials = 100)
 plot(tree3, type = "simple")
@@ -201,4 +209,8 @@ levels3 <- levels(Prediction3)
 levels3 <- levels[order(levels3)]    
 cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Diagnosis, levels3))
 cm3
+
+end.time <- Sys.time()
+time_taken <- end.time -start.time
+time_taken
 ###########################################
