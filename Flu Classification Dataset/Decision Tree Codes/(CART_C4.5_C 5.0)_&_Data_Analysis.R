@@ -13,7 +13,6 @@ if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART
 if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
 if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
-if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
 
 library("factoextra")
 library("FSelector")
@@ -53,7 +52,6 @@ for (i in 1:2) {
 for (i in 3:13) {
   data_matrix[,i] <- as.factor(data_matrix[,i])
 }
-
 
 ###########################
 ## Unsupervised Learning ##
