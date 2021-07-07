@@ -6,14 +6,16 @@
 cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
+if(!require("ggplot2")) install.packages("ggplot2")       # Visualization
 if(!require("factoextra")) install.packages("factoextra") # PCA
 if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
 if(!require("DescTools")) install.packages("DescTools")   # Gini Index
-if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART
+if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART (gini)
 if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
-if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0
-if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5
+if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0 (gain ratio)
+if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
 
+library("ggplot2")
 library("factoextra")
 library("FSelector")
 library("DescTools")
@@ -52,6 +54,31 @@ for (i in 1:2) {
 for (i in 3:13) {
   data_matrix[,i] <- as.factor(data_matrix[,i])
 }
+
+###################
+## Data Analysis ##
+###################
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = age), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = creatinine_phosphokinase), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = ejection_fraction), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = platelets), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = serum_creatinine), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = serum_sodium), bins = 10, colour = "black", fill = "red")
+
+ggplot(data = data_matrix) +
+  geom_histogram(aes(x = time), bins = 10, colour = "black", fill = "red")
 
 ###########################
 ## Unsupervised Learning ##
@@ -103,7 +130,7 @@ n = nrow(data_matrix)
 smp_size <- floor(training_size * n)  
 index<- sample(seq_len(n),size = smp_size, replace = FALSE)
 
-#Breaking into Training and Testing Sets:
+# Breaking into Training and Testing Sets:
 TrainingSet <- data_matrix[index,]
 TestingSet <- data_matrix[-index,]
 
@@ -144,12 +171,15 @@ for (i in 3:13) {
 ########
 
 options(digits.secs = 6)
-start.time <- Sys.time()
-
+start.time1 <- Sys.time()
 tree1 <- rpart(Diagnosis ~.,data=TrainingSet[,-4], method = 'class', parms = list(split = "gini"))
+end.time1 <- Sys.time()
+
 rpart.plot(tree1)
 
+start.time2 <- Sys.time()
 Prediction1 <- predict(tree1, newdata=TestingSet[,-4],type = 'class')
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -158,9 +188,10 @@ levels <- levels[order(levels)]
 cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Diagnosis, levels))
 cm1
 
-end.time <- Sys.time()
-time_taken <- end.time -start.time
-time_taken
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
 
 ###########################################
 
@@ -169,12 +200,15 @@ time_taken
 ########
 
 options(digits.secs = 6)
-start.time <- Sys.time()
-
+start.time1 <- Sys.time()
 tree2 <- J48(Diagnosis~., data = TrainingSet[,-4])
+end.time1 <- Sys.time()
+
 plot(tree2, type = "simple")
 
+start.time2 <- Sys.time()
 Prediction2 <- predict(tree2, newdata = TestingSet[,-4], type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -183,9 +217,10 @@ levels2 <- levels[order(levels2)]
 cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$Diagnosis, levels2))
 cm2
 
-end.time <- Sys.time()
-time_taken <- end.time -start.time
-time_taken
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
 
 ###########################################
 
@@ -194,12 +229,15 @@ time_taken
 ########
 
 options(digits.secs = 6)
-start.time <- Sys.time()
-
+start.time1 <- Sys.time()
 tree3 <- C5.0(Diagnosis~., data = TrainingSet[,-4], trials = 100)
+end.time1 <- Sys.time()
+
 plot(tree3, type = "simple")
 
+start.time2 <- Sys.time()
 Prediction3 <- predict(tree3, newdata = TestingSet[,-4], type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -208,7 +246,8 @@ levels3 <- levels[order(levels3)]
 cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Diagnosis, levels3))
 cm3
 
-end.time <- Sys.time()
-time_taken <- end.time -start.time
-time_taken
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
 ###########################################

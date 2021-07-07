@@ -7,17 +7,14 @@
 cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
-
-if(!require("ggplot2")) install.packages("ggplot2")
-if(!require("factoextra")) install.packages("factoextra")
-if(!require("FSelector")) install.packages("FSelector")
-if(!require("DescTools")) install.packages("DescTools")
-if(!require("rpart")) install.packages("rpart") 
-if(!require("rpart.plot")) install.packages("rpart.plot")
-if(!require("caret")) install.packages("caret") 
-if(!require("C50")) install.packages("C50")
-if(!require("RWeka")) install.packages("RWeka")
-
+if(!require("ggplot2")) install.packages("ggplot2")       # Visualization
+if(!require("factoextra")) install.packages("factoextra") # PCA
+if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
+if(!require("DescTools")) install.packages("DescTools")   # Gini Index
+if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART (gini)
+if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
+if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0 (gain ratio)
+if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
 
 library("ggplot2")
 library("factoextra")
@@ -25,7 +22,6 @@ library("FSelector")
 library("DescTools")
 library("rpart")
 library("rpart.plot")
-library("caret")
 library("C50")
 library("RWeka")
 
@@ -246,10 +242,16 @@ TestingSet$DEATH_EVENT <- as.factor(TestingSet$DEATH_EVENT)
 # CART #
 ########
 
-tree1 <- rpart(DEATH_EVENT~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+options(digits.secs = 6)
+start.time1 <- Sys.time()
+tree1 <- rpart(DEATH_EVENT ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+end.time1 <- Sys.time()
+
 rpart.plot(tree1)
 
+start.time2 <- Sys.time()
 Prediction1 <- predict(tree1, newdata=TestingSet,type = 'class')
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -257,6 +259,12 @@ levels <- levels(Prediction1)
 levels <- levels[order(levels)]    
 cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$DEATH_EVENT, levels))
 cm1
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
 
 
@@ -264,10 +272,15 @@ cm1
 # C4.5 #
 ########
 
+options(digits.secs = 6)
+start.time1 <- Sys.time()
 tree2 <- J48(DEATH_EVENT~., data = TrainingSet)
+end.time1 <- Sys.time()
 plot(tree2)
 
+start.time2 <- Sys.time()
 Prediction2 <- predict(tree2, newdata = TestingSet, type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -275,6 +288,12 @@ levels2 <- levels(Prediction2)
 levels2 <- levels[order(levels2)]    
 cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$DEATH_EVENT, levels2))
 cm2
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
 
 
@@ -282,10 +301,15 @@ cm2
 # C5.0 #
 ########
 
+options(digits.secs = 6)
+start.time1 <- Sys.time()
 tree3 <- C5.0(DEATH_EVENT~., data = TrainingSet)
+end.time1 <- Sys.time()
 plot(tree3)
 
+start.time2 <- Sys.time()
 Prediction3 <- predict(tree3, newdata = TestingSet, type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -293,5 +317,11 @@ levels3 <- levels(Prediction3)
 levels3 <- levels[order(levels3)]    
 cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$DEATH_EVENT, levels3))
 cm3
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
 ######################################################################################

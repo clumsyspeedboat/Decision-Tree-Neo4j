@@ -7,32 +7,21 @@
 cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
+if(!require("factoextra")) install.packages("factoextra") # PCA
+if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
+if(!require("DescTools")) install.packages("DescTools")   # Gini Index
+if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART (gini)
+if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
+if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0 (gain ratio)
+if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
 
-if(!require("ggplot2")) install.packages("ggplot2")
-if(!require("factoextra")) install.packages("factoextra")    # PCA
-if(!require("FSelector")) install.packages("FSelector")
-if(!require("DescTools")) install.packages("DescTools")
-if(!require("rpart")) install.packages("rpart") 
-if(!require("rpart.plot")) install.packages("rpart.plot")
-if(!require("caret")) install.packages("caret") 
-if(!require("C50")) install.packages("C50")
-if(!require("RWeka")) install.packages("RWeka")
-if(!require("tidyr")) install.packages("tidyr")
-if(!require("dplyr")) install.packages("dplyr")
-
-
-library("ggplot2")
 library("factoextra")
 library("FSelector")
 library("DescTools")
 library("rpart")
 library("rpart.plot")
-library("caret")
 library("C50")
 library("RWeka")
-library("tidyr")
-library("dplyr")
-
 
 # Creating a data matrix #
 
@@ -159,76 +148,6 @@ gini_ind <- as.data.frame(lapply(data_matrix_new, Gini))
 gini_ind <- as.data.frame(t(gini_ind))
 colnames(gini_ind) <- "Gini Index"
 
-## Finding abundant columns/meta proteins ##
-
-metadata <- summary(data_matrix_new)
-metadata <- as.data.frame.matrix(metadata)
-
-metadata <- as.data.frame(t(metadata))
-
-metadata1 <- separate(metadata,
-         col = "X.3",
-         into = c("Function", "Mean Values"),
-         sep = " :")
-
-metadata1$`Mean Values` <- as.numeric(metadata1$`Mean Values`)
-
-metadata1$ID <- seq.int(nrow(metadata1))
-
-ab_c <- metadata1 %>% filter(`Mean Values` > 1)
-
-ab_c <- row.names(ab_c)
-
-ab_c <- as.data.frame(ab_c)
-
-ab_c <- separate(ab_c, col = "ab_c", into = c("X","Values"), sep = "X")
-
-ab_c$Values <- as.numeric(ab_c$Values)
-
-data_matrix_new_abc <- data_matrix_new[,ab_c$Values]
-
-
-df <- as.data.frame(48 - colSums(data_matrix_new==0))
-colnames(df)[1] <- "Value.Cells"
-df$ID <- seq.int(nrow(df))
-df <- df[-2970,]
-df <- df %>% arrange(desc(Value.Cells))
-rownames(df) = seq(length=nrow(df))
-
-data_matrix_new_abc <- data_matrix_new[,df[1:300,2]]
-
-
-##  Generating a class label - Control. CD & UC Patients labeled accordingly ##
-
-n <- NCOL(data_matrix_new_abc)+1
-
-Patient.Type <- matrix("C",)
-data_matrix_new_abc <- cbind(data_matrix_new_abc, Patient.Type) 
-
-for (i in 21:33) {
-  
-  data_matrix_new_abc[i,n] <- "CD"
-  
-}
-
-for (i in 34:48) {
-  
-  data_matrix_new_abc[i,n] <- "UC"
-  
-}
-
-## Transforming variables and factorizing class labels ##
-
-data_matrix_new_abc$Patient.Type <- as.factor(data_matrix_new_abc$Patient.Type)
-
-for (i in 1: (n-1)) {
-  
-  data_matrix_new_abc[,i] <- as.numeric(data_matrix_new_abc[,i])
-  
-}
-
-barchart(as.factor(data_matrix_new_abc$Patient.Type))
-
 
 ###################
 ## Decision Tree ##
@@ -243,7 +162,7 @@ n = nrow(data_matrix_new_abc)
 smp_size <- floor(training_size * n)  #ask from the user
 index<- sample(seq_len(n),size = smp_size)
 
-#Breaking into Training and Testing Sets:
+# Breaking into Training and Testing Sets:
 TrainingSet <- data_matrix_new_abc[index,]
 TestingSet <- data_matrix_new_abc[-index,]
 
@@ -259,6 +178,7 @@ TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 
 #####################
 
+## Transform Variables ##
 
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
 TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
@@ -279,35 +199,20 @@ for (i in 1:(n-1)) {
   
 }
 
-
-###################################################################
-# 1-Cross Validation + Conditional Random Forest #
-##################################################
-
-train.control <- trainControl(method = "LOOCV")
-
-tree1 <- train(Patient.Type ~., data = TrainingSet, method = "rf", trControl = train.control)
-print(tree1)
-plot(tree1)
-
-Prediction1 <- predict(tree1, newdata = TestingSet)
-
-# Confusion Matrix #
-
-levels <- levels(Prediction1)
-levels <- levels[order(levels)]    
-cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Patient.Type, levels))
-cm1
-###########################################
-
 ##########################################
 # CART #
 ########
 
+options(digits.secs = 6)
+start.time1 <- Sys.time()
 tree1 <- rpart(Patient.Type ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+end.time1 <- Sys.time()
+
 rpart.plot(tree1)
 
+start.time2 <- Sys.time()
 Prediction1 <- predict(tree1, newdata=TestingSet,type = 'class')
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -315,16 +220,27 @@ levels <- levels(Prediction1)
 levels <- levels[order(levels)]    
 cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Patient.Type, levels))
 cm1
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
 
 ###########################################
 # C4.5 #
 ########
 
+options(digits.secs = 6)
+start.time1 <- Sys.time()
 tree2 <- J48(Patient.Type~., data = TrainingSet)
+end.time1 <- Sys.time()
 plot(tree2)
 
+start.time2 <- Sys.time()
 Prediction2 <- predict(tree2, newdata = TestingSet, type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -332,16 +248,27 @@ levels2 <- levels(Prediction2)
 levels2 <- levels[order(levels2)]    
 cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$Patient.Type, levels2))
 cm2
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
 
 ###########################################
 # C5.0 #
 ########
 
+options(digits.secs = 6)
+start.time1 <- Sys.time()
 tree3 <- C5.0(Patient.Type~., data = TrainingSet)
+end.time1 <- Sys.time()
 plot(tree3)
 
+start.time2 <- Sys.time()
 Prediction3 <- predict(tree3, newdata = TestingSet, type = "class")
+end.time2 <- Sys.time()
 
 # Confusion Matrix #
 
@@ -349,4 +276,10 @@ levels3 <- levels(Prediction3)
 levels3 <- levels[order(levels3)]    
 cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Patient.Type, levels3))
 cm3
+
+time_taken1 <- end.time1 -start.time1
+time_taken2 <- end.time2 -start.time2
+time_taken1
+time_taken2
+
 ###########################################
