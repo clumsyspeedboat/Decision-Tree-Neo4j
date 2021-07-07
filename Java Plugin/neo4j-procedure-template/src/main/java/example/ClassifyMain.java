@@ -28,9 +28,14 @@ public class ClassifyMain {
 		
 	    
 	    PrintTree tree = new PrintTree();
-	    //ArrayList<String> res = tree.printDFS(mine.getRoot());
+		
+		//ArrayList<String> res = tree.printDFS(mine.getRoot());
+		//System.out.println(res);
+		
+		
 	    tree.createNodesForGraph(mine.getRoot());
-	    //System.out.println(res);
+	    System.out.println(tree.nodesBucket);
+	    System.out.println(tree.relationshipsBucket);
 	    
 	    
 		/*
@@ -39,6 +44,11 @@ public class ClassifyMain {
 	    
 	    //tree.printDFS(mine.getRoot());
 	    
+		/*
+		 * String path =
+		 * "/Users/nasim/Desktop/data/train.csv,	/Users/nasim/Desktop/data/test.csv";
+		 * String[] paths = path.split(","); System.out.println(paths[0]);
+		 */
 	    
 		in.close();
 	}

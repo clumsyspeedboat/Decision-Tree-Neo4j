@@ -13,6 +13,9 @@ import java.util.HashMap;
 public class TreeNode {
 	private String type;
 	private Attribute attribute;
+	private Attribute parentAttribute;
+	
+	
 	private HashMap<String, TreeNode> children;
 	
 	private String targetLabel;
@@ -95,6 +98,13 @@ public class TreeNode {
 		this.index = index;
 	}
 
+	public Attribute getParentAttribute() {
+		return parentAttribute;
+	}
+
+	public void setParentAttribute(Attribute parentAttribute) {
+		this.parentAttribute = parentAttribute;
+	}
 	
 	
 	@Override

@@ -1,15 +1,16 @@
 package example;
+import java.util.Scanner;
 
-import java.util.List;
-
-import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.UserFunction;
 
+import MineData.C45MineData;
+import ProcessOutput.PrintTree;
+
 import static org.neo4j.driver.Values.parameters;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -19,19 +20,17 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.Transaction;
 import org.neo4j.driver.TransactionWork;
 
-/**
- *  This aim at passing csv directory into java plugin
- * @author minhd
- *
- */
-public class CreateDecisionTreeNeo4j implements AutoCloseable{
+public class OutputDecisionTreeNeo4j implements AutoCloseable{
+	
 	private static Driver driver;
 	
-	public CreateDecisionTreeNeo4j( String uri, String user, String password )
+	
+	public OutputDecisionTreeNeo4j( String uri, String user, String password )
     {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
     }
-	public CreateDecisionTreeNeo4j()
+	
+	public OutputDecisionTreeNeo4j()
     {
         driver = null;
     }
@@ -41,6 +40,9 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     {
         driver.close();
     }
+	
+	
+	
 	
 	/**
 	 * Create nodes in Neo4j using Java
@@ -64,18 +66,14 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
 					                            " SET a.i = " + nodeDetail.get(4) +
 					                            " RETURN a.message + ', from node ' + id(a)",
 					   parameters( "name", name ) );
-                    return result.single().get( 0 ).asString();
+                    return result.single().get(0).asString();
                 }
             } );
             System.out.println( greeting );
         }
     }
     
-    /**
-     * Create relationship between nodes in Java
-     * @param message String the message that print to Console
-     * @param nodeDetail ArrayList<String> Detail of a relationship
-     */
+    
     public void createRelationship( final String message, final ArrayList<ArrayList<String>> relationshipDetail)
     {
         try ( Session session = driver.session() )
@@ -85,7 +83,7 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (a:DT), (b:DT) " +
+                    Result result = tx.run("MATCH (a:DT), (b:DT) " +
 					                            "Where a.name = '" + relationshipDetail.get(0).get(0) + "' And " +
 					                            "a.l = " + relationshipDetail.get(0).get(1) + " And " +
 					                            "b.name = '" + relationshipDetail.get(1).get(0) + "' And " +
@@ -93,7 +91,7 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
 					                            " Create (a)-[r:DT {type: '" + relationshipDetail.get(2).get(0) +
 					                            "' , value: '" + relationshipDetail.get(2).get(1) +
 					                            "' , propname: '" + relationshipDetail.get(2).get(2) + "' }]->(b)" +
-					                            " RETURN type(r)");
+					                            " RETURN type(r)" );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -101,6 +99,31 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
         }
     }
     
+    
+    /**
+     * Create relationship between nodes in Java
+     * @param message String the message that print to Console
+     * @param nodeDetail ArrayList<String> Detail of a relationship
+     */
+	/*
+	 * public void createRelationship( final String message, final ArrayList<String>
+	 * relationshipDetail) { try (Session session = driver.session()) { String
+	 * greeting = session.writeTransaction( new TransactionWork<String>() {
+	 * 
+	 * @Override public String execute( Transaction tx ) { Result result =
+	 * tx.run("MATCH (a:DT), (b:DT) " + "Where a.name = '" +
+	 * relationshipDetail.get(0) + "' And " + "a.l = " + relationshipDetail.get(1) +
+	 * " And " + "b.name = '" + relationshipDetail.get(2) + "' And " + "b.l = " +
+	 * relationshipDetail.get(3) + " Create (a)-[r:DT {type: '" +
+	 * relationshipDetail.get(5) + "' , value: '" + relationshipDetail.get(4) +
+	 * "' , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
+	 * " RETURN type(r)" ); return result.single().get(0).asString(); } } );
+	 * System.out.println( greeting ); } }
+	 */
+    
+    
+    
+    //These are dummy data
     public static ArrayList<ArrayList<String>> dummyNodeData()
     {
     	ArrayList<ArrayList<String>> decisionTreeNodes = new ArrayList<ArrayList<String>>();
@@ -205,9 +228,12 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     {
     	//To hold all relationships
     	ArrayList<ArrayList<ArrayList<String>>> decisionTreeRelationshipRelationships = new ArrayList<ArrayList<ArrayList<String>>>();
+    	
+    	
     	// Create Array Relationship 1
     	// To create 1 relationship
     	ArrayList<ArrayList<String>> decisionTreeRelationship = new ArrayList<ArrayList<String>>();
+    	
     	//Relationship 1 - 1st element
     	// Hold the information of the 1st node
     	ArrayList<String> decisionTreeRelationshipDetail = new ArrayList<String>();
@@ -215,6 +241,8 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     	decisionTreeRelationshipDetail.add("time");
     	// 1st node level
     	decisionTreeRelationshipDetail.add("0");
+    	
+    	
     	//Relationship 1 - 2nd element
     	// Hold the information of the 2nd node
     	ArrayList<String> decisionTreeRelationshipDetail2 = new ArrayList<String>();
@@ -222,6 +250,8 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     	decisionTreeRelationshipDetail2.add("serum_creatinine");
     	// 2nd node level
     	decisionTreeRelationshipDetail2.add("1");
+    	
+    	
     	//Relationship 1 - 3rd element
     	// Hold the information of the relationship
     	ArrayList<String> decisionTreeRelationshipDetail3 = new ArrayList<String>();
@@ -237,25 +267,36 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     	decisionTreeRelationshipRelationships.add(decisionTreeRelationship);
 
     	
+    	
+    	
+    	
     	// Create Array Relationship 2
     	ArrayList<ArrayList<String>> decisionTreeRelationship2 = new ArrayList<ArrayList<String>>();
     	//Relationship 1 - 1st element
     	ArrayList<String> decisionTreeRelationship2Detail = new ArrayList<String>();
     	decisionTreeRelationship2Detail.add("time");
     	decisionTreeRelationship2Detail.add("0");
+    	
+    	
     	//Relationship 1 - 2nd element
     	ArrayList<String> decisionTreeRelationship2Detail2 = new ArrayList<String>();
     	decisionTreeRelationship2Detail2.add("yes");
     	decisionTreeRelationship2Detail2.add("1");
+    	
+    	
     	//Relationship 1 - 3rd element
     	ArrayList<String> decisionTreeRelationship2Detail3 = new ArrayList<String>();
     	decisionTreeRelationship2Detail3.add("Left");
     	decisionTreeRelationship2Detail3.add("73");
     	decisionTreeRelationship2Detail3.add("time");
+    	
+    	
     	decisionTreeRelationship2.add(decisionTreeRelationship2Detail);
     	decisionTreeRelationship2.add(decisionTreeRelationship2Detail2);
     	decisionTreeRelationship2.add(decisionTreeRelationship2Detail3);
     	decisionTreeRelationshipRelationships.add(decisionTreeRelationship2);
+    	
+    	
     	
     	// Create Array Relationship 3
     	ArrayList<ArrayList<String>> decisionTreeRelationship3 = new ArrayList<ArrayList<String>>();
@@ -419,33 +460,43 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
     	
     	return decisionTreeRelationshipRelationships;
     }
-	
-	@UserFunction
-	public String something(@Name("path") String path)
+    
+    @UserFunction
+    public String createTree(@Name("path") String path) throws Exception
 	{
-		if(path == null)
-		{
-			return null;
-		}
-		else
-		{
-			return "path to csv file: " + path;
-		}
-	}
-	
-	@UserFunction
-	public String createTree(@Name("path") String path) throws Exception
-	{
-		try ( CreateDecisionTreeNeo4j connecter = new CreateDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-        	ArrayList<ArrayList<String>> decisionTreeNodes = new ArrayList<ArrayList<String>>();
+			/*
+			 * Scanner in = new Scanner(System.in);
+			 * 
+			 * 
+			 * String[] paths = path.split(","); C45MineData mine = new
+			 * C45MineData(paths[0], paths[1]);
+			 * 
+			 * mine.calculateAccuracy();
+			 * 
+			 * PrintTree tree = new PrintTree();
+			 * 
+			 * 
+			 * tree.createNodesForGraph(mine.getRoot()); for (ArrayList<String> nodeDetail :
+			 * tree.nodesBucket) { connector.createNode( "create nodes in neo4j",
+			 * nodeDetail); } for (ArrayList<String> relationshipDetail :
+			 * tree.relationshipsBucket) { System.out.println( "Relationship " +
+			 * relationshipDetail);
+			 * connector.createRelationship("create relationship in neo4j",
+			 * relationshipDetail); }
+			 * 
+			 * in.close();
+			 */	
+    		ArrayList<ArrayList<String>> decisionTreeNodes = new ArrayList<ArrayList<String>>();
         	decisionTreeNodes = dummyNodeData();
         	System.out.println(decisionTreeNodes.size());
         	for (ArrayList<String> nodeDetail : decisionTreeNodes)
         	{
         		System.out.println( "Node" + nodeDetail.get(2));
-        		connecter.createNode( "create nodes in neo4j", nodeDetail);
+        		connector.createNode( "create nodes in neo4j", nodeDetail);
         	}
+        	
         	System.out.println( "----------------Create Relationship--------------------");
         	ArrayList<ArrayList<ArrayList<String>>> decisionTreeRelationshipRelationships = new ArrayList<ArrayList<ArrayList<String>>>();
         	decisionTreeRelationshipRelationships = dummyRelationShipData();
@@ -453,10 +504,31 @@ public class CreateDecisionTreeNeo4j implements AutoCloseable{
         	for (ArrayList<ArrayList<String>> relationshipDetail : decisionTreeRelationshipRelationships)
         	{
         		System.out.println( "Relationship " + relationshipDetail);
-        		connecter.createRelationship( "create relationship in neo4j", relationshipDetail);
+        		connector.createRelationship( "create relationship in neo4j", relationshipDetail);
         	}
+    		
         }
-		return "Create the tree successful, path: " +path;
+    	
+    	return "Create the tree successful, path: " +path;
 	}
+    
 	
+	public static void main(String[] args) throws IOException {
+		Scanner in = new Scanner(System.in);
+		
+		String path = "/Users/nasim/Desktop/data/train.csv,/Users/nasim/Desktop/data/test.csv";
+		String[] paths = path.split(",");
+		C45MineData mine = new C45MineData(paths[0], paths[1]);
+		
+		mine.calculateAccuracy();
+		
+		PrintTree tree = new PrintTree();
+		
+	
+	    tree.createNodesForGraph(mine.getRoot());
+	    System.out.println(tree.nodesBucket);
+	    System.out.println(tree.relationshipsBucket);
+	    in.close();
+	}
+
 }

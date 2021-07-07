@@ -43,6 +43,7 @@ public class C45MineData {
 	 */
 	private void mine(){
 		for(int i = 0; i < testInstances.size(); i++){
+			
 			TreeNode node = root;
 			Instance currInstance = testInstances.get(i);
 			Instance resInstance = result.get(i);
@@ -77,6 +78,7 @@ public class C45MineData {
 			
 			HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
 			pairs.put("Test" + target.getName(), node.getTargetLabel());
+			
 		}
 	}
 	
