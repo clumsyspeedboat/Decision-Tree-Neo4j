@@ -16,7 +16,12 @@ public class ClassifyMain {
 		Scanner in = new Scanner(System.in);
 		long startTime = System.nanoTime();
 		
-		C45MineData mine = new C45MineData("data/train.csv", "data/test.csv");
+		
+		String pathos = "data/train.csv,data/test.csv";
+		
+		String[] paths = pathos.split(",");
+		
+		C45MineData mine = new C45MineData(paths[0], paths[1]);
 		
 		mine.calculateAccuracy();
 		
@@ -29,27 +34,18 @@ public class ClassifyMain {
 	    
 	    PrintTree tree = new PrintTree();
 		
-		//ArrayList<String> res = tree.printDFS(mine.getRoot());
-		//System.out.println(res);
+		/*
+		 * ArrayList<String> res = tree.printDFS(mine.getRoot());
+		 * System.out.println(res);
+		 */
 		
 		
-	    tree.createNodesForGraph(mine.getRoot());
-	    System.out.println(tree.nodesBucket);
-	    System.out.println(tree.relationshipsBucket);
+		tree.createNodesForGraph(mine.getRoot());
+		System.out.println(tree.nodesBucket);
+		System.out.println(tree.relationshipsBucket);
+		 
 	    
-	    
-		/*
-		 * for(int i=0; i< res.size(); i++) { System.out.println(res.get(i)); }
-		 */
-	    
-	    //tree.printDFS(mine.getRoot());
-	    
-		/*
-		 * String path =
-		 * "/Users/nasim/Desktop/data/train.csv,	/Users/nasim/Desktop/data/test.csv";
-		 * String[] paths = path.split(","); System.out.println(paths[0]);
-		 */
-	    
+	   
 		in.close();
 	}
 }

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import MineData.C45MineData;
 
@@ -20,9 +21,8 @@ public class PrintTree{
 	private String pic; 
 	public ArrayList<ArrayList<String>> nodesBucket;
 	public ArrayList<ArrayList<String>> relationshipsBucket;
-	
-	
-	
+	private Map<String, Integer> nodeNames; 
+	private Map<String, Integer> relationNames; 
 	
 	/**
 	 * This method create nodes for the graph in Neo4j
@@ -32,6 +32,8 @@ public class PrintTree{
 	public void createNodesForGraph(TreeNode root){
 		nodesBucket = new ArrayList<ArrayList<String>>();
 		relationshipsBucket = new ArrayList<ArrayList<String>>();
+		nodeNames = new HashMap<String, Integer>();
+		relationNames = new HashMap<String, Integer>();
 				
 		root.setParentLevel(0);
 		root.setCurrentLevel(0);
@@ -42,6 +44,7 @@ public class PrintTree{
 		
 		createNodeData(root, "");
 		createRelationshipData(root, "");
+		System.out.println(nodeNames);
 	}
 
 
@@ -112,46 +115,65 @@ public class PrintTree{
 		
 		
 		if(root.getType().equals("leaf")) {
-			
-		
-			
+			String tl = root.getTargetLabel();
+			addToNodeNames(relationNames, tl);
 			
 			if(root.getParentAttribute() != null) {
-				temp.add(root.getParentAttribute().getName());
-				temp.add(Integer.toString(root.getCurrentLevel()-1));
+				String p = root.getParentAttribute().getName();
 				
-				temp.add(root.getTargetLabel());
+				temp.add(p);
+				temp.add(Integer.toString(root.getCurrentLevel()-1));
+				temp.add(Integer.toString(relationNames.get(p)));
+				
+				
+				temp.add(tl);
 				temp.add(Integer.toString(root.getCurrentLevel()));
+				temp.add(Integer.toString(relationNames.get(tl)));
+				
+				//edge value
+				//String edgeVal = tmp.substring(4);
 				temp.add(tmp);
+				
 				int ind = root.getIndex();
 				if(ind == 0) {
 					temp.add("Right");
 				}else {
 					temp.add("Left");
 				}
-				
-				
 				relationshipsBucket.add(temp);
 			}
 
 			
 		} else {
 			String rootAtt = root.getAttribute().getName();
-
+			addToNodeNames(relationNames, rootAtt);
 			
 			if(root.getParentAttribute() != null) {
-				temp.add(root.getParentAttribute().getName());
+				
+				String parent = root.getParentAttribute().getName();
+				
+				
+				temp.add(parent);
 				temp.add(Integer.toString(root.getCurrentLevel()-1));
+				temp.add(Integer.toString(relationNames.get(parent)));
+				
 				
 				temp.add(rootAtt);
+				
 				temp.add(Integer.toString(root.getCurrentLevel()));
+				//add duplicates
+				temp.add(Integer.toString(relationNames.get(rootAtt)));
+				//edge value
+				//String edgeVal = tmp.substring(4);
 				temp.add(tmp);
+				
 				int ind = root.getIndex();
 				if(ind == 0) {
 					temp.add("Right");
 				}else {
 					temp.add("Left");
 				}
+				
 				relationshipsBucket.add(temp);
 			}
 			
@@ -163,10 +185,10 @@ public class PrintTree{
 			   createRelationshipData(children.get(valueName), tmp);
 				
 				
-			}
-			
+			}	
 		}
 	}
+	
 	
 	
 
@@ -174,9 +196,12 @@ public class PrintTree{
 	private void createNodeData(TreeNode root, String tmp){
 		TreeNode node = root;
 		
+		
 		if(node.getType().equals("leaf")) {
 			ArrayList<String> leafNodeDetail = new ArrayList<String>();
 			String leafLabel = node.getTargetLabel();
+			
+			addToNodeNames(nodeNames, leafLabel);
 			
 			leafNodeDetail.add("a");
 			leafNodeDetail.add(":DT:Terminal");
@@ -185,14 +210,20 @@ public class PrintTree{
 			leafNodeDetail.add(Integer.toString(node.getCurrentLevel()));
 			//add index
 			leafNodeDetail.add(Integer.toString(node.getIndex()));
-			leafNodeDetail.add(tmp);
+			leafNodeDetail.add(Integer.toString(nodeNames.get(leafLabel)));
+			//leafNodeDetail.add(tmp);
+			
 			
 			nodesBucket.add(leafNodeDetail);
 		
 		}else{
+			
 			ArrayList<String> rootNodeDetail = new ArrayList<String>();
 			String rootName = node.getAttribute().getName();
+	
+			addToNodeNames(nodeNames, rootName);
 			
+		
 			rootNodeDetail.add("a");
 			rootNodeDetail.add(":DT:Split");
 			
@@ -201,9 +232,13 @@ public class PrintTree{
 			rootNodeDetail.add(Integer.toString(node.getCurrentLevel()));
 			//add index
 			rootNodeDetail.add(Integer.toString(node.getIndex()));
-			rootNodeDetail.add(tmp);
+			//add duplicate
+			rootNodeDetail.add(Integer.toString(nodeNames.get(rootName)));
+			
+			//rootNodeDetail.add(tmp);
 			
 			nodesBucket.add(rootNodeDetail);
+			
 			
 			
 			HashMap<String, TreeNode> children = node.getChildren();
@@ -218,6 +253,15 @@ public class PrintTree{
 			
 		}
 	} 
+	
+	private void addToNodeNames(Map<String, Integer> namesMap, String rootName) {
+		if(namesMap.containsKey(rootName)) {
+			int countNames = namesMap.get(rootName);
+			namesMap.put(rootName, ++countNames);
+		}else {
+			namesMap.put(rootName, 0);
+		}
+	}
 	
 	
 	@Override
