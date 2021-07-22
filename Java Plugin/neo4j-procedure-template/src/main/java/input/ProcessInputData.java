@@ -3,16 +3,16 @@
  * This class is used to process the input csv file 
  */
 
-package ProcessInput;
-
-import DataDefination.Attribute;
-import DataDefination.Instance;
+package input;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import definition.Attribute;
+import definition.Instance;
 
 public class ProcessInputData {
 	ArrayList<Attribute> attributeSet;
@@ -109,7 +109,6 @@ public class ProcessInputData {
 			}
 			instanceSet.add(item);
 		}
-
 	}
 	 
 	 

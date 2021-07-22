@@ -2,9 +2,7 @@
  * This class is used to print the Tree
  */
 
-package ProcessOutput;
-
-import TreeDefination.TreeNode;
+package output;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +10,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import MineData.C45MineData;
+import evaluate.C45MineData;
+import node.TreeNode;
 
 
 
@@ -44,7 +43,6 @@ public class PrintTree{
 		
 		createNodeData(root, "");
 		createRelationshipData(root, "");
-		System.out.println(nodeNames);
 	}
 
 

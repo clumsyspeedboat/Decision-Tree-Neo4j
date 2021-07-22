@@ -2,16 +2,17 @@
  * This class is used for mining data.
  */
 
-package MineData;
+package evaluate;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import ProcessInput.ProcessInputData;
-import TreeDefination.TreeNode;
-import C45CoreAlgorithm.ConstructTree;
-import DataDefination.Attribute;
-import DataDefination.Instance;
+
+import core.ConstructTree;
+import definition.Attribute;
+import definition.Instance;
+import input.ProcessInputData;
+import node.TreeNode;
 
 public class C45MineData {
 	private ArrayList<Attribute> attributes;
@@ -21,6 +22,7 @@ public class C45MineData {
 	private TreeNode root;
 	private ArrayList<Instance> result;
 	private Double score = 0.0;
+	
 	
 	public C45MineData(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();

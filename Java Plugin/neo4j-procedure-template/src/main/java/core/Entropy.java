@@ -4,14 +4,14 @@
  */
 
 
-package C45CoreAlgorithm;
-
-import DataDefination.Attribute;
-import DataDefination.Instance;
+package core;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import definition.Attribute;
+import definition.Instance;
 
 public class Entropy {
 	

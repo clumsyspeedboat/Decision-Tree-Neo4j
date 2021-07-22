@@ -1,14 +1,14 @@
-package example;
+package main;
 
 /**
  * Main class to build the decision tree and test on the test dataset
  */
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
-import MineData.C45MineData;
-import ProcessOutput.PrintTree;
+
+import evaluate.C45MineData;
+import output.PrintTree;
 
 public class ClassifyMain {
 	
@@ -41,11 +41,8 @@ public class ClassifyMain {
 		
 		
 		tree.createNodesForGraph(mine.getRoot());
-		System.out.println(tree.nodesBucket);
-		System.out.println(tree.relationshipsBucket);
+		
 		 
-	    
-	   
 		in.close();
 	}
 }

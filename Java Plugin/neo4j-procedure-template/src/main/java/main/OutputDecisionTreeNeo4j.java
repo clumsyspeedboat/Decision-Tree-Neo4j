@@ -1,11 +1,11 @@
-package example;
+package main;
 import java.util.Scanner;
 
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.UserFunction;
 
-import MineData.C45MineData;
-import ProcessOutput.PrintTree;
+import evaluate.C45MineData;
+import output.PrintTree;
 
 import static org.neo4j.driver.Values.parameters;
 
@@ -25,15 +25,25 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	private static Driver driver;
 	
 	
+	/**
+	 * Creation of driver object using bolt protocol
+	 * @param uri
+	 * @param user
+	 * @param password
+	 */
 	public OutputDecisionTreeNeo4j( String uri, String user, String password )
     {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
     }
+	/**
+	 * Empty constructor
+	 */
 	
 	public OutputDecisionTreeNeo4j()
     {
         driver = null;
     }
+	
 	
 	@Override
     public void close() throws Exception
@@ -107,13 +117,18 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
             System.out.println( greeting );
         }
     }
-	 
     
-   
+    
+    /**
+     * User defined function to create the decision tree with nodes and relationships in neo4j
+     * @param path
+     * @return
+     * @throws Exception
+     */
+
     @UserFunction
     public String createTree(@Name("path") String path) throws Exception
 	{
-    	
     	
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
@@ -140,10 +155,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 				System.out.println("Relationship " + relationshipDetail);
 				connector.createRelationship("create relationship in neo4j", relationshipDetail);
 			}
-
-			
         }
-    	
     	
     	return "Create the tree successful, path: " +path;
     	

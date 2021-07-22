@@ -1,12 +1,8 @@
-/*********************************
- * Author: Xiaodong Zhou
- * Date: 2015/04/05
- *********************************/
-package Pruning;
+package pruning;
 
-import DataDefination.Instance;
-import ProcessInput.ProcessInputData;
-import TreeDefination.TreeNode;
+import definition.Instance;
+import input.ProcessInputData;
+import node.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;

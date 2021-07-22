@@ -3,7 +3,7 @@
  * Instance class
  */
 
-package DataDefination;
+package definition;
 
 import java.util.HashMap;
 

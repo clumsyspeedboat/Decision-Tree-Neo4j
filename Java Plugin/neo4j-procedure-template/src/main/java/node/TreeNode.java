@@ -4,11 +4,11 @@
  */
 
 
-package TreeDefination;
-
-import DataDefination.Attribute;
+package node;
 
 import java.util.HashMap;
+
+import definition.Attribute;
 
 public class TreeNode {
 	private String type;
@@ -23,14 +23,7 @@ public class TreeNode {
 	private int parentLevel;
 	private int currentLevel;
 	
-	/*
-	 * private enum Index{ LeftSubTree(0), RightSubTree(1);
-	 * 
-	 * private final int value;
-	 * 
-	 * Index(final int newValue) { value = newValue; } public int getValue() {
-	 * return value;} };
-	 */
+
 	
 	private int index;
 	

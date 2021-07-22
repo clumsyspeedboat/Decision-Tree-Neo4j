@@ -3,7 +3,7 @@
  */
 
 
-package DataDefination;
+package definition;
 
 import java.io.IOException;
 import java.util.ArrayList;

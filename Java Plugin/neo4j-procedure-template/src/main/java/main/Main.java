@@ -1,12 +1,12 @@
-package example;
+package main;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import CV.CrossValidation;
-import CV.CrossValidationWithPruning;
-import ProcessOutput.PrintTree;
+import cv.CrossValidation;
+import cv.CrossValidationWithPruning;
+import output.PrintTree;
 
 public class Main {
     public static void main(String[] args) throws IOException {

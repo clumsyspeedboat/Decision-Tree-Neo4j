@@ -1,12 +1,12 @@
-package C45CoreAlgorithm;
+package core;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import DataDefination.Attribute;
-import DataDefination.Instance;
+import definition.Attribute;
+import definition.Instance;
 
 
 public class JUnitTesting {

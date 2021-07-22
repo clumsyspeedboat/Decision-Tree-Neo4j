@@ -1,53 +1,46 @@
+
 /**
- * Cross validation class
+ * Cross validation with pruning
  */
 
+package cv;
 
-package CV;
-
-import C45CoreAlgorithm.ConstructTree;
-import DataDefination.Attribute;
-import DataDefination.Instance;
-import ProcessInput.ProcessInputData;
-import TreeDefination.TreeNode;
+import core.ConstructTree;
+import definition.Attribute;
+import definition.Instance;
+import input.ProcessInputData;
+import node.TreeNode;
+import pruning.Pruning;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class CrossValidation {
+public class CrossValidationWithPruning {
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> trainInstances;
 	private ArrayList<Instance> testInstances;
+	private ArrayList<Instance> pruningInstances;
 	private ArrayList<ArrayList<Instance>> testBundles;
 	private Attribute target;
+	private TreeNode rootBefore;
 	private TreeNode root;
 	private ArrayList<Instance> result;
 	private ArrayList<Instance> totalInstances;
 	private ArrayList<Double> scores;
 	Random rand;
 	
-	/**
-	 * Constructor
-	 * @param trainData
-	 * @throws IOException
-	 */
-	public CrossValidation(String trainData) throws IOException {
-
+	public CrossValidationWithPruning(String trainData) throws IOException {
 		result = new ArrayList<Instance>();
 		
 		ProcessInputData input = new ProcessInputData(trainData);
 		this.attributes = input.getAttributeSet();
-
-		this.target = input.getTargetAttribute();
-		
-
+		target = input.getTargetAttribute();
 		this.testBundles = new ArrayList<ArrayList<Instance>>();
-
 		this.totalInstances = input.getInstanceSet();
-
 		rand = new Random(totalInstances.size());
+		pruningInstances = new ArrayList<Instance>();
 	}
 	
 	/**
@@ -56,7 +49,6 @@ public class CrossValidation {
 	 */
 	public void shuffle(int k) {
 		int total_size = totalInstances.size();
-
 		int average = total_size / k;
 		
 		for(int i = 0; i < k - 1; i++) {
@@ -74,22 +66,25 @@ public class CrossValidation {
 		for(int i = 0; i < totalInstances.size(); i++) {
 			lastBundle.add(totalInstances.get(i));
 		}
+		
 		testBundles.add(lastBundle);
 	}
 	
 	/**
-	 * Mine input data (e.g. put target attribute label on input data).
+	 * Mine input data (e.g. put target attribute label on input data), which uses tree
+	 * after pruning.
+	 * @param testInstances
+	 * @param result
+	 * @return ArrayList<Instance>
 	 */
-	private void mine() {
+	public ArrayList<Instance> mine(ArrayList<Instance> testInstances, ArrayList<Instance> result) {
 		for (int i = 0; i < testInstances.size(); i++) {
 			TreeNode node = root;
 			Instance currInstance = testInstances.get(i);
 			Instance resInstance = result.get(i);
-
 			while (!node.getType().equals("leaf")) {
 				String attributeName = node.getAttribute().getName();
 				String attributeType = node.getAttribute().getType();
-
 				HashMap<String, String> attributeValuePairs = currInstance.getAttributeValuePairs();
 				String value = attributeValuePairs.get(attributeName);
 				if (attributeType.equals("continuous")) {
@@ -112,35 +107,28 @@ public class CrossValidation {
 			}
 			HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
 			pairs.put("Test" + target.getName(), node.getTargetLabel());
+			
 		}
-	}
-	
-	/**
-	 * Get result of mined data.
-	 * @return the result of mined data.
-	 */
-	public ArrayList<Instance> getResult() {
-		mine();
 		return result;
 	}
 	
+	public ArrayList<Instance> getResult(ArrayList<Instance> testInstances, ArrayList<Instance> result) {
+		return mine(testInstances, result);
+	}
+	
 	/**
-	 * Do cross validation on input data.
+	 * Do cross validation on input data, which uses tree after pruning.
 	 * @param crossValidationN
-	 * @return the result of cross validation
+	 * @return ArrayList<Double>
 	 * @throws IOException
 	 */
 	public ArrayList<Double> validate(int crossValidationN) throws IOException {
 		shuffle(crossValidationN);
 		scores = new ArrayList<Double>();
-
 		for(int i = 0; i < testBundles.size(); i++) {
 			trainInstances = new ArrayList<Instance>();
-
 			testInstances = new ArrayList<Instance>();
-
 			result = new ArrayList<Instance>();
-
 			for(int j = 0; j < testBundles.size(); j++) {
 				if(i == j) {
 					result.addAll(testBundles.get(j));
@@ -149,33 +137,47 @@ public class CrossValidation {
 					trainInstances.addAll(testBundles.get(j));
 				}
 			}
-            
-
+			ArrayList<Instance> allTrainInstances = trainInstances;
+			int preSum = allTrainInstances.size() * 2 / 3;
+			int index = 0;
+			trainInstances = new ArrayList<Instance>();
+			for(index = 0; index < preSum; index++) {
+				trainInstances.add(allTrainInstances.get(index));
+			}
+			for(; index < allTrainInstances.size(); index++) {
+				pruningInstances.add(allTrainInstances.get(index));
+			}
 			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 			root = tree.construct();
-
-
-			int correct = 0;
-			ArrayList<Instance> res = getResult();
+			rootBefore = root;
 			
-			for (Instance item : res) {				
+			ArrayList<Instance> originalInstances = pruningInstances;
+			ArrayList<Instance> originalPruning = getResult(pruningInstances, pruningInstances);
+			Pruning pruning = new Pruning(root, originalInstances, originalPruning);
+			TreeNode newRoot = pruning.run(root, originalInstances);
+			this.root = newRoot;
+			int correct = 0;
+			ArrayList<Instance> res = getResult(this.testInstances, this.result);
+			for (Instance item : res) {
 				String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
 				String label = item.getAttributeValuePairs().get(target.getName());
+				
 				if(testLabel.equals(label)) {
 					correct++;
 				}
+				
 			}
 			scores.add(correct * 1.0 / res.size());
 		}
-
 		return scores;
 	}
-
-	/**
-	 * 
-	 * @return tree root
-	 */
+	public TreeNode getRootBefore() {
+		return rootBefore;
+	}
 	public TreeNode getRoot() {
 		return root;
+	}
+	public ArrayList<Instance> getResult() {
+		return result;
 	}
 }

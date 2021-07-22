@@ -1,12 +1,12 @@
 /** 
  * This class is used to construct tree
  */
-package C45CoreAlgorithm;
+package core;
 
-import DataDefination.Attribute;
-import DataDefination.Instance;
-import ProcessInput.ProcessInputData;
-import TreeDefination.TreeNode;
+import definition.Attribute;
+import definition.Instance;
+import input.ProcessInputData;
+import node.TreeNode;
 
 import java.io.IOException;
 import java.util.ArrayList;

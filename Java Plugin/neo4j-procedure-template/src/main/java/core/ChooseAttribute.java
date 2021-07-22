@@ -2,16 +2,16 @@
  * This class is used to choose the attribute based on information gain
  */
 
-package C45CoreAlgorithm;
+package core;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import DataDefination.Attribute;
-import DataDefination.Instance;
-import ProcessInput.ProcessInputData;
+import definition.Attribute;
+import definition.Instance;
+import input.ProcessInputData;
 
 public class ChooseAttribute {
 	
