@@ -15,8 +15,8 @@ public class Main {
         System.out.println("===============================================================");
         
         long startTime = System.nanoTime();
-        CrossValidation cv = new CrossValidation("data/Metaprotein_100.csv");
-        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/Metaprotein_100.csv");
+        CrossValidation cv = new CrossValidation("data/Metaprotein_500.csv");
+        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/Metaprotein_500.csv");
 
         ArrayList<Double> final_score = cv.validate(10);
         ArrayList<Double> final_score_P = cvP.validate(10);
@@ -56,7 +56,5 @@ public class Main {
 		}
 		
         in.close();
-        
-        
     }
 }

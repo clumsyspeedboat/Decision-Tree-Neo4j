@@ -15,7 +15,6 @@ import node.TreeNode;
 
 
 
-
 public class PrintTree{
 	private String pic; 
 	public ArrayList<ArrayList<String>> nodesBucket;
@@ -23,11 +22,11 @@ public class PrintTree{
 	private Map<String, Integer> nodeNames; 
 	private Map<String, Integer> relationNames; 
 	
+	
 	/**
 	 * This method create nodes for the graph in Neo4j
 	 * @param root
 	 */
-	
 	public void createNodesForGraph(TreeNode root){
 		nodesBucket = new ArrayList<ArrayList<String>>();
 		relationshipsBucket = new ArrayList<ArrayList<String>>();
@@ -36,13 +35,13 @@ public class PrintTree{
 				
 		root.setParentLevel(0);
 		root.setCurrentLevel(0);
-		//root.setParentAttribute(null);
 		root.setIndex(0);
 		
 		setLevelIndex(root);
 		
 		createNodeData(root, "");
 		createRelationshipData(root, "");
+		
 	}
 
 

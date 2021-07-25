@@ -30,19 +30,16 @@ public class ClassifyMain {
 	    long elapsedTime = endTime - startTime;
 	    double msTime = (double) elapsedTime / 1000000.0;
 	    System.out.println("Time taken: " + msTime + " ms\n");
-		
+	    
 	    
 	    PrintTree tree = new PrintTree();
-		
 		/*
 		 * ArrayList<String> res = tree.printDFS(mine.getRoot());
 		 * System.out.println(res);
 		 */
 		
-		
 		tree.createNodesForGraph(mine.getRoot());
 		
-		 
 		in.close();
 	}
 }

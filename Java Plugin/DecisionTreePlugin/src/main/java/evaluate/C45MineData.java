@@ -23,7 +23,12 @@ public class C45MineData {
 	private ArrayList<Instance> result;
 	private Double score = 0.0;
 	
-	
+	/**
+	 * Constructor to process train and test data 
+	 * @param trainData
+	 * @param testData
+	 * @throws IOException
+	 */
 	public C45MineData(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData);
@@ -95,7 +100,7 @@ public class C45MineData {
 	
 	
 	/**
-	 * Evaluate the decision tree on the test set 
+	 * Evaluate the decision tree on the test set and calculate accuracy
 	 * 
 	 * @throws IOException
 	 */
