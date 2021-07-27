@@ -16,7 +16,7 @@ A project to survey the possibilities of a graph database Neo4j in building a ma
 * Rahul Mondal - rahulmondal415@gmail.com
 
 ## Goal 
-The goal of this project is to accelerated the analysis of highly interlinked clinical and biological data using graph databases. Therefore, we will try to integrate machine learning algorithms into the graph structure
+The goal of this project is to accelerate the analysis of highly interlinked clinical and biological data using graph databases. Therefore, we will try to integrate machine learning algorithms into the graph structure
 
 * What are the time-consuming steps (data access, data organization, training of the network) of machine learning algorithms, and what are the interfaces to connect machine learning algorithms to data provisioning frameworks (e.g. graph databases)?
 * How can we optimize the data provisioning of a graph database for machine learning algorithms (e.g. by special machine-learning-agnostic operators of the graph database or suitable indexing)?
