@@ -89,10 +89,12 @@ public class C45MineData {
 		}
 	}
 	
+	
 	public ArrayList<Instance> getResult(){
 		mine();
 		return result;
 	}
+	
 	
 	public TreeNode getRoot(){
 		return root;
@@ -122,4 +124,5 @@ public class C45MineData {
 		
 		System.out.println("Accuracy:" + score*100 + "%");
 	}
+	
 }

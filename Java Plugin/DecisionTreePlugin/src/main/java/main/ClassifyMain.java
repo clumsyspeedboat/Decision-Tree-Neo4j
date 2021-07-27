@@ -14,7 +14,7 @@ public class ClassifyMain {
 	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
-		long startTime = System.nanoTime();
+		long strTime = System.nanoTime();
 		
 		
 		String pathos = "data/train.csv,data/test.csv";
@@ -23,16 +23,17 @@ public class ClassifyMain {
 		
 		C45MineData mine = new C45MineData(paths[0], paths[1]);
 		
+	    
 		mine.calculateAccuracy();
 		
+		long eTime = System.nanoTime();
+	    long elTime = eTime - strTime;
+	    double mTime = (double) elTime / 1000000.0;
+	    System.out.println("Time taken to generate prediction: " + mTime + " ms\n");
 		
-		long endTime = System.nanoTime();
-	    long elapsedTime = endTime - startTime;
-	    double msTime = (double) elapsedTime / 1000000.0;
-	    System.out.println("Time taken: " + msTime + " ms\n");
-	    
 	    
 	    PrintTree tree = new PrintTree();
+	    
 		/*
 		 * ArrayList<String> res = tree.printDFS(mine.getRoot());
 		 * System.out.println(res);

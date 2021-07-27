@@ -41,7 +41,6 @@ public class PrintTree{
 		
 		createNodeData(root, "");
 		createRelationshipData(root, "");
-		
 	}
 
 

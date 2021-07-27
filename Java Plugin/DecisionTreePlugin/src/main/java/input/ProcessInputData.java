@@ -45,6 +45,7 @@ public class ProcessInputData {
 		
 		int datasetCount = 0;
 		
+		
 		while(in.hasNextLine()) {
 			String line = in.nextLine();
 			String[] lineArr = line.split(",");
@@ -65,6 +66,7 @@ public class ProcessInputData {
 			instanceSet.add(item);
 			datasetCount++;
 		}
+		
 		
 	
 		for(int i=0;i<attributeArr.length;i++){
