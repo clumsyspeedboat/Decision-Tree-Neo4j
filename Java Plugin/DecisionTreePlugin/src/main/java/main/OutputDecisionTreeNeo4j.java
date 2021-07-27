@@ -108,8 +108,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 					                            "b.dupValue = " + relationshipDetail.get(5) + " And " +
 					                            "b.l = " + relationshipDetail.get(4) +
 					                            " Create (a)-[r:DT {type: '" + relationshipDetail.get(7) +
-					                            "' , value: '" + relationshipDetail.get(6) +
-					                            "' , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
+					                            "' , value: " + relationshipDetail.get(6) +
+					                            " , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
 					                            " RETURN type(r)");
                     return result.single().get( 0 ).asString();
                 }

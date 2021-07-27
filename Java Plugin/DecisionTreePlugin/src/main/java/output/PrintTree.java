@@ -128,7 +128,8 @@ public class PrintTree{
 				
 				//edge value
 				//String edgeVal = tmp.substring(4);
-				temp.add(tmp);
+				//temp.add(tmp);
+				temp.add(tmp.replaceAll("[^\\d.]", ""));
 				
 				int ind = root.getIndex();
 				if(ind == 0) {
@@ -161,7 +162,8 @@ public class PrintTree{
 				temp.add(Integer.toString(relationNames.get(rootAtt)));
 				//edge value
 				//String edgeVal = tmp.substring(4);
-				temp.add(tmp);
+				//temp.add(tmp);
+				temp.add(tmp.replaceAll("[^\\d.]", ""));
 				
 				int ind = root.getIndex();
 				if(ind == 0) {
