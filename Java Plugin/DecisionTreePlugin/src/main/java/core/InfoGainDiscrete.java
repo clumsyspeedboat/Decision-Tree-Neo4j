@@ -12,11 +12,12 @@ import java.util.HashMap;
 import definition.Attribute;
 import definition.Instance;
 
+
 public class InfoGainDiscrete {
 	
-	private Attribute attribute;
-	private double infoGain;
-	private HashMap<String, ArrayList<Instance>> subset;
+	protected Attribute attribute;
+	protected double infoGain;
+	protected HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain for
@@ -53,23 +54,19 @@ public class InfoGainDiscrete {
 			subset.get(valueOfInstanceAtAttribute).add(instance);
 		}
 	
-//		for (String key : subset.keySet()) {
-//		    System.out.println(key + subset.get(key).size());
-//		}
-		
+
 
 		int totalN = instances.size();
 		infoGain = Entropy.calculate(target, instances);
-		
-		
+
 		for (String s : subset.keySet()) {
 			ArrayList<Instance> currSubset = subset.get(s);
 			int subN = currSubset.size();
-			double subRes = ((double) subN) / ((double) totalN) * 
-					Entropy.calculate(target, currSubset);
+			double subRes = ((double) subN) / ((double) totalN) * Entropy.calculate(target, currSubset);
 			infoGain -= subRes;
 		}
-
+		 
+	
 	}
 	
 	public Attribute getAttribute() {

@@ -31,6 +31,7 @@ public class CrossValidationWithPruning {
 	private ArrayList<Double> scores;
 	Random rand;
 	
+	
 	public CrossValidationWithPruning(String trainData) throws IOException {
 		result = new ArrayList<Instance>();
 		
@@ -41,6 +42,7 @@ public class CrossValidationWithPruning {
 		this.totalInstances = input.getInstanceSet();
 		rand = new Random(totalInstances.size());
 		pruningInstances = new ArrayList<Instance>();
+		
 	}
 	
 	/**

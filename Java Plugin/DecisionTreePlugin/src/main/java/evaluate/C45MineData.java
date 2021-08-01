@@ -15,13 +15,13 @@ import input.ProcessInputData;
 import node.TreeNode;
 
 public class C45MineData {
-	private ArrayList<Attribute> attributes;
+	protected ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
-	private ArrayList<Instance> trainInstances;
-	private Attribute target;
-	private TreeNode root;
-	private ArrayList<Instance> result;
-	private Double score = 0.0;
+	protected ArrayList<Instance> trainInstances;
+	protected Attribute target;
+	protected TreeNode root;
+	protected ArrayList<Instance> result;
+	protected Double score = 0.0;
 	
 	/**
 	 * Constructor to process train and test data 
@@ -29,6 +29,7 @@ public class C45MineData {
 	 * @param testData
 	 * @throws IOException
 	 */
+	
 	public C45MineData(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData);
@@ -48,7 +49,7 @@ public class C45MineData {
 	/**
 	 * After constructing 
 	 */
-	private void mine(){
+	protected void mine(){
 		for(int i = 0; i < testInstances.size(); i++){
 			
 			TreeNode node = root;
@@ -101,14 +102,35 @@ public class C45MineData {
 	}
 	
 	
+	public double calculateTime(long strTime, long eTime) {
+		long elTime = eTime - strTime; 
+		double mTime = (double) elTime / 1000000.0;
+		double sTime = mTime / 1000;
+		return sTime;
+	}
+	
+	
+	
 	/**
 	 * Evaluate the decision tree on the test set and calculate accuracy
 	 * 
 	 * @throws IOException
 	 */
 	public void calculateAccuracy() throws IOException {
+		//time taken to generate the tree
+		long tstTime = System.nanoTime();
+		
 		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 		root = tree.construct();
+		
+		long teTime = System.nanoTime();
+		double generationTime = calculateTime(tstTime, teTime);
+		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
+		
+		
+		
+		//time taken to run predictions 
+		long startTime = System.nanoTime();
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
@@ -121,6 +143,11 @@ public class C45MineData {
 			}
 		}
 		score = correct * 1.0 / res.size();
+		
+		long endTime = System.nanoTime(); 
+		double predTime = calculateTime(startTime, endTime);
+		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
+		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
 	}
