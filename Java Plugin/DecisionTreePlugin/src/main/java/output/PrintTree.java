@@ -79,7 +79,12 @@ public class PrintTree{
 		}
 	}
 	
-
+	/**
+	 * This method is to print the tree 
+	 * @param root TreeNode the root node of the tree
+	 * @param sb StringBuilder 
+	 * @param res ArrayList<String>
+	 */
 	private void printDFS(TreeNode root, StringBuilder sb, ArrayList<String> res) {
 		
 		if (root.getType().equals("leaf")) {
@@ -104,8 +109,11 @@ public class PrintTree{
 		}	
 	}
 	
-	
-	
+	/**
+	 * This method is to record the relationship data into relationshipsBucket
+	 * @param root TreeNode the node of the tree
+	 * @param tmp tmp String the value of the edge/relationship
+	 */
 	public void createRelationshipData(TreeNode root, String tmp) {
 		ArrayList<String> temp = new ArrayList<String>();
 		
@@ -117,19 +125,20 @@ public class PrintTree{
 			if(root.getParentAttribute() != null) {
 				String p = root.getParentAttribute().getName();
 				
+				//add first node
 				temp.add(p);
 				temp.add(Integer.toString(root.getCurrentLevel()-1));
 				temp.add(Integer.toString(relationNames.get(p)));
 				
-				
+				//add second node
 				temp.add(tl);
 				temp.add(Integer.toString(root.getCurrentLevel()));
 				temp.add(Integer.toString(relationNames.get(tl)));
 				
 				//edge value
-				//String edgeVal = tmp.substring(4);
-				temp.add(tmp);
+				temp.add(tmp.replaceAll("[^\\d.]", ""));
 				
+				//add direction left or right
 				int ind = root.getIndex();
 				if(ind == 0) {
 					temp.add("Right");
@@ -147,7 +156,7 @@ public class PrintTree{
 			if(root.getParentAttribute() != null) {
 				
 				String parent = root.getParentAttribute().getName();
-				
+			
 				
 				temp.add(parent);
 				temp.add(Integer.toString(root.getCurrentLevel()-1));
@@ -160,8 +169,7 @@ public class PrintTree{
 				//add duplicates
 				temp.add(Integer.toString(relationNames.get(rootAtt)));
 				//edge value
-				//String edgeVal = tmp.substring(4);
-				temp.add(tmp);
+				temp.add(tmp.replaceAll("[^\\d.]", ""));
 				
 				int ind = root.getIndex();
 				if(ind == 0) {
@@ -186,9 +194,11 @@ public class PrintTree{
 	}
 	
 	
-	
-
-	
+	/**
+	 * This method is to record the node data into nodesBucket
+	 * @param root TreeNode the node of the tree
+	 * @param tmp String the value of the edge/relationship
+	 */
 	private void createNodeData(TreeNode root, String tmp){
 		TreeNode node = root;
 		
@@ -200,6 +210,7 @@ public class PrintTree{
 			addToNodeNames(nodeNames, leafLabel);
 			
 			leafNodeDetail.add("a");
+			//node type
 			leafNodeDetail.add(":DT:Terminal");
 			leafNodeDetail.add(leafLabel);
 			
@@ -221,6 +232,7 @@ public class PrintTree{
 			
 		
 			rootNodeDetail.add("a");
+			//node type
 			rootNodeDetail.add(":DT:Split");
 			
 			rootNodeDetail.add(rootName);
@@ -230,12 +242,8 @@ public class PrintTree{
 			rootNodeDetail.add(Integer.toString(node.getIndex()));
 			//add duplicate
 			rootNodeDetail.add(Integer.toString(nodeNames.get(rootName)));
-			
-			//rootNodeDetail.add(tmp);
-			
+						
 			nodesBucket.add(rootNodeDetail);
-			
-			
 			
 			HashMap<String, TreeNode> children = node.getChildren();
 			
@@ -250,6 +258,11 @@ public class PrintTree{
 		}
 	} 
 	
+	/**
+	 * This method record the name of the node
+	 * @param namesMap Map<String, Integer> the namesMap
+	 * @param rootName String rootName
+	 */
 	private void addToNodeNames(Map<String, Integer> namesMap, String rootName) {
 		if(namesMap.containsKey(rootName)) {
 			int countNames = namesMap.get(rootName);
