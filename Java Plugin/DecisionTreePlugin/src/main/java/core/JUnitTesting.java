@@ -48,7 +48,6 @@ public class JUnitTesting {
 
 		targetAttribute = attributeSet.get(attributeSet.size() - 1);
 
-
 		// Put all instances into instanceSet
 		while (in.hasNextLine()) {
 			String line = in.nextLine();
@@ -61,7 +60,6 @@ public class JUnitTesting {
 		}
 		
 		in.close();
-		
 	}
 	
 	

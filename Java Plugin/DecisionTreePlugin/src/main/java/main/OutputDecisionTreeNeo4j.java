@@ -171,6 +171,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
+			
 			C45MineData mine = new C45MineData(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
@@ -198,22 +199,5 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     
 	
-	public static void main(String[] args) throws IOException {
-		Scanner in = new Scanner(System.in);
-		
-		String path = "/Users/nasim/Desktop/data/train.csv,/Users/nasim/Desktop/data/test.csv";
-		String[] paths = path.split(",");
-		C45MineData mine = new C45MineData(paths[0], paths[1]);
-		
-		mine.calculateAccuracy();
-		
-		PrintTree tree = new PrintTree();
-		
-	
-	    tree.createNodesForGraph(mine.getRoot());
-	    System.out.println(tree.nodesBucket);
-	    System.out.println(tree.relationshipsBucket);
-	    in.close();
-	}
 
 }

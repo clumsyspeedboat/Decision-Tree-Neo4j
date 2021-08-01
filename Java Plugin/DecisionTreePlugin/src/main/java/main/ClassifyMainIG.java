@@ -10,38 +10,29 @@ import java.util.Scanner;
 import evaluate.C45MineData;
 import output.PrintTree;
 
-public class ClassifyMain {
+public class ClassifyMainIG {
 	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
-		long strTime = System.nanoTime();
-		
 		
 		String pathos = "data/train.csv,data/test.csv";
 		
 		String[] paths = pathos.split(",");
 		
+		
 		C45MineData mine = new C45MineData(paths[0], paths[1]);
 		
-	    
-		mine.calculateAccuracy();
-		
-		long eTime = System.nanoTime();
-	    long elTime = eTime - strTime;
-	    double mTime = (double) elTime / 1000000.0;
-	    System.out.println("Time taken to generate prediction: " + mTime + " ms\n");
-		
+	    mine.calculateAccuracy();
+
 	    
 	    PrintTree tree = new PrintTree();
 	    
-		/*
-		 * ArrayList<String> res = tree.printDFS(mine.getRoot());
-		 * System.out.println(res);
-		 */
-		
+		//System.out.println(tree.printDFS(mine.getRoot()));
+		 
 		tree.createNodesForGraph(mine.getRoot());
 		System.out.println(tree.nodesBucket);
 		
 		in.close();
 	}
+	
 }

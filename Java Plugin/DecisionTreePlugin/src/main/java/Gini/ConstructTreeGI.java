@@ -1,39 +1,25 @@
-/** 
- * This class is used to construct tree
- */
-package core;
+package Gini;
 
 import definition.Attribute;
+import core.ConstructTree;
 import definition.Instance;
-import input.ProcessInputData;
 import node.TreeNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ConstructTree {
-	protected ArrayList<Attribute> attributes;
-	protected ArrayList<Instance> instances;
-	protected Attribute target;
-	private int level = 0;
-	private int parentLevel = 0; 
-	
-	
-	public ConstructTree(String fileName) throws IOException {
-		ProcessInputData input = new ProcessInputData(fileName);
-		attributes = input.getAttributeSet();
-		instances = input.getInstanceSet();
-		target = input.getTargetAttribute();
-		
-	}
 
+public class ConstructTreeGI extends ConstructTree{
 	
-	public ConstructTree(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
+	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
                          Attribute target) {
+		
+		super(instances,attributes,target);
 		this.instances = instances;
 		this.attributes = attributes;
 		this.target = target;
+		
 	}
 	
 	/**
@@ -44,6 +30,8 @@ public class ConstructTree {
 	public TreeNode construct() throws IOException {
 		return constructTree(target, attributes, instances);
 	}
+	
+	
 	
 	/**
 	 * Construct tree recursively. First make the root node, then construct its subtrees 
@@ -57,45 +45,33 @@ public class ConstructTree {
 	private TreeNode constructTree(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
 		
-		/*
-		 *  Stop when (1) entropy is zero
-		 *  (2) no attribute left
-		 */
-		
-		if (Entropy.calculate(target, instances) == 0 || attributes.size() == 0) {
+		if (GiniIndex.calculate(target, instances) == 0 || attributes.size() == 0) {
 			String leafLabel = "";
-			if (Entropy.calculate(target, instances) == 0) {
+			if (GiniIndex.calculate(target, instances) == 0) {
 				leafLabel = instances.get(0).getAttributeValuePairs().get(target.getName());
 			} else {
 				leafLabel = getMajorityLabel(target, instances);
 			}
 			TreeNode leaf = new TreeNode(leafLabel);
-
 			return leaf;
 		}
 		
-		
-		
-		
 		// Choose the root attribute
-		ChooseAttribute choose = new ChooseAttribute(target, attributes, instances);
+		ChooseAttributeGI choose = new ChooseAttributeGI(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
 		
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
-		
 		// Make a new root
 		TreeNode root = new TreeNode(rootAttr);
-	    
-	    
+		
 		// Get value subsets of the root attribute to construct branches
 		HashMap<String, ArrayList<Instance>> valueSubsets = choose.getSubset();
 		
 		if (valueSubsets == null || valueSubsets.size() == 0) {
 			String leafLabel = getMajorityLabel(target, instances);
 			TreeNode leaf = new TreeNode(leafLabel);
-			
 			return leaf;
 			
 		}else {
@@ -105,7 +81,6 @@ public class ConstructTree {
 					String leafLabel = getMajorityLabel(target, instances);
 					TreeNode leaf = new TreeNode(leafLabel);
 					root.addChild(valueName, leaf);
-					
 				} else {
 					TreeNode child = constructTree(target, attributes, subset);
 					root.addChild(valueName, child);
@@ -113,46 +88,13 @@ public class ConstructTree {
 			}	
 		}
 		
+			
 		
+		// Remember to add it again!
 		attributes.add(rootAttr);
 		
 		return root;
 	}
-
 	
 
-	
-	/**
-	 * Get the majority target class label from instances
-	 * @param target
-	 * @param instances
-	 * @return String
-	 * @throws IOException
-	 */
-	public String getMajorityLabel(Attribute target, ArrayList<Instance> instances) throws IOException {
-		ArrayList<String> valuesOfTarget = target.getValues();
-		String targetName = target.getName();
-		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
-		for (String s : valuesOfTarget) {
-			countValueOfTarget.put(s, 0);
-		}
-		for (Instance instance : instances) {
-			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
-			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
-			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) 
-				throw new IOException("Invalid input data");
-			countValueOfTarget.put(valueOfInstanceAtTarget, 
-					countValueOfTarget.get(valueOfInstanceAtTarget) + 1);
-		}
-		String maxLabel = "";
-		int maxCount = 0;
-		for (String s : countValueOfTarget.keySet()) {
-			int currCount = countValueOfTarget.get(s);
-			if (currCount > maxCount) {
-				maxCount = currCount;
-				maxLabel = s;
-			}
-		}
-		return maxLabel;
-	}
 }
