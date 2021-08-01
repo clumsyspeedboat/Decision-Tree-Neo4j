@@ -209,9 +209,9 @@ public class PrintTree{
 			
 			addToNodeNames(nodeNames, leafLabel);
 			
-			leafNodeDetail.add("a");
+			leafNodeDetail.add("a:");
 			//node type
-			leafNodeDetail.add(":DT:Terminal");
+			leafNodeDetail.add(":Terminal");
 			leafNodeDetail.add(leafLabel);
 			
 			leafNodeDetail.add(Integer.toString(node.getCurrentLevel()));
@@ -231,9 +231,9 @@ public class PrintTree{
 			addToNodeNames(nodeNames, rootName);
 			
 		
-			rootNodeDetail.add("a");
+			rootNodeDetail.add("a:");
 			//node type
-			rootNodeDetail.add(":DT:Split");
+			rootNodeDetail.add(":Split");
 			
 			rootNodeDetail.add(rootName);
 			//add level

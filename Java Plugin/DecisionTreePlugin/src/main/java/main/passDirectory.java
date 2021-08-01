@@ -13,6 +13,7 @@ import org.neo4j.procedure.UserFunction;
  */
 public class passDirectory{
 	@UserFunction
+    @Description("pass directory")
 	public String directory(@Name("path") String path)
 	{
 		if(path == null)

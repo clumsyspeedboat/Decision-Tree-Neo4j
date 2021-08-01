@@ -40,6 +40,7 @@ public class ClassifyMain {
 		 */
 		
 		tree.createNodesForGraph(mine.getRoot());
+		System.out.println(tree.nodesBucket);
 		
 		in.close();
 	}
