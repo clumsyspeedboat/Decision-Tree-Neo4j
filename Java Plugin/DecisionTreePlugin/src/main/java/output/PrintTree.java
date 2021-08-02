@@ -41,6 +41,8 @@ public class PrintTree{
 		
 		createNodeData(root, "");
 		createRelationshipData(root, "");
+		System.out.println(nodesBucket);
+		System.out.println(relationshipsBucket);
 	}
 
 

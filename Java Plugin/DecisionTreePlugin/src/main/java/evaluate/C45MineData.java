@@ -6,7 +6,9 @@ package evaluate;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import core.ConstructTree;
 import definition.Attribute;
@@ -38,7 +40,7 @@ public class C45MineData {
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
 		
-		target = train.getTargetAttribute();
+		//target = train.getTargetAttribute();
 		trainInstances = train.getInstanceSet();
 		testInstances = test.getInstanceSet();	
 		
@@ -110,6 +112,64 @@ public class C45MineData {
 	}
 	
 	
+	/**
+	 * This function creates the confusion matrix from actual and predicted arrays
+	 * @param act
+	 * @param pred
+	 */
+	public void calculateConfusionMatrix(ArrayList<String> act, ArrayList<String> pred) {
+		 int truePositive = 0;
+		 int trueNegative = 0;
+		 int falsePositive = 0;
+		 int falseNegative = 0;
+		
+		 List<String> categories = target.getValues();
+		 int matrixSize = categories.size();
+		 int [][] confMatrix = new int[matrixSize][matrixSize];
+		 for(int i=0; i<act.size(); i++) {
+			 String predLabel = pred.get(i);
+	         String actualLabel = act.get(i);
+	         int outLabelIndex = categories.indexOf(predLabel);
+	         int actualLabelIndex = categories.indexOf(actualLabel);
+	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
+		 }
+		 
+		 if(matrixSize==2) {
+			 truePositive = confMatrix[0][0]; 
+			 trueNegative = confMatrix[1][1];
+			 falseNegative = confMatrix[1][0];
+			 falsePositive = confMatrix[0][1];
+		 }else {
+			 for(int row=0; row<matrixSize; row++)
+			 {
+			    for(int col=0; col<matrixSize; col++)
+			    {
+			    	if(row==0 && col==0) {
+			    		truePositive = confMatrix[row][col];
+			    	}else if(row==0 && col>0) {
+			    		falsePositive += confMatrix[row][col];
+			    	}else if(col==0 && row>0) {
+			    		falseNegative += confMatrix[row][col];
+			    	}
+			    	if(row>0 && col>0) {
+			    		trueNegative += confMatrix[row][col];
+			    	}
+			    }
+			 }
+		 }
+		 
+		 //System.out.println(Arrays.deepToString(confMatrix));
+		 String tp=String.format("TP: %d",truePositive);
+		 String tn=String.format("TN: %d",trueNegative);
+		 String fp=String.format("FP: %d",falsePositive);
+		 String fn=String.format("FN: %d",falseNegative);
+		 System.out.println(tp);
+		 System.out.println(tn);
+		 System.out.println(fp);
+		 System.out.println(fn);
+	}
+	
+	
 	
 	/**
 	 * Evaluate the decision tree on the test set and calculate accuracy
@@ -134,14 +194,26 @@ public class C45MineData {
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
+		//System.out.println(res);
+		ArrayList<String> actual = new ArrayList<>();
+		ArrayList<String> predictions = new ArrayList<>();
 		
 		for (Instance item : res) {				
 			String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
+			predictions.add(testLabel);
 			String label = item.getAttributeValuePairs().get(target.getName());
+			actual.add(label);
+			
+			
 			if(testLabel.equals(label)) {
 				correct++;
 			}
 		}
+		
+		
+		calculateConfusionMatrix(actual, predictions);
+		
+		
 		score = correct * 1.0 / res.size();
 		
 		long endTime = System.nanoTime(); 
