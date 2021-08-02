@@ -22,6 +22,7 @@ public class ClassifyMainIG {
 		
 		C45MineData mine = new C45MineData(paths[0], paths[1]);
 		
+		
 	    mine.calculateAccuracy();
 
 	    
@@ -30,7 +31,7 @@ public class ClassifyMainIG {
 		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
-		System.out.println(tree.nodesBucket);
+		
 		
 		in.close();
 	}
