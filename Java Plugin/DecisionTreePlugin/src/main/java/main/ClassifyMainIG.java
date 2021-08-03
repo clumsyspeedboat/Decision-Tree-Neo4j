@@ -30,8 +30,6 @@ public class ClassifyMainIG {
 		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
-		System.out.println(tree.nodesBucket);
-		
 		in.close();
 	}
 	
