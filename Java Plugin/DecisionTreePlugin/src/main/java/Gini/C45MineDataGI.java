@@ -15,7 +15,6 @@ public class C45MineDataGI extends C45MineData{
 	}
 	
 
-	
 	/**
 	 * Evaluate the decision tree on the test set 
 	 * 
@@ -35,7 +34,7 @@ public class C45MineDataGI extends C45MineData{
 		double generationTime = calculateTime(tstTime, teTime);
 		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
 		
-		
+
 		
 		//time taken to run predictions 
 		long startTime = System.nanoTime();
@@ -55,6 +54,9 @@ public class C45MineDataGI extends C45MineData{
 				correct++;
 			}
 		}
+		
+		calculateConfusionMatrix(actual, predictions);
+		
 		score = correct * 1.0 / res.size();
 		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
