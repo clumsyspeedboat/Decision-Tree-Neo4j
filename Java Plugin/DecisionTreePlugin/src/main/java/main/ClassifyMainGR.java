@@ -10,7 +10,7 @@ public class ClassifyMainGR {
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String pathos = "data/train.csv,data/test.csv";
+		String pathos = "Metaprotein_Training_Dataset,Metaprotein_Testing_Dataset";
 		
 		String[] paths = pathos.split(",");
 		
