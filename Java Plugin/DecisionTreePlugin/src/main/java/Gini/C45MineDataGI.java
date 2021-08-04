@@ -21,10 +21,12 @@ public class C45MineDataGI extends C45MineData{
 	 * 
 	 * @throws IOException
 	 */
-	public void calculateAccuracy() throws IOException {
+	
+	public String calculateAccuracy() throws IOException {
 		
 		//time taken to generate the tree
 		long tstTime = System.nanoTime();
+		String confusionMatrix = "";
 		
 		ConstructTreeGI tree = new ConstructTreeGI(trainInstances, attributes, target);
 		root = tree.construct();
@@ -39,6 +41,7 @@ public class C45MineDataGI extends C45MineData{
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
+		//
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 		
@@ -47,11 +50,10 @@ public class C45MineDataGI extends C45MineData{
 			predictions.add(testLabel);
 			String label = item.getAttributeValuePairs().get(target.getName());
 			actual.add(label);
+
 			
-			if(testLabel!= null) {
-				if(testLabel.equals(label)) {
-					correct++;
-				}
+			if(testLabel.equals(label)) {
+				correct++;
 			}
 			
 		}
@@ -60,12 +62,15 @@ public class C45MineDataGI extends C45MineData{
 		
 		score = correct * 1.0 / res.size();
 		
+		confusionMatrix = calculateConfusionMatrix(actual, predictions);
+		
 		long endTime = System.nanoTime(); 
 		double predTime = calculateTime(startTime, endTime);
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
+		return confusionMatrix;
 
 	}
 }

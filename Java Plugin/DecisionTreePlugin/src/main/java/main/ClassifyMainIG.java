@@ -15,7 +15,11 @@ public class ClassifyMainIG {
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String pathos = "data/meta_train.csv,data/meta_test.csv";
+
+		String pathos = "data/train.csv,data/test.csv";
+
+		String pathos = "data/train.csv,data/test.csv";
+
 		
 		String[] paths = pathos.split(",");
 		

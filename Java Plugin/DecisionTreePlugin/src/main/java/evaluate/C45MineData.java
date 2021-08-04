@@ -137,11 +137,12 @@ public class C45MineData {
 	 * @param act
 	 * @param pred
 	 */
-	public void calculateConfusionMatrix(ArrayList<String> act, ArrayList<String> pred) {
+	public String calculateConfusionMatrix(ArrayList<String> act, ArrayList<String> pred) {
 		 int truePositive = 0;
 		 int trueNegative = 0;
 		 int falsePositive = 0;
 		 int falseNegative = 0;
+		 String confusionMatrix = "";
 		
 		 List<String> categories = target.getValues();
 		 int matrixSize = categories.size();
@@ -187,6 +188,8 @@ public class C45MineData {
 		 System.out.println(tn);
 		 System.out.println(fp);
 		 System.out.println(fn);
+		 confusionMatrix = tp + "\n" + tn + "\n" + fp + "\n" + fn;
+		 return confusionMatrix;
 	}
 	
 	
@@ -196,8 +199,9 @@ public class C45MineData {
 	 * 
 	 * @throws IOException
 	 */
-	public void calculateAccuracy() throws IOException {
+	public String calculateAccuracy() throws IOException {
 		//time taken to generate the tree
+		String confusionMatrix = "";
 		long tstTime = System.nanoTime();
 		
 		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
@@ -233,7 +237,7 @@ public class C45MineData {
 		}
 		
 		
-		calculateConfusionMatrix(actual, predictions);
+		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		
 		score = correct * 1.0 / res.size();
 		
@@ -243,6 +247,7 @@ public class C45MineData {
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
+		return confusionMatrix;
 	}
 	
 }

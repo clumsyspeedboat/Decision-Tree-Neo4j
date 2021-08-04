@@ -1,10 +1,13 @@
 package main;
 import java.util.Scanner;
 
+import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.UserFunction;
 
+import Gini.C45MineDataGI;
 import evaluate.C45MineData;
+import gainratio.GainRatioMineData;
 import output.PrintTree;
 
 import static org.neo4j.driver.Values.parameters;
@@ -136,7 +139,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			C45MineData mine = new C45MineData(paths[0], paths[1]);
+			
+			C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
 
@@ -172,7 +176,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			C45MineData mine = new C45MineData(paths[0], paths[1]);
+			GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
 
@@ -197,7 +201,104 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     	
 	}
     
+    @UserFunction
+    public String createTreeInformation(@Name("path") String path) throws Exception
+	{
+    	
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+			
+    		Scanner in = new Scanner(System.in);
+
+			String[] paths = path.split(",");
+			
+			C45MineData mine = new C45MineData(paths[0], paths[1]);
+
+			mine.calculateAccuracy();
+
+			PrintTree tree = new PrintTree();
+
+			tree.createNodesForGraph(mine.getRoot());
+			
+			
+			in.close();
+			
+			for (ArrayList<String> nodeDetail : tree.nodesBucket) {
+				connector.createNode("DTInformation","create nodes in neo4j", nodeDetail);
+			}
+			
+			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
+				System.out.println("Relationship " + relationshipDetail);
+				connector.createRelationship("DTInformation","create relationship in neo4j", relationshipDetail);
+			}
+        }
+    	
+    	return "Create the Gain Ratio Decision Tree successful, path: " + path;
+    	
+	}
     
+    @UserFunction
+    @Description("retrieve the confusion matrix Information Gain Decision Tree")
+	public String confusionMatrixIG(@Name("path") String path) throws Exception
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			String confusionMatrix = "";
+			Scanner in = new Scanner(System.in);
+
+			String[] paths = path.split(",");
+			C45MineData mine = new C45MineData(paths[0], paths[1]);
+
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
+		}
+	}
+    
+    @UserFunction
+    @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
+	public String confusionMatrixGR(@Name("path") String path) throws Exception
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			String confusionMatrix = "";
+			Scanner in = new Scanner(System.in);
+
+			String[] paths = path.split(",");
+			GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
+
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
+		}
+	}
+    
+    @UserFunction
+    @Description("retrieve the confusion matrix Gini Index Decision Tree")
+	public String confusionMatrixGI(@Name("path") String path) throws Exception
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			String confusionMatrix = "";
+			Scanner in = new Scanner(System.in);
+
+			String[] paths = path.split(",");
+			C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
+
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;
+		}
+	}
 	
 
 }
