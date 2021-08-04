@@ -14,8 +14,7 @@ public class ClassifyMainGI {
 		
 		String[] paths = pathos.split(",");
 		
-		
-		C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
+		C45MineDataGI mine = new C45MineDataGI(paths[0],paths[1]);
 		
 	    mine.calculateAccuracy();
 

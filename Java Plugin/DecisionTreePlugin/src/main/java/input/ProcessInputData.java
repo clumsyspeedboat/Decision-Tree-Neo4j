@@ -67,13 +67,17 @@ public class ProcessInputData {
 			datasetCount++;
 		}
 		
+		HashSet<String> targetColumn = myMap.get(myMap.size()-1);
+		double threshold = 1.0 * targetColumn.size()/datasetCount + 0.01;
 		
 	
 		for(int i=0;i<attributeArr.length;i++){
 			int nUnique = myMap.get(i).size();
 			
-			boolean isCategorical = 1.0 * nUnique/datasetCount < 0.07;
+			
+			boolean isCategorical = 1.0 * nUnique/datasetCount < threshold;
 		
+			
 			
 			if(isCategorical == false){
 				Attribute attr1 = new Attribute(attributeArr[i], "real");
@@ -89,6 +93,7 @@ public class ProcessInputData {
 		}
 		
 		targetAttribute = attributeSet.get(attributeSet.size() - 1);
+		
 	}
 
 
@@ -101,7 +106,6 @@ public class ProcessInputData {
 	public ArrayList<Instance> getInstanceSet() {
 		return instanceSet;
 	}
-
 	public Attribute getTargetAttribute() {
 		return targetAttribute;
 	}

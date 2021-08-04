@@ -15,6 +15,7 @@ import definition.Attribute;
 import definition.Instance;
 import input.ProcessInputData;
 import node.TreeNode;
+import output.PrintTree;
 
 public class C45MineData {
 	protected ArrayList<Attribute> attributes;
@@ -52,44 +53,63 @@ public class C45MineData {
 	 * After constructing 
 	 */
 	protected void mine(){
-		for(int i = 0; i < testInstances.size(); i++){
+		
+		try
+        {
+			for(int i = 0; i < testInstances.size(); i++) {
+				TreeNode node = root;
 			
-			TreeNode node = root;
-			Instance currInstance = testInstances.get(i);
-			Instance resInstance = result.get(i);
-			while (!node.getType().equals("leaf")) {
-				String attributeName = node.getAttribute().getName();
-				String attributeType = node.getAttribute().getType();
-				HashMap<String, String> attributeValuePairs = currInstance.getAttributeValuePairs();
-				String value = attributeValuePairs.get(attributeName);
-	
-				if (attributeType.equals("continuous")){
-					HashMap<String, TreeNode> children = node.getChildren();
-					
-					String tmp = "";
-					
-					for (String s : children.keySet()) {
-						String threshold = s.substring(4);
-						
-						if (Double.parseDouble(value) < Double.parseDouble(threshold)){
-							tmp = "less";
-						} else {
-							tmp = "more";
+				Instance currInstance = testInstances.get(i);
+				Instance resInstance = result.get(i);
+				if(node!= null) {
+					while (!node.getType().equals("leaf")) {
+						String attributeName = node.getAttribute().getName();
+						String attributeType = node.getAttribute().getType();
+						HashMap<String, String> attributeValuePairs = currInstance.getAttributeValuePairs();
+						String value = attributeValuePairs.get(attributeName);
+			
+						if (attributeType.equals("continuous")){
+							HashMap<String, TreeNode> children = node.getChildren();
+							
+							String tmp = "";
+							
+							for (String s : children.keySet()) {
+								String threshold = s.substring(4);
+								
+								if (Double.parseDouble(value) < Double.parseDouble(threshold)){
+									tmp = "less";
+								} else {
+									tmp = "more";
+								}
+								
+								String curLabel = s.substring(0, 4);
+								if (tmp.equals(curLabel)) node = children.get(s);
+							}
+						}else{
+							
+								HashMap<String, TreeNode> children = node.getChildren();
+								node = children.get(value);
+							
+							
 						}
-						
-						String curLabel = s.substring(0, 4);
-						if (tmp.equals(curLabel)) node = children.get(s);
 					}
-				}else{
-					HashMap<String, TreeNode> children = node.getChildren();
-					node = children.get(value);
+					
 				}
+				
+				
+				HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
+				pairs.put("Test" + target.getName(), node.getTargetLabel());
+				
 			}
-			
-			HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
-			pairs.put("Test" + target.getName(), node.getTargetLabel());
-			
-		}
+            
+          
+        }catch(NullPointerException n)
+        {
+            // getMessage will print description of exception(here / by zero)
+            System.out.println(n.getMessage());
+        }
+		
+		
 	}
 	
 	
@@ -187,7 +207,9 @@ public class C45MineData {
 		double generationTime = calculateTime(tstTime, teTime);
 		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
 		
-		
+		PrintTree pt = new PrintTree();
+	    
+		System.out.println(pt.printDFS(root));
 		
 		//time taken to run predictions 
 		long startTime = System.nanoTime();
@@ -212,7 +234,6 @@ public class C45MineData {
 		
 		
 		calculateConfusionMatrix(actual, predictions);
-		
 		
 		score = correct * 1.0 / res.size();
 		
