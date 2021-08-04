@@ -1,29 +1,24 @@
-/**
- * This class is used to choose the attribute based on information gain
- */
+package Gini;
 
-package core;
+import core.ChooseAttribute;
+import definition.Attribute;
+import definition.Instance;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-import definition.Attribute;
-import definition.Instance;
-
-public class ChooseAttribute {
+public class ChooseAttributeGI extends ChooseAttribute{
 	
-	public Attribute chosen;
-	public HashMap<String, ArrayList<Instance>> subset;
-	private double infoGain;
-	protected double threshold;
+	private Attribute chosen;
+	private HashMap<String, ArrayList<Instance>> subset;
+	private double probabilities;
+	private double threshold;
 	
 	
-	
-	public ChooseAttribute() {
+	public ChooseAttributeGI() {
 		chosen = new Attribute();
-		infoGain = -1;
+		probabilities = Double.POSITIVE_INFINITY;
 		subset = new HashMap<String, ArrayList<Instance>>();
 	}
 	
@@ -35,46 +30,45 @@ public class ChooseAttribute {
 	 * @param instances
 	 * @throws IOException
 	 */
-	public ChooseAttribute(Attribute target, ArrayList<Attribute> attributes, 
+	public ChooseAttributeGI(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
+		super(target,attributes,instances);
 		
 		// Initialize variables
 		chosen = null;
-		infoGain = -1;
+		probabilities = Double.POSITIVE_INFINITY;
 		subset = null;
+		
 		
 		// Iterate to find the attribute with the largest information gain
 		for (Attribute currAttribute : attributes) {
-			double currInfoGain = 0;
+			double currProbability = 0;
 			HashMap<String, ArrayList<Instance>> currSubset = null;
 			
 			if (currAttribute.getType().equals("continuous")) {
-				InfoGainContinuous continuous = new InfoGainContinuous(currAttribute, target, instances);
-				currInfoGain = continuous.getInfoGain();
+				ContinuousProbability continuous = new ContinuousProbability(currAttribute, target, instances);
+				currProbability = continuous.getGiniValue();
 				currSubset = continuous.getSubset();
 				threshold = continuous.getThreshold();
 			} else {
-				InfoGainDiscrete discrete = new InfoGainDiscrete(target, currAttribute, instances);
-				currInfoGain = discrete.getInfoGain();
+				DiscreteProbability discrete = new DiscreteProbability(target, currAttribute, instances);
+				currProbability = discrete.getGiniValue();
 				currSubset = discrete.getSubset();
 			}
-			if (currInfoGain > infoGain) {
-				infoGain = currInfoGain;
+			if (currProbability < probabilities) {
+				probabilities = currProbability;
 				chosen = currAttribute;
 				subset = currSubset;
 			}
 		}
 	}
 	
-
-	
-	
 	public Attribute getChosen() {
 		return chosen;
 	}
 	
 	public double getInfoGain() {
-		return infoGain;
+		return probabilities;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
@@ -85,9 +79,6 @@ public class ChooseAttribute {
 		return threshold;
 	}
 	
-	public String toString() {
-		return "Chosen attribute: " + chosen + "\n" + "InfoGain: " + infoGain + "\n"
-				+ "Subset: " + subset;
-	}
+	
 
 }

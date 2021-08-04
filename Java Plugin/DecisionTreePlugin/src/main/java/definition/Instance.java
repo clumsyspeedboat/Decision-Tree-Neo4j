@@ -32,7 +32,5 @@ public class Instance {
 				+ "@Instance Attribute Value Pairs: " + attributeValuePairs;
 	}
 	
-	public static void main(String[] args) {
-
-	}
+	
 }

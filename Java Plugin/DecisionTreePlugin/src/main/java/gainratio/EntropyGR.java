@@ -1,19 +1,13 @@
+package gainratio;
 
-/**
- * This class calculates entropy
- */
-
-
-package core;
+import definition.Attribute;
+import definition.Instance;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import definition.Attribute;
-import definition.Instance;
-
-public class Entropy {
+public class EntropyGR {
 	
 	/**
 	 * Calculate entropy of instances for the target attribute.
@@ -28,14 +22,10 @@ public class Entropy {
 		ArrayList<String> valuesOfTarget = target.getValues();
 		String targetName = target.getName();
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
-		
-		
-		//instances.forEach((temp) -> System.out.println(temp));
 
 		for (String s : valuesOfTarget) {
 			countValueOfTarget.put(s, 0);
 		}
-		
 		for (Instance instance : instances) {
 			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
 			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
@@ -44,7 +34,6 @@ public class Entropy {
 			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) {
 				throw new IOException("Invalid input data");
 			}
-			
 			countValueOfTarget.put(valueOfInstanceAtTarget, 
 					countValueOfTarget.get(valueOfInstanceAtTarget) + 1);
 		}
@@ -60,12 +49,8 @@ public class Entropy {
 			double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
 			entropy += itemRes;
 		}
-		
 		return entropy;
 	}
-	
-	
-    
 	
 	/**
 	 * Calculate entropy of instances for the target attribute.
@@ -111,6 +96,4 @@ public class Entropy {
 		}
 		return entropy;
 	}
-	
-	
 }

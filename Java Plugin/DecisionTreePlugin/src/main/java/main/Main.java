@@ -15,6 +15,7 @@ public class Main {
         System.out.println("===============================================================");
         
         long startTime = System.nanoTime();
+        
         CrossValidation cv = new CrossValidation("data/heart_failure.csv");
         CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure.csv");
 

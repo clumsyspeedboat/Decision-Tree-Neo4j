@@ -1,9 +1,8 @@
-/**
- * Calculates the information gain of continuous attribute
- */
+package Gini;
 
-
-package core;
+import definition.Attribute;
+import definition.Instance;
+import core.InfoGainContinuous;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,16 +10,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import definition.Attribute;
-import definition.Instance;
-
-
-public class InfoGainContinuous {
+public class ContinuousProbability{
 	
-	protected Attribute attribute;
+	private Attribute attribute;
+	private double giniValue;
+	private HashMap<String, ArrayList<Instance>> subset;
 	protected double threshold;
-	protected double infoGain = -1;
-	protected HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
 	 * Constructor: initialize fields. This class is for calculating the information gain
@@ -31,8 +26,7 @@ public class InfoGainContinuous {
 	 * @param instances
 	 * @throws IOException
 	 */
-	
-	public InfoGainContinuous(Attribute attribute, Attribute target, 
+	public ContinuousProbability(Attribute attribute, Attribute target, 
 			ArrayList<Instance> instances) throws IOException {
 		
 		this.attribute = attribute;
@@ -59,10 +53,11 @@ public class InfoGainContinuous {
 		
 		/*
 		 (3) Get each position that target value change,
-			then calculate information gain of each position
+			then calculate continuous probability of each position
 		    find the maximum position value to be the threshold 		
 		 */		 
 		int thresholdPos = 0;
+		
 		for (int i = 0; i < instances.size() - 1; i++) {
 			HashMap<String, String> instancePair = instances.get(i).getAttributeValuePairs();
 			String instanceValue = instancePair.get(attributeName);
@@ -70,9 +65,9 @@ public class InfoGainContinuous {
 			String instanceValue2 = instancePair2.get(attributeName);
 					
 			if (!instanceValue.equals(instanceValue2)) {
-				double currInfoGain = calculateConti(attribute, target, instances, i);
-				if (currInfoGain - infoGain > 0) {
-					infoGain = currInfoGain;
+				double currGini = calculateConti(attribute, target, instances, i);
+				if (currGini - giniValue > 0) {
+					giniValue = currGini;
 					thresholdPos = i;
 				}
 			}
@@ -105,15 +100,15 @@ public class InfoGainContinuous {
 			ArrayList<Instance> instances, int index) throws IOException {
 		
 		int totalN = instances.size();
-		double infoGain = Entropy.calculate(target, instances);
+		double giniValue = GiniIndex.calculate(target, instances);
 		int subL = index + 1;
 		int subR = instances.size() - index - 1;
 		double subResL = ((double) subL) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, 0, index);
+				GiniIndex.calculateConti(target, instances, 0, index);
 		double subResR = ((double) subR) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, index + 1, totalN - 1);
-		infoGain -= (subResL + subResR);
-		return infoGain;
+				GiniIndex.calculateConti(target, instances, index + 1, totalN - 1);
+		giniValue += (subResL + subResR);
+		return giniValue;
 	}
 	
 	public Attribute getAttribute() {
@@ -124,16 +119,11 @@ public class InfoGainContinuous {
 		return threshold;
 	}
 	
-	public double getInfoGain() {
-		return infoGain;
+	public double getGiniValue() {
+		return giniValue;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
 		return subset;
-	}
-	
-	public String toString() {
-		return "Attribute: " + attribute.getName() + "\n" + "Threshold: " + threshold + "\n" 
-				+ "InfoGain: " + infoGain + "\n" + "Subset: " + subset;
 	}
 }

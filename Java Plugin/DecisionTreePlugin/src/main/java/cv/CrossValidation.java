@@ -27,6 +27,7 @@ public class CrossValidation {
 	private ArrayList<Instance> totalInstances;
 	private ArrayList<Double> scores;
 	Random rand;
+	String impurity; 
 	
 	/**
 	 * Constructor
@@ -48,6 +49,7 @@ public class CrossValidation {
 		this.totalInstances = input.getInstanceSet();
 
 		rand = new Random(totalInstances.size());
+		this.impurity = impurity;
 	}
 	
 	/**

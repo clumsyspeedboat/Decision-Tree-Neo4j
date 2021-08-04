@@ -1,22 +1,16 @@
+package Gini;
 
-/**
- * This class calculates entropy
- */
-
-
-package core;
+import definition.Attribute;
+import definition.Instance;
+import core.Entropy;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import definition.Attribute;
-import definition.Instance;
-
-public class Entropy {
-	
+public class GiniIndex extends Entropy{
 	/**
-	 * Calculate entropy of instances for the target attribute.
+	 * Calculate gini index of instances for the target attribute.
 	 * Only for discrete attribute.
 	 * @param target
 	 * @param instances
@@ -26,65 +20,58 @@ public class Entropy {
 	public static double calculate(Attribute target, ArrayList<Instance> instances) throws IOException{
 
 		ArrayList<String> valuesOfTarget = target.getValues();
+		
 		String targetName = target.getName();
+		
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
-		
-		
-		//instances.forEach((temp) -> System.out.println(temp));
 
 		for (String s : valuesOfTarget) {
 			countValueOfTarget.put(s, 0);
 		}
 		
+		
 		for (Instance instance : instances) {
 			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
 			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
-
+           
 
 			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) {
 				throw new IOException("Invalid input data");
 			}
-			
 			countValueOfTarget.put(valueOfInstanceAtTarget, 
 					countValueOfTarget.get(valueOfInstanceAtTarget) + 1);
 		}
 		
+		
 		int totalN = instances.size();
-		double entropy = 0;
+		double giniindex = 0;
+		
+
 		
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;
-			if (countSingleValue == totalN) return 0;
+			
 			double pValue = ((double) countSingleValue) / ((double)totalN);
-			double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
-			entropy += itemRes;
+			double itemRes = Math.pow(pValue,2);
+			giniindex += itemRes;
 		}
-		
-		return entropy;
+		giniindex = 1 - giniindex;
+				
+		return giniindex;
 	}
 	
-	
-    
-	
 	/**
-	 * Calculate entropy of instances for the target attribute.
+	 * Calculate gini index of instances for the target attribute.
 	 * Only for continuous attribute.
-	 * Reason: arguments of methods are different. The arguments of this method has start and 
-	 * end. Such arguments can reuse instances without separating them into different arrayLists,
-	 * saving time and space.
-	 * @param target
-	 * @param instances
-	 * @param start
-	 * @param end
-	 * @return double
-	 * @throws IOException
 	 */
 	public static double calculateConti(Attribute target, ArrayList<Instance> instances,
                                         int start, int end) throws IOException {
 		ArrayList<String> valuesOfTarget = target.getValues();
 		String targetName = target.getName();
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
+		
+		
 		for (String s : valuesOfTarget) {
 			countValueOfTarget.put(s, 0);
 		}
@@ -99,18 +86,20 @@ public class Entropy {
 		}
 		
 		int totalN = instances.size();
-		double entropy = 0;
-		
+		double giniindex = 0;
+				
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;
-			if (countSingleValue == totalN) return 0;
+			
 			double pValue = ((double) countSingleValue) / ((double)totalN);
-			double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
-			entropy += itemRes;
+			double itemRes = Math.pow(pValue,2);
+			giniindex += itemRes;
 		}
-		return entropy;
+		
+		giniindex = 1 - giniindex;
+		
+		return giniindex;
 	}
-	
-	
+
 }
