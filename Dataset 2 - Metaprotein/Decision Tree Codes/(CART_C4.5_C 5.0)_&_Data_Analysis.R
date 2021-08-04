@@ -88,23 +88,6 @@ for (i in 34:48) {
   
 }
 
-## Directly upload pre-processed file ##
-
-data2 <- file.choose()
-data2
-data_matrix_new <- read.csv(data2, header = TRUE, sep = ",")
-
-
-## Transforming variables and factorizing class labels ##
-
-data_matrix_new$Patient.Type <- as.factor(data_matrix_new$Patient.Type)
-
-for (i in 1:(NCOL(data_matrix_new)-1)) {
-  
-  data_matrix_new[,i] <- as.numeric(data_matrix_new[,i])
-  
-}
-
 
 ###########################
 ## Unsupervised Learning ##
@@ -156,30 +139,24 @@ colnames(gini_ind) <- "Gini Index"
 #------------------------------------------------
 "Train-Test Data Split"
 #------------------------------------------------
-####################
 training_size <- 0.5 #extracting Percentage
-n = nrow(data_matrix_new_abc)
-smp_size <- floor(training_size * n)  #ask from the user
+n = nrow(data_matrix)
+smp_size <- floor(training_size * n)  
 index<- sample(seq_len(n),size = smp_size)
 
 # Breaking into Training and Testing Sets:
-TrainingSet <- data_matrix_new_abc[index,]
-TestingSet <- data_matrix_new_abc[-index,]
-
-barchart(TrainingSet$Patient.Type)
-barchart(TestingSet$Patient.Type)
+TrainingSet <- data_matrix[index,]
+TestingSet <- data_matrix[-index,]
 
 ######   or   ######  
 
 # Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
-
 TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
 
 #####################
 
 ## Transform Variables ##
-
 TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
 TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
