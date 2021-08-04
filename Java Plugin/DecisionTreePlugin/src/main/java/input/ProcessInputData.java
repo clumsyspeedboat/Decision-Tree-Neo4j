@@ -45,27 +45,40 @@ public class ProcessInputData {
 		
 		int datasetCount = 0;
 		
-		
 		while(in.hasNextLine()) {
+			
 			String line = in.nextLine();
 			String[] lineArr = line.split(",");
-			Instance item = new Instance();
-			
-			for(int a=0; a<lineArr.length; a++) {
-				if(myMap.containsKey(a)) {
-					uSet = myMap.get(a);
-					uSet.add(lineArr[a]);
-				}else {
-					uSet = new HashSet<String>();
-					uSet.add(lineArr[a]);
-				    myMap.put(a, uSet);
+			if(lineArr.length == attributeArr.length) {
+				Instance item = new Instance();
+				
+				for(int a=0; a<attributeArr.length; a++) {
+					if(myMap.containsKey(a)) {
+						uSet = myMap.get(a);
+						uSet.add(lineArr[a]);
+					}else {
+						uSet = new HashSet<String>();
+						uSet.add(lineArr[a]);
+					    myMap.put(a, uSet);
+					}
+					
+					item.addAttribute(attributeArr[a], lineArr[a]);
 				}
-				item.addAttribute(attributeArr[a], lineArr[a]);
+				instanceSet.add(item);
+				datasetCount++;
+			}else {
+				
 			}
 			
-			instanceSet.add(item);
-			datasetCount++;
+			
+			
 		}
+	
+		
+		
+		
+		
+		
 		
 		HashSet<String> targetColumn = myMap.get(myMap.size()-1);
 		double threshold = 1.0 * targetColumn.size()/datasetCount + 0.01;

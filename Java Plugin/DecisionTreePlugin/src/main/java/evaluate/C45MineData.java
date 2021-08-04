@@ -75,6 +75,19 @@ public class C45MineData {
 							
 							for (String s : children.keySet()) {
 								String threshold = s.substring(4);
+								try
+								{
+								  Double.parseDouble(value);
+								  Double.parseDouble(threshold);
+								}
+								catch(NumberFormatException e)
+								{
+								  //not a double
+									System.out.println(e);
+									value = "0.0";
+									threshold = "0.0";
+									
+								}
 								
 								if (Double.parseDouble(value) < Double.parseDouble(threshold)){
 									tmp = "less";
@@ -211,9 +224,6 @@ public class C45MineData {
 		double generationTime = calculateTime(tstTime, teTime);
 		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
 		
-		PrintTree pt = new PrintTree();
-	    
-		System.out.println(pt.printDFS(root));
 		
 		//time taken to run predictions 
 		long startTime = System.nanoTime();

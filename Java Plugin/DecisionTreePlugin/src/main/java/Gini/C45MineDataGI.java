@@ -51,10 +51,12 @@ public class C45MineDataGI extends C45MineData{
 			String label = item.getAttributeValuePairs().get(target.getName());
 			actual.add(label);
 
-			
-			if(testLabel.equals(label)) {
-				correct++;
+			if(testLabel != null) {
+				if(testLabel.equals(label)) {
+					correct++;
+				}
 			}
+			
 			
 		}
 		

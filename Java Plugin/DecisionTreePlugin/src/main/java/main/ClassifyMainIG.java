@@ -16,9 +16,7 @@ public class ClassifyMainIG {
 		Scanner in = new Scanner(System.in);
 		
 
-		String pathos = "data/train.csv,data/test.csv";
-
-		String pathos = "data/train.csv,data/test.csv";
+		String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Training_Dataset.csv";
 
 		
 		String[] paths = pathos.split(",");
