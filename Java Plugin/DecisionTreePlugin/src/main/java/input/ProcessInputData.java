@@ -45,35 +45,52 @@ public class ProcessInputData {
 		
 		int datasetCount = 0;
 		
-		
 		while(in.hasNextLine()) {
+			
 			String line = in.nextLine();
 			String[] lineArr = line.split(",");
-			Instance item = new Instance();
-			
-			for(int a=0; a<lineArr.length; a++) {
-				if(myMap.containsKey(a)) {
-					uSet = myMap.get(a);
-					uSet.add(lineArr[a]);
-				}else {
-					uSet = new HashSet<String>();
-					uSet.add(lineArr[a]);
-				    myMap.put(a, uSet);
+			if(lineArr.length == attributeArr.length) {
+				Instance item = new Instance();
+				
+				for(int a=0; a<attributeArr.length; a++) {
+					if(myMap.containsKey(a)) {
+						uSet = myMap.get(a);
+						uSet.add(lineArr[a]);
+					}else {
+						uSet = new HashSet<String>();
+						uSet.add(lineArr[a]);
+					    myMap.put(a, uSet);
+					}
+					
+					item.addAttribute(attributeArr[a], lineArr[a]);
 				}
-				item.addAttribute(attributeArr[a], lineArr[a]);
+				instanceSet.add(item);
+				datasetCount++;
+			}else {
+				
 			}
 			
-			instanceSet.add(item);
-			datasetCount++;
+			
+			
 		}
+	
 		
+		
+		
+		
+		
+		
+		HashSet<String> targetColumn = myMap.get(myMap.size()-1);
+		double threshold = 1.0 * targetColumn.size()/datasetCount + 0.01;
 		
 	
 		for(int i=0;i<attributeArr.length;i++){
 			int nUnique = myMap.get(i).size();
 			
-			boolean isCategorical = 1.0 * nUnique/datasetCount < 0.07;
+			
+			boolean isCategorical = 1.0 * nUnique/datasetCount < threshold;
 		
+			
 			
 			if(isCategorical == false){
 				Attribute attr1 = new Attribute(attributeArr[i], "real");
@@ -89,6 +106,7 @@ public class ProcessInputData {
 		}
 		
 		targetAttribute = attributeSet.get(attributeSet.size() - 1);
+		
 	}
 
 
@@ -101,7 +119,6 @@ public class ProcessInputData {
 	public ArrayList<Instance> getInstanceSet() {
 		return instanceSet;
 	}
-
 	public Attribute getTargetAttribute() {
 		return targetAttribute;
 	}

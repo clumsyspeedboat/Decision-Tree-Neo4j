@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 
 import evaluate.C45MineData;
+import output.PrintTree;
 import definition.*;
 
 public class C45MineDataGI extends C45MineData{
@@ -35,7 +36,6 @@ public class C45MineDataGI extends C45MineData{
 		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
 		
 
-		
 		//time taken to run predictions 
 		long startTime = System.nanoTime();
 		
@@ -50,9 +50,14 @@ public class C45MineDataGI extends C45MineData{
 			predictions.add(testLabel);
 			String label = item.getAttributeValuePairs().get(target.getName());
 			actual.add(label);
-			if(testLabel.equals(label)) {
-				correct++;
+
+			if(testLabel != null) {
+				if(testLabel.equals(label)) {
+					correct++;
+				}
 			}
+			
+			
 		}
 		
 		calculateConfusionMatrix(actual, predictions);

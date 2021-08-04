@@ -21,6 +21,7 @@ public class GiniIndex extends Entropy{
 
 		ArrayList<String> valuesOfTarget = target.getValues();
 		
+		
 		String targetName = target.getName();
 		
 		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
@@ -33,7 +34,7 @@ public class GiniIndex extends Entropy{
 		for (Instance instance : instances) {
 			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
 			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
-           
+            
 
 			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) {
 				throw new IOException("Invalid input data");

@@ -44,6 +44,18 @@ public class ContinuousProbability{
 						
 				HashMap<String, String> yPair = y.getAttributeValuePairs();
 				String yValue = yPair.get(attributeName);
+				try
+				{
+				  Double.parseDouble(xValue);
+				  Double.parseDouble(yValue);
+				}
+				catch(NumberFormatException e)
+				{
+				  //not a double
+					return 0;
+				}
+				
+				
 				if (Double.parseDouble(xValue) - Double.parseDouble(yValue) > 0) return 1;
 				else if (Double.parseDouble(xValue) - Double.parseDouble(yValue) < 0) return -1;
 				else return 0;
@@ -77,7 +89,21 @@ public class ContinuousProbability{
 		HashMap<String, String> a = instances.get(thresholdPos).getAttributeValuePairs();
 		String aValue = a.get(attributeName);
 		HashMap<String, String> b = instances.get(thresholdPos).getAttributeValuePairs();
-		String bValue = b.get(attributeName);			
+		String bValue = b.get(attributeName);	
+		try
+		{
+		  Double.parseDouble(aValue);
+		  Double.parseDouble(bValue);
+		}
+		catch(NumberFormatException e)
+		{
+		  //not a double
+			
+			aValue = "0.0";
+			bValue = "0.0";
+			
+		}
+		
 		threshold = (Double.parseDouble(aValue) + Double.parseDouble(bValue)) / 2;	
 		
 		// Initialize subset
