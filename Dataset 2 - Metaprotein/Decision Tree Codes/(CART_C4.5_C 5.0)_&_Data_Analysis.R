@@ -14,6 +14,9 @@ if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART
 if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
 if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0 (gain ratio)
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
+Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre7') # for 64-bit version
+Sys.setenv(JAVA_HOME='C:\\Program Files (x86)\\Java\\jre7') # for 32-bit version
+library(rJava)
 
 library("factoextra")
 library("FSelector")
@@ -168,7 +171,6 @@ for (i in 1:(n-1)) {
   
 }
 
-TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
 
 for (i in 1:(n-1)) {
   
