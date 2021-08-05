@@ -7,7 +7,7 @@ package main;
 import java.io.IOException;
 import java.util.Scanner;
 
-import evaluate.C45MineData;
+import evaluate.EvaluateTree;
 import output.PrintTree;
 
 public class ClassifyMainIG {
@@ -16,13 +16,13 @@ public class ClassifyMainIG {
 		Scanner in = new Scanner(System.in);
 		
 
-		String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Training_Dataset.csv";
+		String pathos = "data/train.csv,data/test.csv";
 
 		
 		String[] paths = pathos.split(",");
 		
 		
-		C45MineData mine = new C45MineData(paths[0], paths[1]);
+		EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
 		
 		
 	    mine.calculateAccuracy();

@@ -5,14 +5,12 @@ import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.UserFunction;
 
-import Gini.C45MineDataGI;
-import evaluate.C45MineData;
-import gainratio.GainRatioMineData;
+import Gini.EvaluateTreeGI;
+import evaluate.EvaluateTree;
+import gainratio.EvaluateTreeGR;
 import output.PrintTree;
 
 import static org.neo4j.driver.Values.parameters;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.neo4j.driver.AuthTokens;
@@ -140,7 +138,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
 
@@ -176,7 +174,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
 
@@ -212,7 +210,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			C45MineData mine = new C45MineData(paths[0], paths[1]);
+			EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
 
 			mine.calculateAccuracy();
 
@@ -251,7 +249,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			C45MineData mine = new C45MineData(paths[0], paths[1]);
+			EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
@@ -272,7 +270,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
@@ -293,7 +291,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1]);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;

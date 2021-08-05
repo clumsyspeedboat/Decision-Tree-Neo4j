@@ -6,18 +6,16 @@ package evaluate;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import core.ConstructTree;
 import definition.Attribute;
 import definition.Instance;
 import input.ProcessInputData;
 import node.TreeNode;
-import output.PrintTree;
 
-public class C45MineData {
+
+public class EvaluateTree {
 	protected ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
 	protected ArrayList<Instance> trainInstances;
@@ -33,7 +31,7 @@ public class C45MineData {
 	 * @throws IOException
 	 */
 	
-	public C45MineData(String trainData, String testData) throws IOException {
+	public EvaluateTree(String trainData, String testData) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData);
 		ProcessInputData test = new ProcessInputData(testData);	
