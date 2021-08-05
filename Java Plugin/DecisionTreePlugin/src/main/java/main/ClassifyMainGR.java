@@ -3,10 +3,11 @@ package main;
 import java.io.IOException;
 import java.util.Scanner;
 
-import gainratio.GainRatioMineData;
+import gainratio.EvaluateTreeGR;
 import output.PrintTree;
 
 public class ClassifyMainGR {
+	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
@@ -14,11 +15,10 @@ public class ClassifyMainGR {
 		
 		String[] paths = pathos.split(",");
 		
-		GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
+		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
 		
 	    mine.calculateAccuracy();
 
-	    
 	    PrintTree tree = new PrintTree();
 	    
 		//System.out.println(tree.printDFS(mine.getRoot()));

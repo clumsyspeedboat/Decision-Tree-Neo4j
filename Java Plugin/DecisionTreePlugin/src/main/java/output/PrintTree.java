@@ -4,19 +4,15 @@
 
 package output;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import evaluate.C45MineData;
 import node.TreeNode;
 
 
 
-public class PrintTree{
-	private String pic; 
+public class PrintTree{ 
 	public ArrayList<ArrayList<String>> nodesBucket;
 	public ArrayList<ArrayList<String>> relationshipsBucket;
 	private Map<String, Integer> nodeNames; 
@@ -274,11 +270,6 @@ public class PrintTree{
 		}
 	}
 	
-	
-	@Override
-	public String toString() {
-		return pic;
-	}
 	
 	public static void main(String[] args) {
 		

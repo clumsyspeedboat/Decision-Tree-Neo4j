@@ -15,9 +15,6 @@ public class ConstructTreeGR extends ConstructTree{
 	
 	public ConstructTreeGR(ArrayList<Instance> instances, ArrayList<Attribute> attributes, Attribute target) {
 		super(instances, attributes, target);
-		this.instances = instances;
-		this.attributes = attributes;
-		this.target = target;
 	}
 
 	/**
@@ -89,7 +86,6 @@ public class ConstructTreeGR extends ConstructTree{
 			}
 		}
 
-		// Remember to add it again!
 		attributes.add(rootAttr);
 
 		return root;

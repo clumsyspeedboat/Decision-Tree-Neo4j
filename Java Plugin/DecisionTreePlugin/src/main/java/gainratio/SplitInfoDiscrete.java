@@ -31,8 +31,7 @@ public class SplitInfoDiscrete extends InfoGainDiscrete{
 		
 		
 		subset = new HashMap<String, ArrayList<Instance>>();
-		
-		
+	
 		
 		int totalN = instances.size();
 		splitinfo = 0;
@@ -42,9 +41,9 @@ public class SplitInfoDiscrete extends InfoGainDiscrete{
 			ArrayList<Instance> currSubset = subset.get(s);
 			int subN = currSubset.size();
 			double subRes = ((double) subN) / ((double) totalN);
-			 splitinfo -= (double)subRes *(Math.log(subRes));
-			
-			}
+			splitinfo -= (double) subRes * ((double)(Math.log(subRes) / Math.log(2)));
+
+		}
 		
 	}
 	

@@ -16,7 +16,7 @@ public class ChooseAttribute {
 	
 	public Attribute chosen;
 	public HashMap<String, ArrayList<Instance>> subset;
-	private double infoGain;
+	protected double infoGain;
 	protected double threshold;
 	
 	
