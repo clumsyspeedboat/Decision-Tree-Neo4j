@@ -1,4 +1,4 @@
-package Gini;
+package gini;
 
 import definition.Attribute;
 import core.ConstructTree;

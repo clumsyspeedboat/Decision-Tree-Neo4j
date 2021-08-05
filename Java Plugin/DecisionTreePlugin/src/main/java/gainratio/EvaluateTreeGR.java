@@ -9,6 +9,7 @@ import evaluate.EvaluateTree;
 
 public class EvaluateTreeGR extends EvaluateTree{
 	
+	
 	public EvaluateTreeGR(String trainData, String testData) throws IOException {
 		super(trainData,testData);
 	}

@@ -1,4 +1,4 @@
-package Gini;
+package gini;
 
 import java.io.IOException;
 import java.util.ArrayList;

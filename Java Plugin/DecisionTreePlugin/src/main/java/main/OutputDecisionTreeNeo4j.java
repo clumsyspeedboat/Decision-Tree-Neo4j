@@ -5,9 +5,9 @@ import org.neo4j.procedure.Description;
 import org.neo4j.procedure.Name;
 import org.neo4j.procedure.UserFunction;
 
-import Gini.EvaluateTreeGI;
 import evaluate.EvaluateTree;
 import gainratio.EvaluateTreeGR;
+import gini.EvaluateTreeGI;
 import output.PrintTree;
 
 import static org.neo4j.driver.Values.parameters;

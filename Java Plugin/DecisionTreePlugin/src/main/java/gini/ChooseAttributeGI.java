@@ -1,4 +1,4 @@
-package Gini;
+package gini;
 
 import core.ChooseAttribute;
 import definition.Attribute;

@@ -2,7 +2,8 @@ package main;
 
 import java.io.IOException;
 import java.util.Scanner;
-import Gini.EvaluateTreeGI;
+
+import gini.EvaluateTreeGI;
 import output.PrintTree;
 
 public class ClassifyMainGI {
