@@ -191,7 +191,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTGain","create relationship in neo4j \n" , relationshipDetail);
+				connector.createRelationship("DTGainRatio","create relationship in neo4j \n" , relationshipDetail);
 			}
         }
     	
@@ -226,7 +226,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTInformation","create relationship in neo4j \n", relationshipDetail);
+				connector.createRelationship("DTInfoGain","create relationship in neo4j \n", relationshipDetail);
 			}
         }
     	
