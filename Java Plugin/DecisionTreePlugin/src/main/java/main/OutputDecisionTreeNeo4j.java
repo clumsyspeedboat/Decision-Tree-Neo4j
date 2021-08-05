@@ -132,17 +132,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     @UserFunction
     public String createTreeGini(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			C45MineDataGI mine = new C45MineDataGI(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -157,28 +156,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTGini","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTGini","create relationship in neo4j \n", relationshipDetail);
 			}
         }
     	
-    	return "Create the Gini Index Decision Tree successful, path: " + path;
+    	return "Create the Gini Index Decision Tree successful, " + confusionMatrix;
     	
 	}
     
     @UserFunction
     public String createTreeGain(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			GainRatioMineData mine = new GainRatioMineData(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -193,28 +191,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTGain","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTGain","create relationship in neo4j \n" , relationshipDetail);
 			}
         }
     	
-    	return "Create the Gain Ratio Decision Tree successful, path: " + path;
+    	return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
     	
 	}
     
     @UserFunction
     public String createTreeInformation(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			C45MineData mine = new C45MineData(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -229,11 +226,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTInformation","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTInformation","create relationship in neo4j \n", relationshipDetail);
 			}
         }
     	
-    	return "Create the Gain Ratio Decision Tree successful, path: " + path;
+    	return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
     	
 	}
     

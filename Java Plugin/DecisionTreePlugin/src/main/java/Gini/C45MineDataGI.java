@@ -72,7 +72,7 @@ public class C45MineDataGI extends C45MineData{
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
-		return confusionMatrix;
+		return confusionMatrix + ", Accuracy:" + score*100 + "%";
 
 	}
 }

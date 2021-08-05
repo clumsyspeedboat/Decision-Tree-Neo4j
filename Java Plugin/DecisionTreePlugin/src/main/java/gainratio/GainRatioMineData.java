@@ -115,7 +115,7 @@ public class GainRatioMineData extends C45MineData{
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 
 		System.out.println("Accuracy:" + score * 100 + "%");
-		return confusionMatrix;
+		return confusionMatrix + ", Accuracy:" + score*100 + "%";
 
 	}
 }
