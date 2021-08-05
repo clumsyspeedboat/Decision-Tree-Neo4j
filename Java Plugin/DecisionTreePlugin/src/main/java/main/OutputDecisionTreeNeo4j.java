@@ -111,8 +111,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 					                            "b.dupValue = " + relationshipDetail.get(5) + " And " +
 					                            "b.l = " + relationshipDetail.get(4) +
 					                            " Create (a)-[r:DT {type: '" + relationshipDetail.get(7) +
-					                            "' , value: " + relationshipDetail.get(6) +
-					                            " , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
+					                            "' , value: '" + relationshipDetail.get(6) +
+					                            "' , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
 					                            " RETURN type(r)");
                     return result.single().get( 0 ).asString();
                 }
@@ -165,7 +165,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	}
     
     @UserFunction
-    public String createTreeGain(@Name("path") String path) throws Exception
+    public String createTreeGainRatio(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -200,7 +200,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	}
     
     @UserFunction
-    public String createTreeInformation(@Name("path") String path) throws Exception
+    public String createTreeInfoGain(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )

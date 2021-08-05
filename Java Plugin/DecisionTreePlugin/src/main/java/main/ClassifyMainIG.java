@@ -16,7 +16,7 @@ public class ClassifyMainIG {
 		Scanner in = new Scanner(System.in);
 		
 
-		String pathos = "data/meta_train.csv,data/meta_test.csv";
+		String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Testing_Dataset.csv";
 
 		
 		String[] paths = pathos.split(",");
@@ -33,7 +33,6 @@ public class ClassifyMainIG {
 		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
-		
 		
 		in.close();
 	}
