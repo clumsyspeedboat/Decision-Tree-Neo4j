@@ -68,7 +68,7 @@ public class EvaluateTreeGI extends EvaluateTree{
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
-		return confusionMatrix;
+		return confusionMatrix + ", Accuracy:" + score*100 + "%";
 
 	}
 }

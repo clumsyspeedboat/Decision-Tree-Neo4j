@@ -24,6 +24,7 @@ public class ClassifyMainGR {
 		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
+
 		in.close();
 	}
 

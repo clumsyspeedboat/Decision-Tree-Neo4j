@@ -109,8 +109,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 					                            "b.dupValue = " + relationshipDetail.get(5) + " And " +
 					                            "b.l = " + relationshipDetail.get(4) +
 					                            " Create (a)-[r:DT {type: '" + relationshipDetail.get(7) +
-					                            "' , value: " + relationshipDetail.get(6) +
-					                            " , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
+					                            "' , value: '" + relationshipDetail.get(6) +
+					                            "' , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
 					                            " RETURN type(r)");
                     return result.single().get( 0 ).asString();
                 }
@@ -130,17 +130,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     @UserFunction
     public String createTreeGini(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -155,28 +154,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTGini","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTGini","create relationship in neo4j \n", relationshipDetail);
 			}
         }
     	
-    	return "Create the Gini Index Decision Tree successful, path: " + path;
+    	return "Create the Gini Index Decision Tree successful, " + confusionMatrix;
     	
 	}
     
     @UserFunction
-    public String createTreeGain(@Name("path") String path) throws Exception
+    public String createTreeGainRatio(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -191,28 +189,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTGain","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTGain","create relationship in neo4j \n" , relationshipDetail);
 			}
         }
     	
-    	return "Create the Gain Ratio Decision Tree successful, path: " + path;
+    	return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
     	
 	}
     
     @UserFunction
-    public String createTreeInformation(@Name("path") String path) throws Exception
+    public String createTreeInfoGain(@Name("path") String path) throws Exception
 	{
-    	
+    	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-			
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
 			
 			EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
 
-			mine.calculateAccuracy();
+			confusionMatrix = mine.calculateAccuracy();
 
 			PrintTree tree = new PrintTree();
 
@@ -227,11 +224,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
-				connector.createRelationship("DTInformation","create relationship in neo4j", relationshipDetail);
+				connector.createRelationship("DTInformation","create relationship in neo4j \n", relationshipDetail);
 			}
         }
     	
-    	return "Create the Gain Ratio Decision Tree successful, path: " + path;
+    	return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
     	
 	}
     
