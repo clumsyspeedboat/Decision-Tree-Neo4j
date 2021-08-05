@@ -1,6 +1,6 @@
-###################
-###### COVID ###### ---> DATA ANALYSIS + DECISION TREE ALGORITHMS
-###################
+################################
+###### Flu Classification ###### ---> DATA ANALYSIS + DECISION TREE ALGORITHMS
+################################
 
 # Cleaning the work space #
 cat("\f")       # Clear old outputs
