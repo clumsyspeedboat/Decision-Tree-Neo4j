@@ -12,9 +12,11 @@ import org.neo4j.procedure.UserFunction;
  *
  */
 public class passDirectory{
+	static String globalString = "";
+	
 	@UserFunction
     @Description("pass directory")
-	public String directory(@Name("path") String path)
+	public String CreateTreeOnData(@Name("path") String path)
 	{
 		if(path == null)
 		{
@@ -22,7 +24,22 @@ public class passDirectory{
 		}
 		else
 		{
-			return "path to csv file: " + path;
+			return "Create Tree on Data: " + globalString;
+		}
+	}
+	
+	@UserFunction
+    @Description("pass directory")
+	public String QueryData(@Name("path") String path)
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			globalString = path;
+			return "Query Data: " + globalString;
 		}
 	}
 }

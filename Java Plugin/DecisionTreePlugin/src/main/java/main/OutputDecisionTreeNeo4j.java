@@ -11,20 +11,29 @@ import gini.EvaluateTreeGI;
 import output.PrintTree;
 
 import static org.neo4j.driver.Values.parameters;
+
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
+import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.Transaction;
 import org.neo4j.driver.TransactionWork;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.Node;
+import org.neo4j.driver.util.Pair;
 
 public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
-	private static Driver driver;
-	
+	private static Driver driver;	
+	public static List<Record> dataKey = new ArrayList<>();
+	public static ArrayList<ArrayList<String>> testDataList =  new ArrayList<ArrayList<String>>();
+	public static ArrayList<ArrayList<String>> trainDataList =  new ArrayList<ArrayList<String>>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
@@ -80,7 +89,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 				    return result.single().get( 0 ).asString();
                 }
             } );
-            System.out.println( greeting );
         }
     }
     
@@ -115,9 +123,145 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
                     return result.single().get( 0 ).asString();
                 }
             } );
-            System.out.println( greeting );
         }
     }
+    
+    /**
+     * Query Data
+     * @param 
+     * @param 
+     */
+    public void queryData( final String nodeType)
+    {
+    	try ( Session session = driver.session() )
+        {
+            String greeting = session.writeTransaction( new TransactionWork<String>()
+            {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (n:" + nodeType + ") RETURN n");
+                    dataKey = result.list();
+                    return "Query Successful";
+                }
+            } );
+        }
+    }
+    
+    @UserFunction
+    public String queryTestData(@Name("nodeType") String nodeType) throws Exception
+	{
+    	String listOfData = "";
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    		queryData(nodeType);
+    		for (Record key : dataKey) {
+    			List<Pair<String,Value>> values = key.fields();
+    			for (Pair<String,Value> nodeValues: values) {
+    				String valueOfNode = "";
+    				ArrayList<String> nodeData =  new ArrayList<String>();
+    				if ("n".equals(nodeValues.key())) { 
+    			        Value value = nodeValues.value();
+    			        for (String nodeKey : value.keys())
+    			        {
+    			        	if(value.get(nodeKey).getClass().equals(String.class))
+    			        	{
+    			        		valueOfNode = valueOfNode + ", " + nodeKey + " : " + value.get(nodeKey);
+    			        		nodeData.add(nodeKey + " : " + value.get(nodeKey));
+    			        	}
+    			        	else
+    			        	{
+    			        		String converValueToString = String.valueOf(value.get(nodeKey));
+        			        	valueOfNode = valueOfNode + ", " + nodeKey + " : " + converValueToString;
+        			        	nodeData.add(nodeKey + " : " + converValueToString);
+    			        	}
+    			        }
+    			    }
+    				listOfData = listOfData + valueOfNode + " | ";
+    				testDataList.add(nodeData);
+    			}
+    		}
+        }
+    	
+    	return "The Data: " + listOfData;
+    	
+	}
+    
+    @UserFunction
+    public String queryTrainData(@Name("nodeType") String nodeType) throws Exception
+	{
+    	String listOfData = "";
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    		queryData(nodeType);
+    		for (Record key : dataKey) {
+    			List<Pair<String,Value>> values = key.fields();
+    			for (Pair<String,Value> nodeValues: values) {
+    				String valueOfNode = "";
+    				ArrayList<String> nodeData =  new ArrayList<String>();
+    				if ("n".equals(nodeValues.key())) { 
+    			        Value value = nodeValues.value();
+    			        for (String nodeKey : value.keys())
+    			        {
+    			        	if(value.get(nodeKey).getClass().equals(String.class))
+    			        	{
+    			        		valueOfNode = valueOfNode + ", " + nodeKey + " : " + value.get(nodeKey);
+    			        		nodeData.add(nodeKey + " : " + value.get(nodeKey));
+    			        	}
+    			        	else
+    			        	{
+    			        		String converValueToString = String.valueOf(value.get(nodeKey));
+        			        	valueOfNode = valueOfNode + ", " + nodeKey + " : " + converValueToString;
+        			        	nodeData.add(nodeKey + " : " + converValueToString);
+    			        	}
+    			        }
+    			    }
+    				listOfData = listOfData + valueOfNode + " | ";
+    				trainDataList.add(nodeData);
+    			}
+    		}
+        }
+    	return "The Data: " + listOfData;
+    	
+	}
+    
+    @UserFunction
+    public String displayData(@Name("dataType") String dataType) throws Exception
+	{
+    	String listOfData = "";
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    		if(dataType.equals("train"))
+    		{
+    			listOfData = "train data: ";
+    			for(ArrayList<String> node : trainDataList)
+    			{
+    				String dataOfNode = "";
+    				for(String nodeAttr : node)
+    				{
+    					dataOfNode = dataOfNode + nodeAttr + ", ";
+    				}
+    				listOfData = listOfData + dataOfNode + "|";
+    			}
+    		}
+    		else
+    		{
+    			listOfData = "test data: ";
+    			for(ArrayList<String> node : testDataList)
+    			{
+    				String dataOfNode = "";
+    				for(String nodeAttr : node)
+    				{
+    					dataOfNode = dataOfNode + nodeAttr + ", ";
+    				}
+    				listOfData = listOfData + dataOfNode + "|";
+    			}
+    		}
+
+        }
+    	return "The " + listOfData;
+    	
+	}
     
     
     /**
