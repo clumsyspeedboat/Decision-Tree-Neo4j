@@ -1,10 +1,13 @@
 package main;
 
+import java.io.FileOutputStream;
+
 /**
  * Main class to build the decision tree and test on the test dataset
  */
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -106,6 +109,19 @@ public class ClassifyMainIG {
 		t9.add("anaemia:0, serum_creatinine:1.3, sex:1, ejection_fraction:45, creatinine_phosphokinase:122, platelets:284000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:1, time:26, serum_sodium:136, diabetes:1, age:'70.0'");
 		ArrayList<String> t10= new ArrayList<String>();
 		t10.add("anaemia:1, serum_creatinine:1.1, sex:0, ejection_fraction:60, creatinine_phosphokinase:588, platelets:194000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:33, serum_sodium:142, diabetes:1, age:'60.0'");
+		ArrayList<String> t11= new ArrayList<String>();
+		t11.add("anaemia:1, serum_creatinine:0.19, sex:1, ejection_fraction:45, creatinine_phosphokinase:562, platelets:1232000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:1, time:71, serum_sodium:139, diabetes:1, age:'58.0'");
+		ArrayList<String> t12= new ArrayList<String>();
+		t12.add("anaemia:1, serum_creatinine:111.0, sex:0, ejection_fraction:235, creatinine_phosphokinase:125, platelets:237000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:0, time:15, serum_sodium:140, diabetes:0, age:'70.0'");
+		ArrayList<String> t13= new ArrayList<String>();
+		t13.add("anaemia:0, serum_creatinine:2.39, sex:1, ejection_fraction:220, creatinine_phosphokinase:168, platelets:119000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:1, time:64, serum_sodium:127, diabetes:0, age:'60.0'");
+		ArrayList<String> t14= new ArrayList<String>();
+		t14.add("anaemia:1, serum_creatinine:21.1, sex:1, ejection_fraction:338, creatinine_phosphokinase:1628, platelets:276000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:0, time:11, serum_sodium:137, diabetes:0, age:'50.0'");
+		ArrayList<String> t15= new ArrayList<String>();
+		t15.add("anaemia:0, serum_creatinine:11.3, sex:1, ejection_fraction:415, creatinine_phosphokinase:1222, platelets:284000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:1, time:26, serum_sodium:136, diabetes:1, age:'70.0'");
+		ArrayList<String> t16= new ArrayList<String>();
+		t16.add("anaemia:1, serum_creatinine:12.1, sex:0, ejection_fraction:610, creatinine_phosphokinase:5838, platelets:194000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:33, serum_sodium:142, diabetes:1, age:'60.0'");
+		
 		
 		testList.add(t1);
 		testList.add(t2);
@@ -117,7 +133,21 @@ public class ClassifyMainIG {
 		testList.add(t8);
 		testList.add(t9);
 		testList.add(t10);
+		testList.add(t11);
+		testList.add(t12);
+		testList.add(t13);
+		testList.add(t14);
+		testList.add(t15);
+		testList.add(t16);
 		
+		try {
+		    FileOutputStream fos = new FileOutputStream("D:/Personal_Project/testList_output.txt");
+		    ObjectOutputStream oos = new ObjectOutputStream(fos);   
+		    oos.writeObject(testList); // write MenuArray to ObjectOutputStream
+		    oos.close(); 
+		} catch(Exception ex) {
+		    ex.printStackTrace();
+		}
 		
 	
 		//String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Testing_Dataset.csv";
@@ -136,6 +166,8 @@ public class ClassifyMainIG {
 		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
+		
+		System.out.println(tree.nodesBucket);
 		
 		
 		in.close();
