@@ -37,9 +37,12 @@ public class Entropy {
 		}
 		
 		for (Instance instance : instances) {
+			
 			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
+			
 			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
-
+			
+            
 
 			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget)) {
 				throw new IOException("Invalid input data");

@@ -1,5 +1,5 @@
 /**
- * This class is used for mining data.
+ * This class is used for evaluating decision tree.
  */
 
 package evaluate;
@@ -30,10 +30,11 @@ public class EvaluateTree {
 	 * @param testData
 	 * @throws IOException
 	 */
-	
 	public EvaluateTree(String trainData, String testData) throws IOException {
+		
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData);
+		
 		ProcessInputData test = new ProcessInputData(testData);	
 		
 		this.attributes = train.getAttributeSet();
@@ -41,14 +42,43 @@ public class EvaluateTree {
 		
 		//target = train.getTargetAttribute();
 		trainInstances = train.getInstanceSet();
-		testInstances = test.getInstanceSet();	
+		testInstances = test.getInstanceSet();
+		System.out.println(trainInstances);
+		System.out.println(testInstances);
 		
 		result.addAll(testInstances);
 	}
 	
 	
 	/**
-	 * After constructing 
+	 * Constructor to process train and test data from neo4j nodes 
+	 * @param trainDataList  - The training list of nodes
+	 * @param testDataList - The test list of nodes
+	 * @param targetAttr- The target Attribute
+	 * @throws IOException
+	 */
+	public EvaluateTree(ArrayList<ArrayList<String>> trainDataList, ArrayList<ArrayList<String>> testDataList, String targetAttr) throws IOException {
+		result = new ArrayList<Instance>();
+		ProcessInputData train = new ProcessInputData(trainDataList, targetAttr);
+		ProcessInputData test = new ProcessInputData(testDataList, targetAttr);	
+		
+		this.attributes = train.getAttributeSet();
+		this.target = train.getTargetAttribute();
+		
+		trainInstances = train.getInstanceSet();
+		testInstances = test.getInstanceSet();	
+		System.out.println(trainInstances);
+		System.out.println(testInstances);
+		
+		result.addAll(testInstances);
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Loop through the entire tree 
 	 */
 	protected void mine(){
 		
@@ -129,6 +159,10 @@ public class EvaluateTree {
 		return result;
 	}
 	
+	/**
+	 * Get the root of the tree
+	 * @return the root of the tree
+	 */
 	
 	public TreeNode getRoot(){
 		return root;
