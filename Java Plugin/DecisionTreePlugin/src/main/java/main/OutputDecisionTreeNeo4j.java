@@ -41,8 +41,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
 	private static Driver driver;	
 	public static List<Record> dataKey = new ArrayList<>();
-	public static ArrayList<ArrayList<String>> testDataList =  new ArrayList<ArrayList<String>>();
-	public static ArrayList<ArrayList<String>> trainDataList =  new ArrayList<ArrayList<String>>();
+	public static ArrayList<String> testDataList =  new ArrayList<String>();
+	public static ArrayList<String> trainDataList =  new ArrayList<String>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
@@ -160,62 +160,59 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     public String queryTestData(@Name("nodeType") String nodeType) throws Exception
-	{
-    	String listOfData = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
-        {
-    		queryData(nodeType);
-    		for (Record key : dataKey) {
-    			List<Pair<String,Value>> values = key.fields();
-    			for (Pair<String,Value> nodeValues: values) {
-    				String valueOfNode = "";
-    				ArrayList<String> nodeData =  new ArrayList<String>();
-    				if ("n".equals(nodeValues.key())) { 
-    			        Value value = nodeValues.value();
-    			        for (String nodeKey : value.keys())
-    			        {
-    			        	if(value.get(nodeKey).getClass().equals(String.class))
-    			        	{
-    			        		if(valueOfNode != "")
-    			        		{
-    			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
-        			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
-    			        		}
-    			        		else
-    			        		{
-    			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
-        			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
-    			        		}
-    			   
-    			        	}
-    			        	else
-    			        	{
-    			        		if(valueOfNode != "")
-    			        		{
-    			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
-            			        	//nodeData.add(nodeKey+":"+converValueToString);
-    			        		}
-    			        		else
-    			        		{
-    			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode =  nodeKey + ":" + converValueToString;
-            			        	//nodeData.add(nodeKey+":"+converValueToString);
-    			        		}
-    			        		
-    			        	}
-    			        }
-    			        nodeData.add(valueOfNode);
-    			    }
-    				listOfData = listOfData + valueOfNode + " | ";
-    				testDataList.add(nodeData);
-    			}
-    		}
-        }
-    	
-    	return "The Data: " + listOfData;
-    	
-	}
+   	{
+       	String listOfData = "";
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+           {
+       		queryData(nodeType);
+       		for (Record key : dataKey) {
+       			List<Pair<String,Value>> values = key.fields();
+       			for (Pair<String,Value> nodeValues: values) {
+       				String valueOfNode = "";
+       				if ("n".equals(nodeValues.key())) { 
+       			        Value value = nodeValues.value();
+       			        for (String nodeKey : value.keys())
+       			        {
+       			        	if(value.get(nodeKey).getClass().equals(String.class))
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
+           			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
+       			        		}
+       			        		else
+       			        		{
+       			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
+           			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
+       			        		}
+       			   
+       			        	}
+       			        	else
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
+               			        	//nodeData.add(nodeKey+":"+converValueToString);
+       			        		}
+       			        		else
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode =  nodeKey + ":" + converValueToString;
+               			        	//nodeData.add(nodeKey+":"+converValueToString);
+       			        		}
+       			        		
+       			        	}
+       			        }
+       			        testDataList.add(valueOfNode);
+       			    }
+       				listOfData = listOfData + valueOfNode + " | ";
+       			}
+       		}
+           }
+       	
+       	return "The Data: " + listOfData;
+   	}
     
     @UserFunction
     public String queryTrainData(@Name("nodeType") String nodeType) throws Exception
@@ -228,7 +225,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			List<Pair<String,Value>> values = key.fields();
     			for (Pair<String,Value> nodeValues: values) {
     				String valueOfNode = "";
-    				ArrayList<String> nodeData =  new ArrayList<String>();
     				if ("n".equals(nodeValues.key())) { 
     			        Value value = nodeValues.value();
     			        for (String nodeKey : value.keys())
@@ -264,75 +260,46 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        		
     			        	}
     			        }
-    			        nodeData.add(valueOfNode);
+    			        trainDataList.add(valueOfNode);
     			    }
     				listOfData = listOfData + valueOfNode + " | ";
-    				trainDataList.add(nodeData);
     			}
     		}
         }
     	return "The Data: " + listOfData;
-    	
 	}
     
     @UserFunction
     public String displayData(@Name("dataType") String dataType) throws Exception
-	{
-    	String listOfData = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
-        {
-    		if(dataType.equals("train"))
-    		{
-    			//FileWriter writer = new FileWriter("D:/Personal_Project/train_output.txt"); 
-    			listOfData = "train data: ";
-    			for(ArrayList<String> node : trainDataList)
-    			{
-    				String dataOfNode = "";
-    				for(String nodeAttr : node)
-    				{
-    					dataOfNode = dataOfNode + nodeAttr + ", ";
-    					//writer.write(nodeAttr + System.lineSeparator());
-    				}
-    				listOfData = listOfData + dataOfNode + ")";
-    			}
-    			try {
-    			    FileOutputStream fos = new FileOutputStream("D:/Personal_Project/train_output.txt");
-    			    ObjectOutputStream oos = new ObjectOutputStream(fos);   
-    			    oos.writeObject(trainDataList); // write MenuArray to ObjectOutputStream
-    			    oos.close(); 
-    			} catch(Exception ex) {
-    			    ex.printStackTrace();
-    			}
-    		}
-    		else
-    		{
-    			//FileWriter writer = new FileWriter("D:/Personal_Project/test_output.txt"); 
-    			listOfData = "test data: ";
-    			for(ArrayList<String> node : testDataList)
-    			{
-    				String dataOfNode = "";
-    				for(String nodeAttr : node)
-    				{
-    					dataOfNode = dataOfNode + nodeAttr + ", ";
-    					//writer.write(nodeAttr + System.lineSeparator());
-    				}
-    				listOfData = listOfData + dataOfNode + "|";
-    			}
-    			//writer.close();
-    			try {
-    			    FileOutputStream fos = new FileOutputStream("D:/Personal_Project/test_output.txt");
-    			    ObjectOutputStream oos = new ObjectOutputStream(fos);   
-    			    oos.writeObject(testDataList); // write MenuArray to ObjectOutputStream
-    			    oos.close(); 
-    			} catch(Exception ex) {
-    			    ex.printStackTrace();
-    			}
-    		}
+   	{
+       	String listOfData = "";
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+           {
+       		if(dataType.equals("train"))
+       		{
+       			
+       			listOfData = "train data: ";
+       			for(String node : trainDataList)
+       			{
 
-        }
-    	return "The " + listOfData;
-    	
-	}
+       				listOfData = listOfData + node + "|";
+       			}
+       		}
+       		else
+       		{
+       			
+       			listOfData = "test data: ";
+       			for(String node : testDataList)
+       			{
+       				listOfData = listOfData + node + "|";
+       			}
+       			
+       		}
+
+           }
+       	return "The " + listOfData;
+       	
+   	}
     
     /**
      * User defined function to create the decision tree with nodes and relationships in neo4j
@@ -346,9 +313,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
-    		String listOfData = "";
-    		
-    		
+    	
     		boolean isTrainListEmpty = trainDataList.isEmpty();
     		boolean isTestListEmpty = testDataList.isEmpty();
     		if(isTrainListEmpty && isTestListEmpty) {
@@ -371,16 +336,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 					System.out.println("Relationship " + relationshipDetail);
 					connector.createRelationship("DTInfoGain", "create relationship in neo4j \n", relationshipDetail);
 				}
-				 
-				 
-				 
-    		}
-    		return "Create the Information Gain Decision Tree successful, " + listOfData;
-    		
-        }
-    	
-    	
 
+    		}
+    		return "Create the Information Gain Decision Tree successful, " + confusionMatrix;
+        }
     	
     }
     

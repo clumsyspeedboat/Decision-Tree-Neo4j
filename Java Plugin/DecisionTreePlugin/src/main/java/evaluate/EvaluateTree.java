@@ -40,11 +40,10 @@ public class EvaluateTree {
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
 		
-		//target = train.getTargetAttribute();
-		trainInstances = train.getInstanceSet();
-		testInstances = test.getInstanceSet();
-		System.out.println(trainInstances);
-		System.out.println(testInstances);
+		
+		this.trainInstances = train.getInstanceSet();
+		this.testInstances = test.getInstanceSet();
+		
 		
 		result.addAll(testInstances);
 	}
@@ -57,25 +56,27 @@ public class EvaluateTree {
 	 * @param targetAttr- The target Attribute
 	 * @throws IOException
 	 */
-	public EvaluateTree(ArrayList<ArrayList<String>> trainDataList, ArrayList<ArrayList<String>> testDataList, String targetAttr) throws IOException {
+	public EvaluateTree(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainDataList, targetAttr);
 		ProcessInputData test = new ProcessInputData(testDataList, targetAttr);	
 		
+		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
 		
-		trainInstances = train.getInstanceSet();
-		testInstances = test.getInstanceSet();	
-		System.out.println(trainInstances);
-		System.out.println(testInstances);
+		for(Attribute a:this.attributes) {
+			System.out.println(a.getName());
+		}
+		
+		
+		this.trainInstances = train.getInstanceSet();
+		this.testInstances = test.getInstanceSet();	
 		
 		result.addAll(testInstances);
 	}
 	
-	
-	
-	
+
 	
 	/**
 	 * Loop through the entire tree 
@@ -249,7 +250,8 @@ public class EvaluateTree {
 		String confusionMatrix = "";
 		long tstTime = System.nanoTime();
 		
-		ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
+		
+		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target);
 		root = tree.construct();
 		
 		long teTime = System.nanoTime();
@@ -259,6 +261,7 @@ public class EvaluateTree {
 		
 		//time taken to run predictions 
 		long startTime = System.nanoTime();
+		
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();

@@ -11,9 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+
+import org.apache.commons.exec.util.StringUtils;
+import org.apache.shiro.crypto.hash.Hash;
 
 import definition.Attribute;
 import definition.Instance;
@@ -22,8 +27,47 @@ public class ProcessInputData {
 	ArrayList<Attribute> attributeSet;
 	ArrayList<Instance> instanceSet;
 	public static Attribute targetAttribute;
-
+	static int targetAttributeIndex;
 	
+	
+	public static ArrayList<String> CustomListFromCSV(String fileName) throws IOException{
+		ArrayList<String> nList = new ArrayList<String>();
+		
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(new File(fileName));
+		String aLine = in.nextLine();
+		
+		String[] attributeArr = aLine.split(",");
+		
+		
+		
+		while (in.hasNextLine()) {
+			String line = in.nextLine();
+			String[] lineArr = line.split(",");
+			
+			StringBuilder str = new StringBuilder("");
+			
+			if (lineArr.length == attributeArr.length) {
+				
+				for (int a = 0; a < attributeArr.length; a++) {
+					String s1 = attributeArr[a];
+					String s2 = lineArr[a];
+					String s3 = s1 +':' + s2;
+		            str.append(s3).append(",");  
+				}	
+			}
+			
+			String commaseparatedlist = str.toString();
+		
+			if (commaseparatedlist.length() > 0)
+	            commaseparatedlist = commaseparatedlist.substring(0, commaseparatedlist.length() - 1);
+	  
+	        nList.add(commaseparatedlist);
+		}
+		return nList;
+		
+	} 
+
 	/**
 	 * This function read csv and process the dataset dynamically.
 	 * 
@@ -33,7 +77,7 @@ public class ProcessInputData {
 	public ProcessInputData(String fileName) throws IOException {
 		attributeSet = new ArrayList<Attribute>();
 		instanceSet = new ArrayList<Instance>();
-		
+
 		Map<Integer, HashSet<String>> myMap = new HashMap<Integer, HashSet<String>>();
 		HashSet<String> uSet;
 
@@ -41,190 +85,165 @@ public class ProcessInputData {
 		Scanner in = new Scanner(new File(fileName));
 
 		String aLine = in.nextLine();
-		
+
 		String[] attributeArr = aLine.split(",");
-		
+
 		int datasetCount = 0;
-		
-		while(in.hasNextLine()) {
+
+		while (in.hasNextLine()) {
 			String line = in.nextLine();
 			String[] lineArr = line.split(",");
-			if(lineArr.length == attributeArr.length) {
+			if (lineArr.length == attributeArr.length) {
 				Instance item = new Instance();
-				
-				for(int a=0; a<attributeArr.length; a++){
-					if(myMap.containsKey(a)) {
+
+				for (int a = 0; a < attributeArr.length; a++) {
+					if (myMap.containsKey(a)) {
 						uSet = myMap.get(a);
 						uSet.add(lineArr[a]);
-					}else {
+					} else {
 						uSet = new HashSet<String>();
 						uSet.add(lineArr[a]);
-					    myMap.put(a, uSet);
+						myMap.put(a, uSet);
 					}
-					
+
 					item.addAttribute(attributeArr[a], lineArr[a]);
 				}
 				instanceSet.add(item);
 				datasetCount++;
-			}else {
-				
+			} else {
+
 			}
-			
+
 		}
-	
-	
-		
-		HashSet<String> targetColumn = myMap.get(myMap.size()-1);
-		double threshold = 1.0 * targetColumn.size()/datasetCount + 0.01;
-		
-	
-		for(int i=0;i<attributeArr.length;i++){
+
+		HashSet<String> targetColumn = myMap.get(myMap.size() - 1);
+		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
+
+		for (int i = 0; i < attributeArr.length; i++) {
 			int nUnique = myMap.get(i).size();
-			
-			
-			boolean isCategorical = 1.0 * nUnique/datasetCount < threshold;
-		
-			
-			if(isCategorical == false){
+
+			boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
+
+			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(attributeArr[i], "real");
 				attributeSet.add(attr1);
-			}else{
+			} else {
 				HashSet<String> app = myMap.get(i);
-				
-				String str = "{"+String.join(",", app)+"}";
-				
+
+				String str = "{" + String.join(",", app) + "}";
+
 				Attribute attr2 = new Attribute(attributeArr[i], str);
 				attributeSet.add(attr2);
 			}
 		}
+
 		
 		targetAttribute = attributeSet.get(attributeSet.size() - 1);
 		
+
 	}
-	
-	
-	
+
 	/**
 	 * This function is for processing input nodes from Neo4j graph database
-	 * @param nodes 
-	 * @throws IOException 
+	 * 
+	 * @param nodes
+	 * @throws IOException
 	 */
-
-    public ProcessInputData(ArrayList<ArrayList<String>> nodesList, String targetAtt) throws IOException {
-    	attributeSet = new ArrayList<Attribute>();
+	public ProcessInputData(ArrayList<String> nodesList, String targetAtt) throws IOException {
+		attributeSet = new ArrayList<Attribute>();
 		instanceSet = new ArrayList<Instance>();
-		int targetAttIndex = 0;
-		int datasetCount = 0;
 		
-		Map<Integer, HashSet<String>> myMap = new HashMap<Integer, HashSet<String>>();
+		int datasetCount = nodesList.size();
+		
+		LinkedHashMap<String, HashSet<String>> myMap = new LinkedHashMap<String, HashSet<String>>();
 		HashSet<String> uSet;
-		
-		
-		Set<String> attributes = new HashSet<>();
-		
+
 		boolean isListEmpty = nodesList.isEmpty();
 		if(isListEmpty == true) {
 			System.out.println("List is empty");
 		}else {
-			for(ArrayList<String> innerList : nodesList) {
+			for(String line : nodesList) {
 				Instance item = new Instance();
-				for(String attrValues : innerList) {
-					String[] output = attrValues.trim().split(",");
-			        for(int i=0;i<output.length;i++) {
-			        	String[] eachAttribute = output[i].trim().split(":");
-			        	if(eachAttribute.length == 2) {
-			        		attributes.add(eachAttribute[0]);
-			        		//get the target attribute index
-			        		
-		
-			        		if(eachAttribute[0].equalsIgnoreCase(targetAtt)) {
-			        			targetAttIndex = i;
-			        		}
-			        		
-			        		if(myMap.containsKey(i)) {
-								uSet = myMap.get(i);
-								uSet.add(eachAttribute[1]);
-							}else {
-								uSet = new HashSet<String>();
-								uSet.add(eachAttribute[1]);
-							    myMap.put(i, uSet);
-							}
-			        		
-			        		item.addAttribute(eachAttribute[0], eachAttribute[1]);
-			        	}
-			        	
-			        	  
-			        } 
-			    }
+				String[] lineArr = line.trim().split(",");
+				
+				for(String l: lineArr) {
+					String[] attArray = l.trim().split(":");
+					
+					item.addAttribute(attArray[0], attArray[1]);
+				
+					if(myMap.containsKey(attArray[0])) {
+						uSet = myMap.get(attArray[0]);
+						uSet.add(attArray[1]);
+					}else {
+						uSet = new HashSet<String>();
+						uSet.add(attArray[1]);
+					    myMap.put(attArray[0], uSet);
+					}
+				}
 				instanceSet.add(item);
-				
 			}
-		
 			
-			//To determine feature type dynamically, whether categorical or numerical
-			datasetCount = nodesList.size();
-			double threshold=0.0;
+			HashSet<String> target = myMap.get(targetAtt);
 			
+			double threshold = 1.0 * target.size() / datasetCount + 0.01;
+		    
+			int index=0;
 			
-			HashSet<String> targetColumn = myMap.get(targetAttIndex);
-			threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
-			
-		
-			String[] atrributesArray = attributes.toArray(new String[attributes.size()]);
-			/*
-			 * for(int i=0;i<atrributesArray.length;i++) {
-			 * System.out.println(atrributesArray[i]); }
-			 */
-				
+			for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
+				String key = entry.getKey();
 
-			for (int i = 0; i < attributes.size(); i++) {
-				int nUnique = myMap.get(i).size();
+				HashSet<String> value = entry.getValue();
+				int nUnique = entry.getValue().size();
 
 				boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
-
 				if (isCategorical == false) {
-					Attribute attr1 = new Attribute(atrributesArray[i], "real");
+					Attribute attr1 = new Attribute(key, "real");
 					attributeSet.add(attr1);
-				} else {
-					HashSet<String> app = myMap.get(i);
-
-					String str = "{" + String.join(",", app) + "}";
-
-					Attribute attr2 = new Attribute(atrributesArray[i], str);
+				}else{
+					String str = "{" + String.join(",", value) + "}";
+					Attribute attr2 = new Attribute(key, str);
 					attributeSet.add(attr2);
 				}
+				if(attributeSet.get(index).getName().equals(targetAtt)) {
+					targetAttributeIndex = index;
+					targetAttribute = attributeSet.get(index);
+				}
+				index++;
 			}
-			targetAttribute = attributeSet.get(targetAttIndex);
 		}
-		
-    }
-    
+	}
 
 	public ArrayList<Attribute> getAttributeSet() {
-		attributeSet.remove(attributeSet.size() - 1);
+		//attributeSet.remove(attributeSet.size() - 1);
+		//attributeSet.remove(targetAttribute);
+		attributeSet.remove(targetAttributeIndex);
+		
 		return attributeSet;
 	}
 
 	public ArrayList<Instance> getInstanceSet() {
 		return instanceSet;
 	}
-	
-	public Attribute getTargetAttribute() {
+
+	public Attribute getTargetAttribute(){
 		return targetAttribute;
 	}
 
 	public static void main(String[] args) throws IOException {
-		ArrayList<ArrayList<String>> nodesList = new ArrayList<>();
-		ArrayList<String> al= new ArrayList<String>();
-		al.add("anaemia:0, serum_creatinine:1.1, sex:0, ejection_fraction:35, creatinine_phosphokinase:618, platelets:327000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:245, serum_sodium:142, diabetes:0, age:70.0");
-		ArrayList<String> bl= new ArrayList<String>();
-		bl.add("anaemia:1, serum_creatinine:1.2, sex:0, ejection_fraction:30, creatinine_phosphokinase:159, platelets:302000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:29, serum_sodium:138, diabetes:0, age:50.0");
-		nodesList.add(al);
-		nodesList.add(bl);
-		ProcessInputData p = new ProcessInputData(nodesList, "DEATH_EVENT");
-		//System.out.println(p.getTargetAttribute());
-	    //System.out.println(p.getInstanceSet());
-	    //System.out.println(p.getAttributeSet().size());
+		ArrayList<String> nodesList = new ArrayList<>();
+
+		nodesList.add(
+				"anaemia:1, serum_creatinine:1.2, sex:1, ejection_fraction:40, creatinine_phosphokinase:170, platelets:336000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:250, serum_sodium:135, diabetes:1, age:'55.0'");
+		nodesList.add(
+				"anaemia:0, serum_creatinine:1.4, sex:1, ejection_fraction:50, creatinine_phosphokinase:224, platelets:481000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:1, time:192, serum_sodium:138, diabetes:0, age:'78.0'");
+		nodesList.add("anaemia:1, serum_creatinine:0.8, sex:0, ejection_fraction:40, creatinine_phosphokinase:101, platelets:226000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:187, serum_sodium:141, diabetes:0, age:'40.0'");
+		nodesList.add("anaemia:0, serum_creatinine:1.18, sex:0, ejection_fraction:60, creatinine_phosphokinase:582, platelets:263358.03, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:82, serum_sodium:137, diabetes:0, age:'42.0'");
+		nodesList.add("anaemia:0, serum_creatinine:0.9, sex:1, ejection_fraction:25, creatinine_phosphokinase:231, platelets:253000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:1, time:10, serum_sodium:140, diabetes:0, age:'62.0'");
 		
+		ArrayList<String> nList = ProcessInputData.CustomListFromCSV("data/train.csv");
+		ProcessInputData p = new ProcessInputData(nList, "DEATH_EVENT");
+		System.out.println(p.getTargetAttribute());
+		
+
 	}
 }
