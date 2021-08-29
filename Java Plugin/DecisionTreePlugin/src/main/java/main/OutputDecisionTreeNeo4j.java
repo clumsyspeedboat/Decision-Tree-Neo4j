@@ -43,6 +43,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	public static List<Record> dataKey = new ArrayList<>();
 	public static ArrayList<String> testDataList =  new ArrayList<String>();
 	public static ArrayList<String> trainDataList =  new ArrayList<String>();
+	public static ArrayList<String> autoSplitDataList =  new ArrayList<String>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
@@ -159,6 +160,76 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
     
     @UserFunction
+    public String queryAutoSplitData(@Name("nodeType") String nodeType, @Name("trainRatio") String trainRatio ) throws Exception
+   	{
+       	String listOfData = "";
+       	double testRatio = 0;
+       	autoSplitDataList.clear();
+       	testDataList.clear();
+   		trainDataList.clear();
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+           {
+       		queryData(nodeType);
+       		for (Record key : dataKey) {
+       			List<Pair<String,Value>> values = key.fields();
+       			for (Pair<String,Value> nodeValues: values) {
+       				String valueOfNode = "";
+       				if ("n".equals(nodeValues.key())) { 
+       			        Value value = nodeValues.value();
+       			        for (String nodeKey : value.keys())
+       			        {
+       			        	if(value.get(nodeKey).getClass().equals(String.class))
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
+       			        		}
+       			        		else
+       			        		{
+       			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
+       			        		}
+       			   
+       			        	}
+       			        	else
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
+       			        		}
+       			        		else
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode =  nodeKey + ":" + converValueToString;
+       			        		}
+       			        		
+       			        	}
+       			        }
+       			        autoSplitDataList.add(valueOfNode);
+       			    }
+       			}
+       		}
+       		int size = autoSplitDataList.size();
+       		double sizeForTrain = Math.floor(size * Double.parseDouble(trainRatio));
+       		int startTestData =  (int) sizeForTrain;
+       		testRatio = 1 - Double.parseDouble(trainRatio);
+       		//Add data to trainDataList
+       		for (int i = 0; i < startTestData; i++)
+       		{
+       			trainDataList.add(autoSplitDataList.get(i));
+       		}
+       		//Add data to testDataList
+       		for (int i = startTestData; i < size; i++)
+       		{
+       			testDataList.add(autoSplitDataList.get(i));
+       		}
+       }
+       	return "The Data has been split -  Train Ratio: " + trainRatio + " Test Ratio: " + testRatio;
+   	}
+    
+    
+    
+    @UserFunction
     public String queryTestData(@Name("nodeType") String nodeType) throws Exception
    	{
        	String listOfData = "";
@@ -178,12 +249,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        		if(valueOfNode != "")
        			        		{
        			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
-           			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
        			        		}
        			        		else
        			        		{
        			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
-           			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
        			        		}
        			   
        			        	}
@@ -193,13 +262,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        		{
        			        			String converValueToString = String.valueOf(value.get(nodeKey));
                			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
-               			        	//nodeData.add(nodeKey+":"+converValueToString);
        			        		}
        			        		else
        			        		{
        			        			String converValueToString = String.valueOf(value.get(nodeKey));
                			        	valueOfNode =  nodeKey + ":" + converValueToString;
-               			        	//nodeData.add(nodeKey+":"+converValueToString);
        			        		}
        			        		
        			        	}
@@ -273,6 +340,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String displayData(@Name("dataType") String dataType) throws Exception
    	{
        	String listOfData = "";
+       	int countLine = 0;
        	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
            {
        		if(dataType.equals("train"))
@@ -281,7 +349,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			listOfData = "train data: ";
        			for(String node : trainDataList)
        			{
-
+       				countLine++;
        				listOfData = listOfData + node + "|";
        			}
        		}
@@ -291,13 +359,13 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			listOfData = "test data: ";
        			for(String node : testDataList)
        			{
+       				countLine++;
        				listOfData = listOfData + node + "|";
        			}
        			
        		}
-
            }
-       	return "The " + listOfData;
+       	return "Number of Lines: " + countLine + " The " + listOfData;
        	
    	}
     

@@ -292,7 +292,7 @@ public class EvaluateTree {
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
-		return confusionMatrix + ", Accuracy:" + score*100 + "%";
+		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + score*100 + "%";
 	}
 	
 }
