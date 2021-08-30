@@ -10,8 +10,8 @@ import evaluate.EvaluateTree;
 public class EvaluateTreeGR extends EvaluateTree{
 	
 	
-	public EvaluateTreeGR(String trainData, String testData) throws IOException {
-		super(trainData,testData);
+	public EvaluateTreeGR(String trainData, String testData, String targetAtt) throws IOException {
+		super(trainData,testData, targetAtt);
 	}
 	
 	
@@ -37,7 +37,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
-		//
+		
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 

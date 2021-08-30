@@ -14,7 +14,7 @@ public class ClassifyMainGI {
 		
 		String[] paths = pathos.split(",");
 		
-		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1]);
+		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],"DEATH_EVENT");
 		
 	    mine.calculateAccuracy();
 

@@ -29,7 +29,13 @@ public class ProcessInputData {
 	public static Attribute targetAttribute;
 	static int targetAttributeIndex;
 	
-	
+	/**
+	 * This function create a custom array list from CSV
+	 * 
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
 	public static ArrayList<String> CustomListFromCSV(String fileName) throws IOException{
 		ArrayList<String> nList = new ArrayList<String>();
 		
@@ -38,7 +44,6 @@ public class ProcessInputData {
 		String aLine = in.nextLine();
 		
 		String[] attributeArr = aLine.split(",");
-		
 		
 		
 		while (in.hasNextLine()) {
@@ -65,8 +70,8 @@ public class ProcessInputData {
 	        nList.add(commaseparatedlist);
 		}
 		return nList;
-		
 	} 
+	
 
 	/**
 	 * This function read csv and process the dataset dynamically.
@@ -74,11 +79,11 @@ public class ProcessInputData {
 	 * @param fileName: file name of input data file
 	 * @throws IOException
 	 */
-	public ProcessInputData(String fileName) throws IOException {
+	public ProcessInputData(String fileName, String targetAtt) throws IOException{
 		attributeSet = new ArrayList<Attribute>();
 		instanceSet = new ArrayList<Instance>();
 
-		Map<Integer, HashSet<String>> myMap = new HashMap<Integer, HashSet<String>>();
+		LinkedHashMap<String, HashSet<String>> myMap = new LinkedHashMap<String, HashSet<String>>();
 		HashSet<String> uSet;
 
 		@SuppressWarnings("resource")
@@ -97,13 +102,13 @@ public class ProcessInputData {
 				Instance item = new Instance();
 
 				for (int a = 0; a < attributeArr.length; a++) {
-					if (myMap.containsKey(a)) {
-						uSet = myMap.get(a);
+					if (myMap.containsKey(attributeArr[a])) {
+						uSet = myMap.get(attributeArr[a]);
 						uSet.add(lineArr[a]);
 					} else {
 						uSet = new HashSet<String>();
 						uSet.add(lineArr[a]);
-						myMap.put(a, uSet);
+						myMap.put(attributeArr[a], uSet);
 					}
 
 					item.addAttribute(attributeArr[a], lineArr[a]);
@@ -113,35 +118,54 @@ public class ProcessInputData {
 			} else {
 
 			}
-
 		}
-
-		HashSet<String> targetColumn = myMap.get(myMap.size() - 1);
+		
+		
+		HashSet<String> targetColumn = myMap.get(targetAtt);
 		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
 
-		for (int i = 0; i < attributeArr.length; i++) {
-			int nUnique = myMap.get(i).size();
+		/*
+		 * for (int i = 0; i < attributeArr.length; i++) { int nUnique =
+		 * myMap.get(i).size();
+		 * 
+		 * boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
+		 * 
+		 * if (isCategorical == false) { Attribute attr1 = new
+		 * Attribute(attributeArr[i], "real"); attributeSet.add(attr1); } else {
+		 * HashSet<String> app = myMap.get(i);
+		 * 
+		 * String str = "{" + String.join(",", app) + "}";
+		 * 
+		 * Attribute attr2 = new Attribute(attributeArr[i], str);
+		 * attributeSet.add(attr2); } } targetAttribute =
+		 * attributeSet.get(attributeSet.size() - 1);
+		 */
+		
+		int index=0;
+		for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
+			String key = entry.getKey();
+
+			HashSet<String> value = entry.getValue();
+			int nUnique = entry.getValue().size();
 
 			boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
-
 			if (isCategorical == false) {
-				Attribute attr1 = new Attribute(attributeArr[i], "real");
+				Attribute attr1 = new Attribute(key, "real");
 				attributeSet.add(attr1);
-			} else {
-				HashSet<String> app = myMap.get(i);
-
-				String str = "{" + String.join(",", app) + "}";
-
-				Attribute attr2 = new Attribute(attributeArr[i], str);
+			}else{
+				String str = "{" + String.join(",", value) + "}";
+				Attribute attr2 = new Attribute(key, str);
 				attributeSet.add(attr2);
 			}
+			if(attributeSet.get(index).getName().equals(targetAtt)) {
+				targetAttributeIndex = index;
+				targetAttribute = attributeSet.get(index);
+			}
+			index++;
 		}
-
-		
-		targetAttribute = attributeSet.get(attributeSet.size() - 1);
-		
-
+		 
 	}
+	
 
 	/**
 	 * This function is for processing input nodes from Neo4j graph database
@@ -240,9 +264,13 @@ public class ProcessInputData {
 		nodesList.add("anaemia:0, serum_creatinine:1.18, sex:0, ejection_fraction:60, creatinine_phosphokinase:582, platelets:263358.03, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:82, serum_sodium:137, diabetes:0, age:'42.0'");
 		nodesList.add("anaemia:0, serum_creatinine:0.9, sex:1, ejection_fraction:25, creatinine_phosphokinase:231, platelets:253000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:1, time:10, serum_sodium:140, diabetes:0, age:'62.0'");
 		
-		ArrayList<String> nList = ProcessInputData.CustomListFromCSV("data/train.csv");
-		ProcessInputData p = new ProcessInputData(nList, "DEATH_EVENT");
-		System.out.println(p.getTargetAttribute());
+		//ArrayList<String> nList = ProcessInputData.CustomListFromCSV("data/train.csv");
+		//ProcessInputData p = new ProcessInputData(nList, "DEATH_EVENT");
+		//System.out.println(p.getTargetAttribute());
+		
+		
+		//ProcessInputData p = new ProcessInputData("data/train.csv", "DEATH_EVENT");
+		//System.out.println(p.getTargetAttribute());
 		
 
 	}

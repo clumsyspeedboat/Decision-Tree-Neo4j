@@ -20,12 +20,11 @@ public class ConstructTree {
 	private int parentLevel = 0; 
 	
 	
-	public ConstructTree(String fileName) throws IOException {
-		ProcessInputData input = new ProcessInputData(fileName);
+	public ConstructTree(String fileName, String targetAttr) throws IOException {
+		ProcessInputData input = new ProcessInputData(fileName, targetAttr);
 		attributes = input.getAttributeSet();
 		instances = input.getInstanceSet();
 		target = input.getTargetAttribute();
-		
 	}
 
 	
@@ -73,8 +72,6 @@ public class ConstructTree {
 
 			return leaf;
 		}
-		
-		
 		
 		
 		// Choose the root attribute

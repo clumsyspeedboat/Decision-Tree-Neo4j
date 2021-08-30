@@ -30,20 +30,16 @@ public class EvaluateTree {
 	 * @param testData
 	 * @throws IOException
 	 */
-	public EvaluateTree(String trainData, String testData) throws IOException {
-		
+	public EvaluateTree(String trainData, String testData, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
-		ProcessInputData train = new ProcessInputData(trainData);
-		
-		ProcessInputData test = new ProcessInputData(testData);	
+		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
+		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
 		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
-		
-		
+	
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();
-		
 		
 		result.addAll(testInstances);
 	}
@@ -61,15 +57,9 @@ public class EvaluateTree {
 		ProcessInputData train = new ProcessInputData(trainDataList, targetAttr);
 		ProcessInputData test = new ProcessInputData(testDataList, targetAttr);	
 		
-		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
-		
-		for(Attribute a:this.attributes) {
-			System.out.println(a.getName());
-		}
-		
-		
+
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();	
 		

@@ -10,8 +10,8 @@ import definition.*;
 public class EvaluateTreeGI extends EvaluateTree{
 	
 	
-	public EvaluateTreeGI(String trainData, String testData) throws IOException {
-		super(trainData,testData);
+	public EvaluateTreeGI(String trainData, String testData, String targetAttr) throws IOException {
+		super(trainData,testData, targetAttr);
 	}
 	
 	/**

@@ -32,10 +32,10 @@ public class CrossValidationWithPruning {
 	Random rand;
 	
 	
-	public CrossValidationWithPruning(String trainData) throws IOException {
+	public CrossValidationWithPruning(String trainData, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
 		
-		ProcessInputData input = new ProcessInputData(trainData);
+		ProcessInputData input = new ProcessInputData(trainData, targetAttr);
 		this.attributes = input.getAttributeSet();
 		target = input.getTargetAttribute();
 		this.testBundles = new ArrayList<ArrayList<Instance>>();

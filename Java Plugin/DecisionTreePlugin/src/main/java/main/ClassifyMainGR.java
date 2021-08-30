@@ -15,7 +15,7 @@ public class ClassifyMainGR {
 		
 		String[] paths = pathos.split(",");
 		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
+		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], "DEATH_EVENT");
 		
 	    mine.calculateAccuracy();
 

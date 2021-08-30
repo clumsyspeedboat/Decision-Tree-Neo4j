@@ -34,11 +34,11 @@ public class CrossValidation {
 	 * @param trainData
 	 * @throws IOException
 	 */
-	public CrossValidation(String trainData) throws IOException {
+	public CrossValidation(String trainData, String targetAttr) throws IOException {
 
 		result = new ArrayList<Instance>();
 		
-		ProcessInputData input = new ProcessInputData(trainData);
+		ProcessInputData input = new ProcessInputData(trainData, targetAttr);
 		this.attributes = input.getAttributeSet();
 
 		this.target = input.getTargetAttribute();

@@ -1,3 +1,9 @@
+/**
+ * This class is used to fetch nodes from graph database or from csv and call the functions to generate decision tree 
+ * with confusion matrix, generation time and prediction time for the output 
+ */
+
+
 package main;
 import java.util.Scanner;
 
@@ -14,7 +20,6 @@ import static org.neo4j.driver.Values.parameters;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -25,16 +30,9 @@ import org.neo4j.driver.Session;
 import org.neo4j.driver.Transaction;
 import org.neo4j.driver.TransactionWork;
 import org.neo4j.driver.Value;
-import org.neo4j.driver.types.Node;
 import org.neo4j.driver.util.Pair;
 
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 
 public class OutputDecisionTreeNeo4j implements AutoCloseable{
@@ -59,13 +57,14 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	/**
 	 * Empty constructor
 	 */
-	
 	public OutputDecisionTreeNeo4j()
     {
         driver = null;
     }
 	
-	
+	/**
+	 * Close the drive object
+	 */
 	@Override
     public void close() throws Exception
     {
@@ -138,7 +137,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
     
     /**
-     * Query Data
+     * This function is used to query the data from graph database
      * @param 
      * @param 
      */
@@ -158,7 +157,13 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
             } );
         }
     }
-    
+    /** 
+     * This function is used to split the nodes from database based on training ratio given 
+     * @param nodeType
+     * @param trainRatio
+     * @return
+     * @throws Exception
+     */
     @UserFunction
     public String queryAutoSplitData(@Name("nodeType") String nodeType, @Name("trainRatio") String trainRatio ) throws Exception
    	{
@@ -229,6 +234,12 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     
     
+    /**
+     * This function is used to query the test dataset from Neo4j and populate the global arraylist of Java Code
+     * @param nodeType
+     * @return
+     * @throws Exception
+     */
     @UserFunction
     public String queryTestData(@Name("nodeType") String nodeType) throws Exception
    	{
@@ -275,11 +286,19 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			    }
        				listOfData = listOfData + valueOfNode + " | ";
        			}
-       		}
+       		 }
            }
        	
        	return "The Data: " + listOfData;
    	}
+    
+    /** 
+     * This function is used to query the training dataset from Neo4j and populate the global trainDataList of Java Code
+     * 
+     * @param nodeType
+     * @return
+     * @throws Exception
+     */
     
     @UserFunction
     public String queryTrainData(@Name("nodeType") String nodeType) throws Exception
@@ -308,7 +327,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
         			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
     			        		}
-    			   
     			        	}
     			        	else
     			        	{
@@ -324,7 +342,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
             			        	valueOfNode =  nodeKey + ":" + converValueToString;
             			        	//nodeData.add(nodeKey+":"+converValueToString);
     			        		}
-    			        		
     			        	}
     			        }
     			        trainDataList.add(valueOfNode);
@@ -335,6 +352,12 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
         }
     	return "The Data: " + listOfData;
 	}
+    /**
+     * This function is used to display the nodes which has been queried and populated already. Used for testing purpose.
+     * @param dataType
+     * @return
+     * @throws Exception
+     */
     
     @UserFunction
     public String displayData(@Name("dataType") String dataType) throws Exception
@@ -370,7 +393,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
    	}
     
     /**
-     * User defined function to create the decision tree with nodes and relationships in neo4j
+     * User defined function to create the decision tree with nodes and relationships in neo4j. This creates a tree based on information gain. 
      * @param path
      * @return
      * @throws Exception
@@ -428,7 +451,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -452,6 +475,12 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     	return "Create the Gini Index Decision Tree successful, " + confusionMatrix;
     	
 	}
+    /**
+     * This function creates tree from csv path which is based on gain ratio
+     * @param path The path is composed of 3 parts, 1st-training dataset, 2nd-test dataset, 3rd- target attribute(as string)
+     * @return
+     * @throws Exception
+     */
     
     @UserFunction
     public String createTreeGainRatio(@Name("path") String path) throws Exception
@@ -463,7 +492,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -486,6 +515,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     	return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
 	}
     
+    
+    /**
+     * This function creates tree from csv path which is based on information gain
+     * 
+     * @param path - The path is composed of 3 parts, 1st-training dataset, 2nd-test dataset, 3rd- target attribute(as string)
+     * @return
+     * @throws Exception
+     */
+    
     @UserFunction
     public String createTreeInfoGain(@Name("path") String path) throws Exception
 	{
@@ -496,7 +534,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
+			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -521,11 +559,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     	
 	}
     
-    
-    
+    /**
+     * This function retrieves the confusion matrix of decision tree based on information gain
+     * @param path
+     * @param target
+     * @return
+     * @throws Exception
+     */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confusionMatrixIG(@Name("path") String path) throws Exception
+	public String confusionMatrixIG(@Name("path") String path,@Name("target") String target) throws Exception
 	{
 		if(path == null)
 		{
@@ -537,12 +580,21 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			EvaluateTree mine = new EvaluateTree(paths[0], paths[1]);
+			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], target);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
 		}
 	}
+    
+    
+    /**
+     * 
+     * This function retrieves the confusion matrix of decision tree based on gain ratio
+     * @param path
+     * @return
+     * @throws Exception
+     */
     
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
@@ -558,12 +610,20 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
 		}
 	}
+    
+    /**
+     * 
+     * This function retrieves the confusion matrix of decision tree based on gini index 
+     * @param path
+     * @return
+     * @throws Exception
+     */
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
@@ -579,7 +639,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;
