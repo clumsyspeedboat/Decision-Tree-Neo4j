@@ -8,12 +8,10 @@ package input;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -24,8 +22,8 @@ import definition.Attribute;
 import definition.Instance;
 
 public class ProcessInputData {
-	ArrayList<Attribute> attributeSet;
-	ArrayList<Instance> instanceSet;
+	private ArrayList<Attribute> attributeSet;
+	private ArrayList<Instance> instanceSet;
 	public static Attribute targetAttribute;
 	static int targetAttributeIndex;
 	
@@ -119,51 +117,38 @@ public class ProcessInputData {
 
 			}
 		}
-		
-		
-		HashSet<String> targetColumn = myMap.get(targetAtt);
-		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
 
-		/*
-		 * for (int i = 0; i < attributeArr.length; i++) { int nUnique =
-		 * myMap.get(i).size();
-		 * 
-		 * boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
-		 * 
-		 * if (isCategorical == false) { Attribute attr1 = new
-		 * Attribute(attributeArr[i], "real"); attributeSet.add(attr1); } else {
-		 * HashSet<String> app = myMap.get(i);
-		 * 
-		 * String str = "{" + String.join(",", app) + "}";
-		 * 
-		 * Attribute attr2 = new Attribute(attributeArr[i], str);
-		 * attributeSet.add(attr2); } } targetAttribute =
-		 * attributeSet.get(attributeSet.size() - 1);
-		 */
+		HashSet<String> targetColumn = myMap.get(targetAtt);
 		
-		int index=0;
+
+		int index = 0;
+		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
+		
 		for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
 			String key = entry.getKey();
 
 			HashSet<String> value = entry.getValue();
+			
+			
 			int nUnique = entry.getValue().size();
-
+		
 			boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
+			
 			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(key, "real");
 				attributeSet.add(attr1);
-			}else{
+			} else {
 				String str = "{" + String.join(",", value) + "}";
 				Attribute attr2 = new Attribute(key, str);
 				attributeSet.add(attr2);
 			}
-			if(attributeSet.get(index).getName().equals(targetAtt)) {
+			if (attributeSet.get(index).getName().equals(targetAtt)) {
 				targetAttributeIndex = index;
 				targetAttribute = attributeSet.get(index);
 			}
 			index++;
 		}
-		 
+ 
 	}
 	
 
@@ -179,7 +164,7 @@ public class ProcessInputData {
 		
 		int datasetCount = nodesList.size();
 		
-		LinkedHashMap<String, HashSet<String>> myMap = new LinkedHashMap<String, HashSet<String>>();
+		HashMap<String, HashSet<String>> myMap = new HashMap<String, HashSet<String>>();
 		HashSet<String> uSet;
 
 		boolean isListEmpty = nodesList.isEmpty();

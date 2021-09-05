@@ -3,72 +3,73 @@ package gini;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 import evaluate.EvaluateTree;
 import definition.*;
 
 public class EvaluateTreeGI extends EvaluateTree{
 	
-	
 	public EvaluateTreeGI(String trainData, String testData, String targetAttr) throws IOException {
 		super(trainData,testData, targetAttr);
 	}
+	
+	public EvaluateTreeGI(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr) throws IOException {
+		super(trainDataList, testDataList, targetAttr);
+	}
+	
 	
 	/**
 	 * Evaluate the decision tree on the test set 
 	 * 
 	 * @throws IOException
 	 */
-	
+	@Override
 	public String calculateAccuracy() throws IOException {
-		
 		//time taken to generate the tree
-		long tstTime = System.nanoTime();
 		String confusionMatrix = "";
 		
-		ConstructTreeGI tree = new ConstructTreeGI(trainInstances, attributes, target);
-		root = tree.construct();
+		long tstTime = System.currentTimeMillis();
 		
-		long teTime = System.nanoTime();
-		double generationTime = calculateTime(tstTime, teTime);
-		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
+		ConstructTreeGI tree = new ConstructTreeGI(getTrainInstances(), getAttributes(), getTarget());
+		super.setRoot(tree.construct());
+	
+	
+		long teTime = System.currentTimeMillis();
+		long generationTime = teTime-tstTime;
+		System.out.println("Time taken to generate tree:"+( generationTime/1000f) +"s");
 		
-
 		//time taken to run predictions 
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
+		
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
-		//
+		//System.out.println(res);
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 		
 		for (Instance item : res) {				
-			String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
+			String testLabel = item.getAttributeValuePairs().get("Test" + getTarget().getName());
 			predictions.add(testLabel);
-			String label = item.getAttributeValuePairs().get(target.getName());
+			String label = item.getAttributeValuePairs().get(getTarget().getName());
 			actual.add(label);
-
-			if(testLabel != null) {
-				if(testLabel.equals(label)) {
-					correct++;
-				}
+			
+			
+			if(testLabel.equals(label)) {
+				correct++;
 			}
 		}
 		
-		calculateConfusionMatrix(actual, predictions);
-		
-		score = correct * 1.0 / res.size();
-		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		
-		long endTime = System.nanoTime(); 
-		double predTime = calculateTime(startTime, endTime);
-		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
+		super.setScore(correct * 1.0 / res.size());
+		
+		long endTime = System.currentTimeMillis(); 
+		//double predTime = calculateTime(startTime, endTime);
+		long predTime = endTime - startTime;
+		System.out.println("Time taken to generate prediction: " + (predTime/1000f) + " s\n");
 		 
 		
-		System.out.println("Accuracy:" + score*100 + "%");
-		return confusionMatrix + ", Accuracy:" + score*100 + "%";
-
+		System.out.println("Accuracy:" + getScore()*100 + "%");
+		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + getScore()*100 + "%";
 	}
 }

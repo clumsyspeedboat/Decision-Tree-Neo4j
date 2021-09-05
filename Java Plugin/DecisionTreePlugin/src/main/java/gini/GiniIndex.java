@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GiniIndex extends Entropy{
+	
 	/**
 	 * Calculate gini index of instances for the target attribute.
 	 * Only for discrete attribute.
@@ -48,7 +49,6 @@ public class GiniIndex extends Entropy{
 		double giniindex = 0;
 		
 
-		
 		for (String s : valuesOfTarget) {
 			int countSingleValue = countValueOfTarget.get(s);
 			if (countSingleValue == 0) continue;

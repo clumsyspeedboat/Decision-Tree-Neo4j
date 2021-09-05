@@ -14,6 +14,10 @@ public class EvaluateTreeGR extends EvaluateTree{
 		super(trainData,testData, targetAtt);
 	}
 	
+	public EvaluateTreeGR(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr) throws IOException {
+		super(trainDataList, testDataList, targetAttr);
+	}
+	
 	
 	/**
 	 * Evaluate the decision tree on the test set 
@@ -25,8 +29,9 @@ public class EvaluateTreeGR extends EvaluateTree{
 		long tstTime = System.nanoTime();
 		String confusionMatrix = "";
 
-		ConstructTreeGR tree = new ConstructTreeGR(trainInstances, attributes, target);
-		root = tree.construct();
+		ConstructTreeGR tree = new ConstructTreeGR(getTrainInstances(), getAttributes(), getTarget());
+		//root = tree.construct();
+		super.setRoot(tree.construct());
 
 		long teTime = System.nanoTime();
 		double generationTime = calculateTime(tstTime, teTime);
@@ -42,9 +47,9 @@ public class EvaluateTreeGR extends EvaluateTree{
 		ArrayList<String> predictions = new ArrayList<>();
 
 		for (Instance item : res) {
-			String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
+			String testLabel = item.getAttributeValuePairs().get("Test" + getTarget().getName());
 			predictions.add(testLabel);
-			String label = item.getAttributeValuePairs().get(target.getName());
+			String label = item.getAttributeValuePairs().get(getTarget().getName());
 			actual.add(label);
 			if (testLabel.equals(label)) {
 				correct++;
@@ -53,15 +58,16 @@ public class EvaluateTreeGR extends EvaluateTree{
 		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		
-		score = correct * 1.0 / res.size();
+		//score = correct * 1.0 / res.size();
+		super.setScore(correct * 1.0 / res.size());
 		
 
 		long endTime = System.nanoTime();
 		double predTime = calculateTime(startTime, endTime);
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 
-		System.out.println("Accuracy:" + score * 100 + "%");
-		return confusionMatrix;
+		System.out.println("Accuracy:" + getScore() * 100 + "%");
+		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + getScore()*100 + "%";
 
 	}
 }

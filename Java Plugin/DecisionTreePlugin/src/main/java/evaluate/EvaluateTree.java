@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.lang3.time.StopWatch;
+import org.glassfish.jersey.internal.guava.Stopwatch;
+
 import core.ConstructTree;
 import definition.Attribute;
 import definition.Instance;
@@ -16,14 +20,15 @@ import node.TreeNode;
 
 
 public class EvaluateTree {
-	protected ArrayList<Attribute> attributes;
+	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
-	protected ArrayList<Instance> trainInstances;
-	protected Attribute target;
-	protected TreeNode root;
-	protected ArrayList<Instance> result;
-	protected Double score = 0.0;
+	private ArrayList<Instance> trainInstances;
+	private Attribute target;
+	private TreeNode root;
+	private ArrayList<Instance> result;
+	private Double score = 0.0;
 	
+
 	/**
 	 * Constructor to process train and test data 
 	 * @param trainData
@@ -66,13 +71,13 @@ public class EvaluateTree {
 		result.addAll(testInstances);
 	}
 	
-
 	
+	
+
 	/**
 	 * Loop through the entire tree 
 	 */
 	protected void mine(){
-		
 		try
         {
 			for(int i = 0; i < testInstances.size(); i++) {
@@ -155,9 +160,7 @@ public class EvaluateTree {
 	 * @return the root of the tree
 	 */
 	
-	public TreeNode getRoot(){
-		return root;
-	}
+	
 	
 	
 	public double calculateTime(long strTime, long eTime) {
@@ -220,10 +223,12 @@ public class EvaluateTree {
 		 String tn=String.format("TN: %d",trueNegative);
 		 String fp=String.format("FP: %d",falsePositive);
 		 String fn=String.format("FN: %d",falseNegative);
+			
 		 System.out.println(tp);
 		 System.out.println(tn);
 		 System.out.println(fp);
 		 System.out.println(fn);
+			 
 		 confusionMatrix = tp + "\n" + tn + "\n" + fp + "\n" + fn;
 		 return confusionMatrix;
 	}
@@ -236,21 +241,24 @@ public class EvaluateTree {
 	 * @throws IOException
 	 */
 	public String calculateAccuracy() throws IOException {
+		
 		//time taken to generate the tree
 		String confusionMatrix = "";
-		long tstTime = System.nanoTime();
-		
+		long tstTime = System.currentTimeMillis();
 		
 		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target);
 		root = tree.construct();
 		
-		long teTime = System.nanoTime();
-		double generationTime = calculateTime(tstTime, teTime);
-		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
+		
+		long teTime = System.currentTimeMillis();
+		//double generationTime = calculateTime(tstTime, teTime);
+		long generationTime = teTime-tstTime;
+		//System.out.println("Time taken to generate tree: " + generationTime + "ms\n");
+		System.out.println("Time taken to generate tree:"+( generationTime/1000f) +"s");
 		
 		
 		//time taken to run predictions 
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
 		
 		
 		int correct = 0;
@@ -271,18 +279,63 @@ public class EvaluateTree {
 			}
 		}
 		
-		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		
 		score = correct * 1.0 / res.size();
 		
-		long endTime = System.nanoTime(); 
-		double predTime = calculateTime(startTime, endTime);
-		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
+		long endTime = System.currentTimeMillis(); 
+		//double predTime = calculateTime(startTime, endTime);
+		long predTime = endTime - startTime;
+		System.out.println("Time taken to generate prediction: " + (predTime/1000f) + " s\n");
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");
 		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + score*100 + "%";
 	}
+	
+	/**
+	 * Setter for members
+	 * @param root
+	 */
+	public void setRoot(TreeNode root) {
+		this.root = root;
+	}
+	
+	
+	public void setScore(Double score) {
+		this.score = score;
+	}
+
+	
+	/**
+	 * Getter for members
+	 * @return
+	 */
+	public ArrayList<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	public ArrayList<Instance> getTestInstances() {
+		return testInstances;
+	}
+
+
+	public ArrayList<Instance> getTrainInstances() {
+		return trainInstances;
+	}
+	
+	public Attribute getTarget() {
+		return target;
+	}
+
+	
+	public TreeNode getRoot(){
+		return root;
+	}
+	
+	public Double getScore() {
+		return score;
+	}
+
 	
 }

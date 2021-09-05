@@ -1,9 +1,3 @@
-/**
- * This class is used to fetch nodes from graph database or from csv and call the functions to generate decision tree 
- * with confusion matrix, generation time and prediction time for the output 
- */
-
-
 package main;
 import java.util.Scanner;
 
@@ -20,7 +14,6 @@ import static org.neo4j.driver.Values.parameters;
 
 import java.util.List;
 import java.util.ArrayList;
-
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -33,21 +26,28 @@ import org.neo4j.driver.Value;
 import org.neo4j.driver.util.Pair;
 
 
-
+/**
+ * 
+ * This class is used to fetch nodes from graph database or from csv and call the functions to generate decision tree 
+ * with confusion matrix, generation time and prediction time for the output 
+ * 
+ * @author nasim
+ *
+ */
 
 public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
 	private static Driver driver;	
-	public static List<Record> dataKey = new ArrayList<>();
-	public static ArrayList<String> testDataList =  new ArrayList<String>();
-	public static ArrayList<String> trainDataList =  new ArrayList<String>();
-	public static ArrayList<String> autoSplitDataList =  new ArrayList<String>();
+	private static List<Record> dataKey = new ArrayList<>();
+	private static ArrayList<String> testDataList =  new ArrayList<String>();
+	private static ArrayList<String> trainDataList =  new ArrayList<String>();
+	private static ArrayList<String> autoSplitDataList =  new ArrayList<String>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
-	 * @param uri
-	 * @param user
-	 * @param password
+	 * @param uri Uniform resource identifier for bolt
+	 * @param user Username
+	 * @param password Password
 	 */
 	public OutputDecisionTreeNeo4j( String uri, String user, String password )
     {
@@ -63,7 +63,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
 	
 	/**
-	 * Close the drive object
+	 * Close the driver object
 	 */
 	@Override
     public void close() throws Exception
@@ -74,11 +74,13 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
 	
 	/**
+	 * 
 	 * Create nodes in Neo4j using Java
+	 * @param dtType Type of decision tree
 	 * @param message String The message that print to Console
 	 * @param nodeDetail ArrayList<String> Detail of a node
 	 */
-    public void createNode( final String dtType, final String message, final ArrayList<String> nodeDetail)
+    public void createNode(final String dtType, final String message, final ArrayList<String> nodeDetail)
     {
     	final String name = nodeDetail.get(2);
         try ( Session session = driver.session() )
@@ -107,8 +109,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
 	/**
      * Create relationship between nodes in Java
+     * @param dtType Type of decision tree
      * @param message String the message that print to Console
-     * @param nodeDetail ArrayList<String> Detail of a relationship
+     * @param relationshipDetail ArrayList<String> Detail of a relationship
      */
     public void createRelationship( final String dtType, final String message, final ArrayList<String> relationshipDetail)
     {
@@ -138,8 +141,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     /**
      * This function is used to query the data from graph database
-     * @param 
-     * @param 
+     * @param nodeType type of node
      */
     public void queryData( final String nodeType)
     {
@@ -161,7 +163,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * This function is used to split the nodes from database based on training ratio given 
      * @param nodeType
      * @param trainRatio
-     * @return
+     * @return String with train ratio and test ratio
      * @throws Exception
      */
     @UserFunction
@@ -236,9 +238,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     /**
      * This function is used to query the test dataset from Neo4j and populate the global arraylist of Java Code
-     * @param nodeType
-     * @return
-     * @throws Exception
+     * @param nodeType The name of the type of node.For example, P_test for Test
+     * @return String showing the data queried
+     * @throws Exception if connection to Neo4j fails
      */
     @UserFunction
     public String queryTestData(@Name("nodeType") String nodeType) throws Exception
@@ -354,9 +356,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	}
     /**
      * This function is used to display the nodes which has been queried and populated already. Used for testing purpose.
-     * @param dataType
-     * @return
-     * @throws Exception
+     * @param dataType 
+     * @return String showing the data queried
+     * @throws Exception if connection to Neo4j fails
      */
     
     @UserFunction
@@ -620,8 +622,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     /**
      * 
      * This function retrieves the confusion matrix of decision tree based on gini index 
-     * @param path
-     * @return
+     * @param path - The path is composed of 3 parts, 1st-training dataset, 2nd-test dataset, 3rd- target attribute(as string)
+     * @return A string with confusion matrix
      * @throws Exception
      */
     

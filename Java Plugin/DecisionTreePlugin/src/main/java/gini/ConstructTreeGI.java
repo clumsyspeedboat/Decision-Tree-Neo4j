@@ -13,13 +13,8 @@ import java.util.HashMap;
 public class ConstructTreeGI extends ConstructTree{
 	
 	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
-                         Attribute target) {
-		
+                         Attribute target){
 		super(instances,attributes,target);
-		this.instances = instances;
-		this.attributes = attributes;
-		this.target = target;
-		
 	}
 	
 	/**
@@ -30,7 +25,6 @@ public class ConstructTreeGI extends ConstructTree{
 	public TreeNode construct() throws IOException {
 		return constructTree(target, attributes, instances);
 	}
-	
 	
 	
 	/**
@@ -44,6 +38,8 @@ public class ConstructTreeGI extends ConstructTree{
 	 */
 	private TreeNode constructTree(Attribute target, ArrayList<Attribute> attributes, 
 			ArrayList<Instance> instances) throws IOException {
+		System.out.println(instances.size());
+		
 		
 		if (GiniIndex.calculate(target, instances) == 0 || attributes.size() == 0) {
 			String leafLabel = "";
@@ -73,7 +69,6 @@ public class ConstructTreeGI extends ConstructTree{
 			String leafLabel = getMajorityLabel(target, instances);
 			TreeNode leaf = new TreeNode(leafLabel);
 			return leaf;
-			
 		}else {
 			for (String valueName : valueSubsets.keySet()) {
 				ArrayList<Instance> subset = valueSubsets.get(valueName);
@@ -88,9 +83,6 @@ public class ConstructTreeGI extends ConstructTree{
 			}	
 		}
 		
-			
-		
-		// Remember to add it again!
 		attributes.add(rootAttr);
 		
 		return root;

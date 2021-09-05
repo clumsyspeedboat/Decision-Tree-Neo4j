@@ -24,19 +24,24 @@ public class PrintTree{
 	 * @param root
 	 */
 	public void createNodesForGraph(TreeNode root){
-		nodesBucket = new ArrayList<ArrayList<String>>();
-		relationshipsBucket = new ArrayList<ArrayList<String>>();
-		nodeNames = new HashMap<String, Integer>();
-		relationNames = new HashMap<String, Integer>();
-				
-		root.setParentLevel(0);
-		root.setCurrentLevel(0);
-		root.setIndex(0);
+		if(root != null) {
+			nodesBucket = new ArrayList<ArrayList<String>>();
+			relationshipsBucket = new ArrayList<ArrayList<String>>();
+			nodeNames = new HashMap<String, Integer>();
+			relationNames = new HashMap<String, Integer>();
+					
+			root.setParentLevel(0);
+			root.setCurrentLevel(0);
+			root.setIndex(0);
+			
+			setLevelIndex(root);
+			
+			createNodeData(root, "");
+			createRelationshipData(root, "");
+		}else {
+			System.out.println("Tree is null");
+		}
 		
-		setLevelIndex(root);
-		
-		createNodeData(root, "");
-		createRelationshipData(root, "");
 	}
 
 
@@ -46,7 +51,6 @@ public class PrintTree{
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> printDFS(TreeNode root) {
-		
 		ArrayList<String> res = new ArrayList<String>();
 		printDFS(root, new StringBuilder(), res);
 		return res;
@@ -218,7 +222,6 @@ public class PrintTree{
 			leafNodeDetail.add(Integer.toString(nodeNames.get(leafLabel)));
 			//leafNodeDetail.add(tmp);
 			
-			
 			nodesBucket.add(leafNodeDetail);
 		
 		}else{
@@ -270,8 +273,4 @@ public class PrintTree{
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		
-	}
 }
