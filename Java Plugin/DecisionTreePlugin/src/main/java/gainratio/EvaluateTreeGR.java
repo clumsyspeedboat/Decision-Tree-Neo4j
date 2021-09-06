@@ -34,7 +34,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		super.setRoot(tree.construct());
 
 		long teTime = System.nanoTime();
-		double generationTime = calculateTime(tstTime, teTime);
+		double generationTime = (teTime-tstTime)/1000f;
 		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
 
 		// time taken to run predictions
@@ -63,7 +63,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		
 
 		long endTime = System.nanoTime();
-		double predTime = calculateTime(startTime, endTime);
+		double predTime = (endTime - startTime)/1000f;
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 
 		System.out.println("Accuracy:" + getScore() * 100 + "%");

@@ -252,9 +252,9 @@ public class EvaluateTree {
 		
 		long teTime = System.currentTimeMillis();
 		//double generationTime = calculateTime(tstTime, teTime);
-		long generationTime = teTime-tstTime;
+		double generationTime = (teTime-tstTime)/1000f;
 		//System.out.println("Time taken to generate tree: " + generationTime + "ms\n");
-		System.out.println("Time taken to generate tree:"+( generationTime/1000f) +"s");
+		System.out.println("Time taken to generate tree:"+ generationTime +"s");
 		
 		
 		//time taken to run predictions 
@@ -285,8 +285,8 @@ public class EvaluateTree {
 		
 		long endTime = System.currentTimeMillis(); 
 		//double predTime = calculateTime(startTime, endTime);
-		long predTime = endTime - startTime;
-		System.out.println("Time taken to generate prediction: " + (predTime/1000f) + " s\n");
+		double predTime = (endTime - startTime)/1000f;
+		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 		 
 		
 		System.out.println("Accuracy:" + score*100 + "%");

@@ -396,12 +396,12 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     /**
      * User defined function to create the decision tree with nodes and relationships in neo4j. This creates a tree based on information gain. 
-     * @param path
+     * @param target attribute
      * @return
      * @throws Exception
      */
     @UserFunction
-    public String createTreeFromDB(@Name("target") String target) throws Exception {
+    public String createTreeInfoGainFromDB(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -432,6 +432,90 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
     		}
     		return "Create the Information Gain Decision Tree successful, " + confusionMatrix;
+        }
+    	
+    }
+    
+    /**
+     * User defined function to create the decision tree with nodes and relationships in neo4j. This creates a tree based on gini index. 
+     * @param target attribute
+     * @return
+     * @throws Exception
+     */
+    @UserFunction
+    public String createTreeGiniFromDB(@Name("target") String target) throws Exception {
+    	
+    	String confusionMatrix = "";
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    	
+    		boolean isTrainListEmpty = trainDataList.isEmpty();
+    		boolean isTestListEmpty = testDataList.isEmpty();
+    		if(isTrainListEmpty && isTestListEmpty) {
+    			return target + "False";
+    		}else {
+		
+				EvaluateTree mine = new EvaluateTreeGI(trainDataList, testDataList, target);
+
+				confusionMatrix = mine.calculateAccuracy();
+
+				PrintTree tree = new PrintTree();
+
+				tree.createNodesForGraph(mine.getRoot());
+
+				for (ArrayList<String> nodeDetail : tree.nodesBucket) {
+					connector.createNode("DTGini", "create nodes in neo4j", nodeDetail);
+				}
+
+				for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
+					System.out.println("Relationship " + relationshipDetail);
+					connector.createRelationship("DTGini", "create relationship in neo4j \n", relationshipDetail);
+				}
+
+    		}
+    		return "Create the Gini Index Decision Tree successful, " + confusionMatrix;
+        }
+    	
+    }
+    
+    /**
+     * User defined function to create the decision tree with nodes and relationships in neo4j. This creates a tree based on gain ratio. 
+     * @param target attribute
+     * @return
+     * @throws Exception
+     */
+    @UserFunction
+    public String createTreeGainRatioFromDB(@Name("target") String target) throws Exception {
+    	
+    	String confusionMatrix = "";
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    	
+    		boolean isTrainListEmpty = trainDataList.isEmpty();
+    		boolean isTestListEmpty = testDataList.isEmpty();
+    		if(isTrainListEmpty && isTestListEmpty) {
+    			return target + "False";
+    		}else {
+		
+				EvaluateTree mine = new EvaluateTreeGR(trainDataList, testDataList, target);
+
+				confusionMatrix = mine.calculateAccuracy();
+
+				PrintTree tree = new PrintTree();
+
+				tree.createNodesForGraph(mine.getRoot());
+
+				for (ArrayList<String> nodeDetail : tree.nodesBucket) {
+					connector.createNode("DTGainRatio", "create nodes in neo4j", nodeDetail);
+				}
+
+				for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
+					System.out.println("Relationship " + relationshipDetail);
+					connector.createRelationship("DTGainRatio", "create relationship in neo4j \n", relationshipDetail);
+				}
+
+    		}
+    		return "Create the Gain Ratio Decision Tree successful, " + confusionMatrix;
         }
     	
     }
