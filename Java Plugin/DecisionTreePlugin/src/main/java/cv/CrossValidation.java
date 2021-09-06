@@ -28,6 +28,8 @@ public class CrossValidation {
 	private ArrayList<Double> scores;
 	Random rand;
 	String impurity; 
+	private ArrayList<Double> cvGenerationTime;
+	
 	
 	/**
 	 * Constructor
@@ -37,6 +39,7 @@ public class CrossValidation {
 	public CrossValidation(String trainData, String targetAttr) throws IOException {
 
 		result = new ArrayList<Instance>();
+		cvGenerationTime = new ArrayList<Double>();
 		
 		ProcessInputData input = new ProcessInputData(trainData, targetAttr);
 		this.attributes = input.getAttributeSet();
@@ -50,6 +53,25 @@ public class CrossValidation {
 
 		rand = new Random(totalInstances.size());
 		this.impurity = impurity;
+	}
+	
+	public CrossValidation(ArrayList<String> trainDataList, String targetAttr) throws IOException {
+		result = new ArrayList<Instance>();
+		cvGenerationTime = new ArrayList<Double>();
+		
+		ProcessInputData input = new ProcessInputData(trainDataList, targetAttr);
+		this.attributes = input.getAttributeSet();
+
+		this.target = input.getTargetAttribute();
+		
+
+		this.testBundles = new ArrayList<ArrayList<Instance>>();
+
+		this.totalInstances = input.getInstanceSet();
+
+		rand = new Random(totalInstances.size());
+		this.impurity = impurity;
+		
 	}
 	
 	/**
@@ -152,9 +174,14 @@ public class CrossValidation {
 				}
 			}
             
+			long startTime = System.currentTimeMillis();
 
 			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
 			root = tree.construct();
+			
+			long endTime = System.currentTimeMillis();
+			double crossValidationGenTime = (endTime -startTime)/1000f;
+			cvGenerationTime.add(crossValidationGenTime);
 
 
 			int correct = 0;
@@ -172,6 +199,11 @@ public class CrossValidation {
 
 		return scores;
 	}
+
+	public ArrayList<Double> getCvGenerationTime() {
+		return cvGenerationTime;
+	}
+
 
 	/**
 	 * 

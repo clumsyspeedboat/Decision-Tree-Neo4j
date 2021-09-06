@@ -28,7 +28,7 @@ public class ClassifyMainIG {
 
 	    PrintTree tree = new PrintTree();
 	    
-		System.out.println(tree.printDFS(mine.getRoot()));
+		//System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
 		
