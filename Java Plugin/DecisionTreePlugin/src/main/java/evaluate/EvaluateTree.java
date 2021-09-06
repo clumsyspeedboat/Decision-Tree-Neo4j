@@ -246,17 +246,20 @@ public class EvaluateTree {
 		String confusionMatrix = "";
 		long tstTime = System.currentTimeMillis();
 		
+		
 		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target);
 		root = tree.construct();
 		
 		
 		long teTime = System.currentTimeMillis();
+		
 		//double generationTime = calculateTime(tstTime, teTime);
 		long generationTime = teTime-tstTime;
+
 		//System.out.println("Time taken to generate tree: " + generationTime + "ms\n");
 		System.out.println("Time taken to generate tree:"+( generationTime/1000f) +"s");
 		
-		
+	
 		//time taken to run predictions 
 		long startTime = System.currentTimeMillis();
 		
