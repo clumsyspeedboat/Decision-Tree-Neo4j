@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class ContinuousProbability{
 	
@@ -151,5 +152,40 @@ public class ContinuousProbability{
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
 		return subset;
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		String[] attributes = { "lotion", "expos", "burn"};
+
+		@SuppressWarnings("serial")
+		ArrayList<String[]> sunBurnDataset = new ArrayList<String[]>() {
+			{
+				add(new String[] { "A", "20", "N" });
+				add(new String[] { "A", "30", "N" });
+				add(new String[] { "A", "40", "Y" });
+				add(new String[] { "B", "20", "Y"});
+				add(new String[] { "C", "20", "N"});		
+			}
+		};
+		
+		ArrayList<Instance> instanceSet = new ArrayList<>();
+		Iterator<String[]> iter = sunBurnDataset.iterator();
+		while (iter.hasNext()) {
+			Instance item = new Instance();
+			String[] a = iter.next();
+			for (int i = 0; i < a.length; i++) {
+				item.addAttribute(attributes[i], a[i]);
+			}
+			instanceSet.add(item);
+		}
+		
+		Attribute target = new Attribute("burn", "{N,Y}");
+		
+		Attribute currAttribute = new Attribute("expos", "real");
+		
+		ContinuousProbability continuous = new ContinuousProbability(currAttribute, target, instanceSet);
+		double giniValue = continuous.getGiniValue();
+		System.out.println(giniValue);
 	}
 }
