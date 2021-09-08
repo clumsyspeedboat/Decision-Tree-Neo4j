@@ -240,22 +240,6 @@ public class ProcessInputData {
 
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> nodesList = new ArrayList<>();
-
-		nodesList.add(
-				"anaemia:1, serum_creatinine:1.2, sex:1, ejection_fraction:40, creatinine_phosphokinase:170, platelets:336000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:250, serum_sodium:135, diabetes:1, age:'55.0'");
-		nodesList.add(
-				"anaemia:0, serum_creatinine:1.4, sex:1, ejection_fraction:50, creatinine_phosphokinase:224, platelets:481000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:1, time:192, serum_sodium:138, diabetes:0, age:'78.0'");
-		nodesList.add("anaemia:1, serum_creatinine:0.8, sex:0, ejection_fraction:40, creatinine_phosphokinase:101, platelets:226000.0, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:187, serum_sodium:141, diabetes:0, age:'40.0'");
-		nodesList.add("anaemia:0, serum_creatinine:1.18, sex:0, ejection_fraction:60, creatinine_phosphokinase:582, platelets:263358.03, DEATH_EVENT:0, high_blood_pressure:0, smoking:0, time:82, serum_sodium:137, diabetes:0, age:'42.0'");
-		nodesList.add("anaemia:0, serum_creatinine:0.9, sex:1, ejection_fraction:25, creatinine_phosphokinase:231, platelets:253000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:1, time:10, serum_sodium:140, diabetes:0, age:'62.0'");
-		
-		//ArrayList<String> nList = ProcessInputData.CustomListFromCSV("data/train.csv");
-		//ProcessInputData p = new ProcessInputData(nList, "DEATH_EVENT");
-		//System.out.println(p.getTargetAttribute());
-		
-		
-		//ProcessInputData p = new ProcessInputData("data/train.csv", "DEATH_EVENT");
-		//System.out.println(p.getTargetAttribute());
 		
 
 	}

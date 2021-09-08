@@ -18,6 +18,7 @@ public class ClassifyMainIG {
 		String[] paths = pathos.split(",");
 		
 		EvaluateTree mine = new EvaluateTree(paths[0], paths[1], "DEATH_EVENT");
+
 		
 		//ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/train.csv");
 		//ArrayList<String> testList = ProcessInputData.CustomListFromCSV("data/test.csv");

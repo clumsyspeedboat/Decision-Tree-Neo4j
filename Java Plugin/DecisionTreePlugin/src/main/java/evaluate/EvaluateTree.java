@@ -38,6 +38,8 @@ public class EvaluateTree {
 	public EvaluateTree(String trainData, String testData, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
+		System.out.println(train.getInstanceSet());
+		
 		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
 		
 		this.attributes = train.getAttributeSet();

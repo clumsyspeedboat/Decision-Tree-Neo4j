@@ -28,7 +28,6 @@ public class DiscreteProbability{
 	 */
 	public DiscreteProbability(Attribute target, Attribute attribute, ArrayList<Instance> instances)
 			throws IOException {
-	
 		
 		this.attribute = attribute;
 		
@@ -38,6 +37,7 @@ public class DiscreteProbability{
 		String attributeName = attribute.getName();
 		
 		subset = new HashMap<String, ArrayList<Instance>>();
+		
 		
 		
 		for (String s : valuesOfAttribute) {
@@ -54,9 +54,9 @@ public class DiscreteProbability{
 			subset.get(valueOfInstanceAtAttribute).add(instance);
 		}
 			
-
-		int totalN = instances.size();
+		//System.out.println(subset);
 		
+		int totalN = instances.size();
 		
 		
 		for (String s : subset.keySet()) {
