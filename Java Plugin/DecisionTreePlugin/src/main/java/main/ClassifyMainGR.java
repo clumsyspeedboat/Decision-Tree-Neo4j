@@ -14,7 +14,7 @@ public class ClassifyMainGR {
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String pathos = "data/train.csv,data/test.csv";
+		String pathos = "data/meta_train.csv,data/meta_test.csv";
 		
 		String[] paths = pathos.split(",");
 		
@@ -23,7 +23,7 @@ public class ClassifyMainGR {
 				
 	    //EvaluateTree mine = new EvaluateTree(trainList, testList, "DEATH_EVENT");
 		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], "DEATH_EVENT");
+		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], "PatientType");
 		
 	    mine.calculateAccuracy();
 

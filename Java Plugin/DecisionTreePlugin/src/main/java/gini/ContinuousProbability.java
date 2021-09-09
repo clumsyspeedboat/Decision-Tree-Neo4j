@@ -130,8 +130,6 @@ public class ContinuousProbability{
 		subset = new HashMap<String, ArrayList<Instance>>();
 		subset.put(leftName, leftInstances);
 		subset.put(rightName, rightInstances);
-		System.out.println(subset);
-
 	}
 
 	

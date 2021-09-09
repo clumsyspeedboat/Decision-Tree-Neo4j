@@ -26,6 +26,7 @@ public class ProcessInputData {
 	private ArrayList<Instance> instanceSet;
 	public static Attribute targetAttribute;
 	static int targetAttributeIndex;
+	private String targetAtt;
 	
 	/**
 	 * This function create a custom array list from CSV
@@ -117,12 +118,14 @@ public class ProcessInputData {
 
 			}
 		}
+		System.out.println(myMap);
 
 		HashSet<String> targetColumn = myMap.get(targetAtt);
-		
-
+	
 		int index = 0;
-		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
+		
+		double threshold = 1.0 * targetColumn.size() / datasetCount +0.01;
+		
 		
 		for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
 			String key = entry.getKey();
@@ -131,9 +134,12 @@ public class ProcessInputData {
 			
 			
 			int nUnique = entry.getValue().size();
-		
-			boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
 			
+			
+			boolean isCategorical = 0.4 * nUnique / datasetCount < threshold;
+			
+			
+	
 			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(key, "real");
 				attributeSet.add(attr1);
@@ -148,6 +154,9 @@ public class ProcessInputData {
 			}
 			index++;
 		}
+		
+		//System.out.println(instanceSet);
+		//System.out.println(attributeSet);
  
 	}
 	

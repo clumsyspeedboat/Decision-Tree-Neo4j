@@ -62,6 +62,8 @@ public class GiniIndex extends Entropy{
 		return giniindex;
 	}
 	
+	
+	
 	/**
 	 * Calculate gini index of instances for the target attribute.
 	 * Only for continuous attribute.

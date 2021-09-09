@@ -53,7 +53,6 @@ public class EvaluateTreeGI extends EvaluateTree{
 			String label = item.getAttributeValuePairs().get(getTarget().getName());
 			actual.add(label);
 			
-			
 			if(testLabel.equals(label)) {
 				correct++;
 			}

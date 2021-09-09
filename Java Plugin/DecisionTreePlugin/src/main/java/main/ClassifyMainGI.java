@@ -12,17 +12,17 @@ public class ClassifyMainGI {
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String pathos = "data/train.csv,data/test.csv";
+		//String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Testing_Dataset.csv";
+		String pathos = "data/flu_train.csv,data/flu_test.csv";
 		
 		String[] paths = pathos.split(",");
 		
-		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],"DEATH_EVENT");
+		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],"Diagnosis");
 		
+		//ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/meta_train.csv");
+		//ArrayList<String> testList = ProcessInputData.CustomListFromCSV("data/meta_test.csv");
 		
-		//ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/train.csv");
-		//ArrayList<String> testList = ProcessInputData.CustomListFromCSV("data/test.csv");
-		
-		//EvaluateTreeGI mine = new EvaluateTreeGI(trainList,testList,"DEATH_EVENT");
+		//EvaluateTreeGI mine = new EvaluateTreeGI(trainList,testList,"PatientType");
 	    
 	    mine.calculateAccuracy();
 
@@ -31,6 +31,7 @@ public class ClassifyMainGI {
 		System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
+		
 
 		in.close();
 	}
