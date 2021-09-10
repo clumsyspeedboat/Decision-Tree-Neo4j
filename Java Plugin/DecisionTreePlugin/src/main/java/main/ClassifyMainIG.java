@@ -17,15 +17,12 @@ import output.PrintTree;
 
 public class ClassifyMainIG {
 	
-	static final String LOCAL_DATASET = "data/train.csv,data/test.csv";
-	static final String TARGET_ATTRIBUTE = "DEATH_EVENT";
-	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String[] paths = LOCAL_DATASET.split(",");
+		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-		EvaluateTree mine = new EvaluateTree(paths[0], paths[1], TARGET_ATTRIBUTE);
+		EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
 	
 		mine.calculateAccuracy();
 

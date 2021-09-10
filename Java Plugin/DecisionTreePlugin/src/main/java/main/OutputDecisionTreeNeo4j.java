@@ -33,7 +33,7 @@ import org.neo4j.driver.util.Pair;
  * This class is used to fetch nodes from graph database or from csv and call the functions to generate decision tree 
  * with confusion matrix, generation time and prediction time for the output 
  * 
- * @author nasim
+ * @author minh
  *
  */
 
@@ -54,6 +54,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	public OutputDecisionTreeNeo4j( String uri, String user, String password )
     {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
+        
     }
 	
 	/**
@@ -210,8 +211,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        		{
        			        			String converValueToString = String.valueOf(value.get(nodeKey));
                			        	valueOfNode =  nodeKey + ":" + converValueToString;
-       			        		}
-       			        		
+       			        		}   			        		
        			        	}
        			        }
        			        autoSplitDataList.add(valueOfNode);

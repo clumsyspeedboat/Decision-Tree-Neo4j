@@ -5,6 +5,7 @@ import java.util.Scanner;
 import gainratio.EvaluateTreeGR;
 import output.PrintTree;
 
+
 /**
  * 
  * This main class is used to create decision tree based on gain ratio from csv or from arraylist of nodes
@@ -14,18 +15,14 @@ import output.PrintTree;
  * @author nasim
  *
  */
-
 public class ClassifyMainGR {
-	
-	static final String LOCAL_DATASET = "data/flu_train.csv,data/flu_test.csv";
-	static final String TARGET_ATTRIBUTE = "Diagnosis";
 	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String[] paths = LOCAL_DATASET.split(",");
+		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], TARGET_ATTRIBUTE);
+		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
 		
 	    mine.calculateAccuracy();
 
