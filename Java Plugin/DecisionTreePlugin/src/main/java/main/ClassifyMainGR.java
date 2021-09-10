@@ -25,7 +25,7 @@ public class ClassifyMainGR {
 		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
 		
 	    mine.calculateAccuracy();
-
+	    	    
 	    PrintTree tree = new PrintTree();
 	    
 		System.out.println(tree.printDFS(mine.getRoot()));
