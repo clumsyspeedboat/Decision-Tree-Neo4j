@@ -25,7 +25,7 @@ public class EvaluateTree {
 	private ArrayList<Instance> trainInstances;
 	private Attribute target;
 	private TreeNode root;
-	private ArrayList<Instance> result;
+	protected ArrayList<Instance> result;
 	private Double score = 0.0;
 	
 
@@ -38,9 +38,8 @@ public class EvaluateTree {
 	public EvaluateTree(String trainData, String testData, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
-		System.out.println(train.getInstanceSet());
-		
 		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
+
 		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
@@ -75,80 +74,70 @@ public class EvaluateTree {
 	
 	
 	
+	
+	
+	
 
 	/**
 	 * Loop through the entire tree 
 	 */
 	protected void mine(){
-		try
-        {
-			for(int i = 0; i < testInstances.size(); i++) {
-				TreeNode node = root;
+		for (int i = 0; i < testInstances.size(); i++) {
+			TreeNode node = root;
+			Instance currInstance = testInstances.get(i);
+			Instance resInstance = result.get(i);
 			
-				Instance currInstance = testInstances.get(i);
-				Instance resInstance = result.get(i);
-				if(node!= null) {
+			if (node != null) {
+				try {
 					while (!node.getType().equals("leaf")) {
 						String attributeName = node.getAttribute().getName();
 						String attributeType = node.getAttribute().getType();
 						HashMap<String, String> attributeValuePairs = currInstance.getAttributeValuePairs();
 						String value = attributeValuePairs.get(attributeName);
-			
-						if (attributeType.equals("continuous")){
+
+						if (attributeType.equals("continuous")) {
 							HashMap<String, TreeNode> children = node.getChildren();
-							
+
 							String tmp = "";
-							
+
 							for (String s : children.keySet()) {
 								String threshold = s.substring(4);
-								try
-								{
-								  Double.parseDouble(value);
-								  Double.parseDouble(threshold);
-								}
-								catch(NumberFormatException e)
-								{
-								  //not a double
-									System.out.println(e);
+								try {
+									Double.parseDouble(value);
+									Double.parseDouble(threshold);
+								} catch (NumberFormatException e) {
+									// not a double
+									
 									value = "0.0";
 									threshold = "0.0";
-									
+
 								}
-								
-								if (Double.parseDouble(value) < Double.parseDouble(threshold)){
+
+								if (Double.parseDouble(value) < Double.parseDouble(threshold)) {
 									tmp = "less";
 								} else {
 									tmp = "more";
 								}
-								
+
 								String curLabel = s.substring(0, 4);
-								if (tmp.equals(curLabel)) node = children.get(s);
+								if (tmp.equals(curLabel))
+									node = children.get(s);
 							}
-						}else{
-							
-								HashMap<String, TreeNode> children = node.getChildren();
-								node = children.get(value);
-							
-							
+						} else {
+
+							HashMap<String, TreeNode> children = node.getChildren();
+							node = children.get(value);
+
 						}
 					}
-					
+				}catch(Exception e) {
+					continue;
 				}
-				
 				
 				HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
 				pairs.put("Test" + target.getName(), node.getTargetLabel());
-				
 			}
-            
-          
-        }catch(NullPointerException n)
-        {
-            // getMessage will print description of exception(here / by zero)
-            System.out.println(n.getMessage());
-        }
-		
-		
+		}
 	}
 	
 	
@@ -157,20 +146,6 @@ public class EvaluateTree {
 		return result;
 	}
 	
-	/**
-	 * Get the root of the tree
-	 * @return the root of the tree
-	 */
-	
-	
-	
-	
-	public double calculateTime(long strTime, long eTime) {
-		long elTime = eTime - strTime; 
-		double mTime = (double) elTime / 1000000.0;
-		double sTime = mTime / 1000;
-		return sTime;
-	}
 	
 	
 	/**
@@ -191,6 +166,9 @@ public class EvaluateTree {
 		 for(int i=0; i<act.size(); i++) {
 			 String predLabel = pred.get(i);
 	         String actualLabel = act.get(i);
+	         if(predLabel == null) {
+	        	 continue;
+	         }
 	         int outLabelIndex = categories.indexOf(predLabel);
 	         int actualLabelIndex = categories.indexOf(actualLabel);
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
@@ -253,6 +231,7 @@ public class EvaluateTree {
 		root = tree.construct();
 		
 		
+		
 		long teTime = System.currentTimeMillis();
 		
 		//double generationTime = calculateTime(tstTime, teTime);
@@ -272,6 +251,8 @@ public class EvaluateTree {
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 		
+		
+		
 		for (Instance item : res) {				
 			String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
 			predictions.add(testLabel);
@@ -283,6 +264,9 @@ public class EvaluateTree {
 				correct++;
 			}
 		}
+		
+		System.out.println(actual);
+		System.out.println(predictions);
 		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		

@@ -69,6 +69,7 @@ public class ConstructTreeGI extends ConstructTree{
 			TreeNode leaf = new TreeNode(leafLabel);
 			return leaf;
 		}else {
+			
 			for (String valueName : valueSubsets.keySet()) {
 				ArrayList<Instance> subset = valueSubsets.get(valueName);
 				if (subset.size() == 0) {

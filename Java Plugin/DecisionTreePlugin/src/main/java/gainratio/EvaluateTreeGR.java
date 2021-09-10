@@ -26,19 +26,20 @@ public class EvaluateTreeGR extends EvaluateTree{
 	 */
 	public String calculateAccuracy() throws IOException {
 		//time taken to generate the tree
-		long tstTime = System.nanoTime();
+		long tstTime = System.currentTimeMillis();
 		String confusionMatrix = "";
 
 		ConstructTreeGR tree = new ConstructTreeGR(getTrainInstances(), getAttributes(), getTarget());
 		//root = tree.construct();
 		super.setRoot(tree.construct());
 
-		long teTime = System.nanoTime();
+		long teTime = System.currentTimeMillis();
 		double generationTime = (teTime-tstTime)/1000f;
-		System.out.println("Time taken to generate tree: " + generationTime + " s\n");
+		System.out.println("Time taken to generate tree:"+ generationTime +"s");
+		
 
 		// time taken to run predictions
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
 		
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
@@ -51,6 +52,9 @@ public class EvaluateTreeGR extends EvaluateTree{
 			predictions.add(testLabel);
 			String label = item.getAttributeValuePairs().get(getTarget().getName());
 			actual.add(label);
+			if(testLabel == null) {
+				continue;
+			}
 			if (testLabel.equals(label)) {
 				correct++;
 			}
@@ -62,7 +66,8 @@ public class EvaluateTreeGR extends EvaluateTree{
 		super.setScore(correct * 1.0 / res.size());
 		
 
-		long endTime = System.nanoTime();
+		long endTime = System.currentTimeMillis(); 
+		//double predTime = calculateTime(startTime, endTime);
 		double predTime = (endTime - startTime)/1000f;
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 

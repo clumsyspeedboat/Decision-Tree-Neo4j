@@ -34,8 +34,7 @@ public class Main {
             //rP += final_score_P.get(i);
         }
         
-        
-        
+       
         if(cv.getCvGenerationTime() != null) {
         	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
         	for(int i = 0; i < totalGenerationTime.size(); i++) {

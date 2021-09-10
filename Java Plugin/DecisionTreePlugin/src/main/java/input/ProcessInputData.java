@@ -26,6 +26,7 @@ public class ProcessInputData {
 	private ArrayList<Instance> instanceSet;
 	public static Attribute targetAttribute;
 	static int targetAttributeIndex;
+	private String targetAtt;
 	
 	/**
 	 * This function create a custom array list from CSV
@@ -108,7 +109,7 @@ public class ProcessInputData {
 						uSet.add(lineArr[a]);
 						myMap.put(attributeArr[a], uSet);
 					}
-
+                      
 					item.addAttribute(attributeArr[a], lineArr[a]);
 				}
 				instanceSet.add(item);
@@ -117,22 +118,44 @@ public class ProcessInputData {
 
 			}
 		}
-
-		HashSet<String> targetColumn = myMap.get(targetAtt);
+		
 		
 
+		HashSet<String> targetColumn = myMap.get(targetAtt);
+	
 		int index = 0;
-		double threshold = 1.0 * targetColumn.size() / datasetCount + 0.01;
+		
+		double threshold = 1.0 * targetColumn.size() / datasetCount +0.01;
+		
 		
 		for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
 			String key = entry.getKey();
 
 			HashSet<String> value = entry.getValue();
-			
-			
-			int nUnique = entry.getValue().size();
-		
-			boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
+			boolean isNumerical = true;
+			for (String val : value)
+			{
+				try
+				{
+				  Double.parseDouble(val);
+				}
+				catch(NumberFormatException e)
+				{
+					isNumerical = false;
+				}
+			}
+			boolean isCategorical;
+			if(isNumerical == false)
+			{
+				isCategorical = true;
+			}
+			else
+			{
+				int nUnique = entry.getValue().size();
+				
+				
+				isCategorical = 1.0 * nUnique / datasetCount < threshold;
+			}
 			
 			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(key, "real");

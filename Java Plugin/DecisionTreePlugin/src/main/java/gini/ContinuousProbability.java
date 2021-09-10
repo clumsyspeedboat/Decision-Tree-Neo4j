@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 public class ContinuousProbability{
 	
@@ -64,79 +65,73 @@ public class ContinuousProbability{
 		};
 		Collections.sort(instances, comparator);
 		
-		/*
-		 (3) Get each position that target value change,
-			then calculate continuous probability of each position
-		    find the maximum position value to be the threshold 		
-		 */		 
-		int thresholdPos = 0;
-		
-		for (int i = 0; i < instances.size() - 1; i++) {
+		LinkedHashSet<Double> uniqueCollection =new LinkedHashSet<Double>();
+		for (int i = 0; i < instances.size(); i++) {
 			HashMap<String, String> instancePair = instances.get(i).getAttributeValuePairs();
-			String instanceValue = instancePair.get(attributeName);
-			HashMap<String, String> instancePair2 = instances.get(i + 1).getAttributeValuePairs();
-			String instanceValue2 = instancePair2.get(attributeName);
-					
-			if (!instanceValue.equals(instanceValue2)) {
-				double currGini = calculateConti(attribute, target, instances, i);
-				if (currGini - giniValue > 0) {
-					giniValue = currGini;
-					thresholdPos = i;
+			Double variable = Double.parseDouble(instancePair.get(attributeName));
+			uniqueCollection.add(variable);
+		}
+		
+		Double splitAt;
+		Double[] uniqueCollectionArray = new Double[uniqueCollection.size()];
+		uniqueCollectionArray =	uniqueCollection.toArray(uniqueCollectionArray);
+		double smallestImpurity = 0.0;
+		ArrayList<Instance> leftInstances = new ArrayList<Instance>();
+		ArrayList<Instance> rightInstances = new ArrayList<Instance>();
+		for (int i = 0; i < uniqueCollectionArray.length - 1; i++){
+			splitAt = (uniqueCollectionArray[i+1] + uniqueCollectionArray[i])/2;
+			//ArrayList Of Instances left leave
+			ArrayList<Instance> leftLeaveInstances = new ArrayList<Instance>();
+			ArrayList<Instance> rightLeaveInstances = new ArrayList<Instance>();
+			for (int j = 0; j< instances.size(); j++)
+			{
+				HashMap<String, String> instancePair = instances.get(j).getAttributeValuePairs();
+				Double variable = Double.parseDouble(instancePair.get(attributeName));
+				if(variable < splitAt)
+				{
+					leftLeaveInstances.add(instances.get(j));
+				}
+				else
+				{
+					rightLeaveInstances.add(instances.get(j));
 				}
 			}
-		}	
-		
-		// (4) Calculate threshold
-		HashMap<String, String> a = instances.get(thresholdPos).getAttributeValuePairs();
-		String aValue = a.get(attributeName);
-		HashMap<String, String> b = instances.get(thresholdPos).getAttributeValuePairs();
-		String bValue = b.get(attributeName);	
-		try
-		{
-		  Double.parseDouble(aValue);
-		  Double.parseDouble(bValue);
-		}
-		catch(NumberFormatException e)
-		{
-		  //not a double
-			
-			aValue = "0.0";
-			bValue = "0.0";
-			
-		}
-		
-		threshold = (Double.parseDouble(aValue) + Double.parseDouble(bValue)) / 2;	
-		
-		// Initialize subset
-		subset = new HashMap<String, ArrayList<Instance>>();
-		ArrayList<Instance> left = new ArrayList<Instance>();
-		ArrayList<Instance> right = new ArrayList<Instance>();
-		for (int i = 0; i < thresholdPos; i++) {
-			left.add(instances.get(i));
-		}
-		for (int i = thresholdPos + 1; i < instances.size(); i++) {
-			right.add(instances.get(i));
+			int totalN = instances.size();
+			//Calculate left Impurity
+			double giniLeftValue = GiniIndex.calculate(target, leftLeaveInstances);
+			double leftImpurity = ((double)leftLeaveInstances.size()/(double)totalN)*giniLeftValue;
+			//Calculate right Impurity
+			double giniRightValue = GiniIndex.calculate(target, rightLeaveInstances);
+			double rightImpurity = ((double)rightLeaveInstances.size()/(double)totalN)*giniRightValue;
+			double totalImpurity = leftImpurity + rightImpurity;
+			if(smallestImpurity == 0.0)
+			{
+				smallestImpurity = totalImpurity;
+				leftInstances = leftLeaveInstances;
+				rightInstances = rightLeaveInstances;
+				threshold = splitAt;
+				giniValue = totalImpurity;
+			}
+			else
+			{
+				if(totalImpurity < smallestImpurity)
+				{
+					smallestImpurity = totalImpurity;
+					leftInstances = leftLeaveInstances;
+					rightInstances = rightLeaveInstances;
+					threshold = splitAt;
+					giniValue = totalImpurity;
+				}
+			}
 		}
 		String leftName = "less" + threshold;
 		String rightName = "more" + threshold;
-		subset.put(leftName, left);
-		subset.put(rightName, right);
+		// Initialize subset
+		subset = new HashMap<String, ArrayList<Instance>>();
+		subset.put(leftName, leftInstances);
+		subset.put(rightName, rightInstances);
 	}
-	
-	public static double calculateConti(Attribute attribute, Attribute target, 
-			ArrayList<Instance> instances, int index) throws IOException {
-		
-		int totalN = instances.size();
-		double giniValue = GiniIndex.calculate(target, instances);
-		int subL = index + 1;
-		int subR = instances.size() - index - 1;
-		double subResL = ((double) subL) / ((double) totalN) * 
-				GiniIndex.calculateConti(target, instances, 0, index);
-		double subResR = ((double) subR) / ((double) totalN) * 
-				GiniIndex.calculateConti(target, instances, index + 1, totalN - 1);
-		giniValue += (subResL + subResR);
-		return giniValue;
-	}
+
 	
 	public Attribute getAttribute() {
 		return attribute;
