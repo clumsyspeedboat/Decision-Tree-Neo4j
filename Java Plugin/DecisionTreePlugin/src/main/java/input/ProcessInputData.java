@@ -131,15 +131,31 @@ public class ProcessInputData {
 			String key = entry.getKey();
 
 			HashSet<String> value = entry.getValue();
-			
-			
-			int nUnique = entry.getValue().size();
-			
-			
-			boolean isCategorical = 0.4 * nUnique / datasetCount < threshold;
-			
-			
-	
+			boolean isNumerical = true;
+			for (String val : value)
+			{
+				try
+				{
+				  Double.parseDouble(val);
+				}
+				catch(NumberFormatException e)
+				{
+					isNumerical = false;
+				}
+			}
+			boolean isCategorical;
+			if(isNumerical == false)
+			{
+				isCategorical = true;
+			}
+			else
+			{
+				int nUnique = entry.getValue().size();
+				
+				
+				isCategorical = 1.0 * nUnique / datasetCount < threshold;
+			}
+			System.out.println(isCategorical);
 			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(key, "real");
 				attributeSet.add(attr1);
@@ -155,8 +171,8 @@ public class ProcessInputData {
 			index++;
 		}
 		
-		//System.out.println(instanceSet);
-		//System.out.println(attributeSet);
+		System.out.println(instanceSet);
+		System.out.println(attributeSet);
  
 	}
 	

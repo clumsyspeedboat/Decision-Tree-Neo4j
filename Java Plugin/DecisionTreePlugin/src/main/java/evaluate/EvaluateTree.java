@@ -38,15 +38,17 @@ public class EvaluateTree {
 	public EvaluateTree(String trainData, String testData, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
-		System.out.println("-----------");
 		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
+
 		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
 	
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();
-		
+		System.out.println(attributes);
+		System.out.println(testInstances);
+		System.out.println(trainInstances);
 		result.addAll(testInstances);
 	}
 	
@@ -83,7 +85,6 @@ public class EvaluateTree {
         {
 			for(int i = 0; i < testInstances.size(); i++) {
 				TreeNode node = root;
-			
 				Instance currInstance = testInstances.get(i);
 				Instance resInstance = result.get(i);
 				if(node!= null) {
@@ -136,8 +137,7 @@ public class EvaluateTree {
 				
 				
 				HashMap<String, String> pairs = resInstance.getAttributeValuePairs();
-				pairs.put("Test" + target.getName(), node.getTargetLabel());
-				
+				pairs.put("Test" + target.getName(), node.getTargetLabel());				
 			}
             
           

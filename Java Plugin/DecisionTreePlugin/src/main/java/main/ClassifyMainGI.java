@@ -26,11 +26,11 @@ public class ClassifyMainGI {
 	    
 	    mine.calculateAccuracy();
 
-	    PrintTree tree = new PrintTree();
-	    
-		System.out.println(tree.printDFS(mine.getRoot()));
-		 
-		tree.createNodesForGraph(mine.getRoot());
+//	    PrintTree tree = new PrintTree();
+//	    
+//		System.out.println(tree.printDFS(mine.getRoot()));
+//		 
+//		tree.createNodesForGraph(mine.getRoot());
 		
 
 		in.close();
