@@ -1,38 +1,39 @@
 package main;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
-
 import gini.EvaluateTreeGI;
-import input.ProcessInputData;
 import output.PrintTree;
 
+/**
+ * This main class is used to create decision tree based on gini from csv or from arraylist of nodes
+ * The EvaluateTreeGI takes in three paths, path1-training set file path, path2 - test set file path, 
+ * path3- the target level string 
+ * 
+ * @author nasim
+ *
+ */
+
 public class ClassifyMainGI {
+	
+	static final String LOCAL_DATASET = "data/flu_train.csv,data/flu_test.csv";
+	static final String TARGET_ATTRIBUTE = "Diagnosis";
+	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		//String pathos = "data/Flu_Classification_Training_Dataset.csv,data/Flu_Classification_Testing_Dataset.csv";
-		String pathos = "data/flu_train.csv,data/flu_test.csv";
+		String[] paths = LOCAL_DATASET.split(",");
 		
-		String[] paths = pathos.split(",");
-		
-		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],"Diagnosis");
-		
-		//ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/meta_train.csv");
-		//ArrayList<String> testList = ProcessInputData.CustomListFromCSV("data/meta_test.csv");
-		
-		//EvaluateTreeGI mine = new EvaluateTreeGI(trainList,testList,"PatientType");
-	    
+		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],TARGET_ATTRIBUTE);
+	
 	    mine.calculateAccuracy();
 
-//	    PrintTree tree = new PrintTree();
-//	    
-//		System.out.println(tree.printDFS(mine.getRoot()));
-//		 
-//		tree.createNodesForGraph(mine.getRoot());
+	    PrintTree tree = new PrintTree();
+	    
+		System.out.println(tree.printDFS(mine.getRoot()));
 		
-
+		tree.createNodesForGraph(mine.getRoot());
+		
 		in.close();
 	}
 

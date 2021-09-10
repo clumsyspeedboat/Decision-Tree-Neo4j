@@ -65,7 +65,7 @@ public class ContinuousProbability{
 		};
 		Collections.sort(instances, comparator);
 		
-		LinkedHashSet<Double> uniqueCollection =new LinkedHashSet();
+		LinkedHashSet<Double> uniqueCollection =new LinkedHashSet<Double>();
 		for (int i = 0; i < instances.size(); i++) {
 			HashMap<String, String> instancePair = instances.get(i).getAttributeValuePairs();
 			Double variable = Double.parseDouble(instancePair.get(attributeName));

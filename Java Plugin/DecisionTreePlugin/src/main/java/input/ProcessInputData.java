@@ -109,7 +109,7 @@ public class ProcessInputData {
 						uSet.add(lineArr[a]);
 						myMap.put(attributeArr[a], uSet);
 					}
-
+                      
 					item.addAttribute(attributeArr[a], lineArr[a]);
 				}
 				instanceSet.add(item);
@@ -118,7 +118,8 @@ public class ProcessInputData {
 
 			}
 		}
-		System.out.println(myMap);
+		
+		
 
 		HashSet<String> targetColumn = myMap.get(targetAtt);
 	
@@ -155,7 +156,7 @@ public class ProcessInputData {
 				
 				isCategorical = 1.0 * nUnique / datasetCount < threshold;
 			}
-			System.out.println(isCategorical);
+			
 			if (isCategorical == false) {
 				Attribute attr1 = new Attribute(key, "real");
 				attributeSet.add(attr1);
@@ -170,9 +171,6 @@ public class ProcessInputData {
 			}
 			index++;
 		}
-		
-		System.out.println(instanceSet);
-		System.out.println(attributeSet);
  
 	}
 	

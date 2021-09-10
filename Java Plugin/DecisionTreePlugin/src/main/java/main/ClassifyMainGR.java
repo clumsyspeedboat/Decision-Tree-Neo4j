@@ -1,35 +1,37 @@
 package main;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
-
-import evaluate.EvaluateTree;
 import gainratio.EvaluateTreeGR;
-import input.ProcessInputData;
 import output.PrintTree;
 
+/**
+ * 
+ * This main class is used to create decision tree based on gain ratio from csv or from arraylist of nodes
+ * The EvaluateTreeGI takes in three paths, path1-training set file path, path2 - test set file path, 
+ * path3- the target level string 
+ * 
+ * @author nasim
+ *
+ */
+
 public class ClassifyMainGR {
+	
+	static final String LOCAL_DATASET = "data/flu_train.csv,data/flu_test.csv";
+	static final String TARGET_ATTRIBUTE = "Diagnosis";
 	
 	public static void main(String[] args) throws IOException {		
 		Scanner in = new Scanner(System.in);
 		
-		String pathos = "data/meta_train.csv,data/meta_test.csv";
+		String[] paths = LOCAL_DATASET.split(",");
 		
-		String[] paths = pathos.split(",");
-		
-		//ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/train.csv");
-		//ArrayList<String> testList = ProcessInputData.CustomListFromCSV("data/test.csv");
-				
-	    //EvaluateTree mine = new EvaluateTree(trainList, testList, "DEATH_EVENT");
-		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], "PatientType");
+		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], TARGET_ATTRIBUTE);
 		
 	    mine.calculateAccuracy();
 
 	    PrintTree tree = new PrintTree();
 	    
-		//System.out.println(tree.printDFS(mine.getRoot()));
+		System.out.println(tree.printDFS(mine.getRoot()));
 		 
 		tree.createNodesForGraph(mine.getRoot());
 
