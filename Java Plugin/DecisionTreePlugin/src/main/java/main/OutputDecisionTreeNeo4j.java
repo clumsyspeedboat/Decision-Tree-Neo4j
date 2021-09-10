@@ -33,7 +33,7 @@ import org.neo4j.driver.util.Pair;
  * This class is used to fetch nodes from graph database or from csv and call the functions to generate decision tree 
  * with confusion matrix, generation time and prediction time for the output 
  * 
- * @author minh
+ * @author minh dung
  *
  */
 
@@ -748,7 +748,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from graph database")
-	public String crossValidationFromDB(@Name("target") String target) throws Exception
+	public String crossValidationFromDB(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -758,7 +758,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			 CrossValidation cv = new CrossValidation(autoSplitDataList, target);
 
-	        ArrayList<Double> final_score = cv.validate(10);	        
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold));	        
 	        
 	        double r = 0;
 	        double gt = 0;
@@ -783,7 +783,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
     @UserFunction
     @Description("cross validation time for data from csv")
-	public String crossValidationFromCSV(@Name("path") String path, @Name("target") String target) throws Exception
+	public String crossValidationFromCSV(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
@@ -795,7 +795,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			CrossValidation cv = new CrossValidation(customList, target);
 
-	        ArrayList<Double> final_score = cv.validate(10);	        
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold));	        
 	        
 	        double r = 0;
 	        double gt = 0;
