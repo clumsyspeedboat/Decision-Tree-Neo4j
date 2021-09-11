@@ -38,30 +38,21 @@ public class ChooseAttributeGR extends ChooseAttribute{
 
 			// Iterate to find the attribute with the largest information gain
 			for (Attribute currAttribute : attributes) {
-				double currInfoGain, currSplitinfo, currGainRatio = 0;
+				double currGainRatio = 0;
 				HashMap<String, ArrayList<Instance>> currSubset = null;
 
 				if (currAttribute.getType().equals("continuous")) {
-					InfoGainContinuous continuous = new InfoGainContinuous(currAttribute, target, instances);
-					currInfoGain = continuous.getInfoGain();
-					currSubset = continuous.getSubset();
-					threshold = continuous.getThreshold();
 
-					SplitInfoContinuous contigous1 = new SplitInfoContinuous(currAttribute, target, instances);
-					currSplitinfo = contigous1.getSplitInfo();
-					currSubset = contigous1.getSubset();
+					GainRatioContinuous gainRatio = new GainRatioContinuous(currAttribute, target, instances);
+					currGainRatio = gainRatio.getGainRatio();
+					currSubset = gainRatio.getSubset();
+					threshold = gainRatio.getThreshold();
 					
-					currGainRatio = currInfoGain / currSplitinfo;
 				} else {
-					SplitInfoDiscrete discrete1 = new SplitInfoDiscrete(target, currAttribute, instances);
-					currSplitinfo = discrete1.getSplitInfo();
+					GainRatioDiscrete discrete1 = new GainRatioDiscrete(target, currAttribute, instances);
+					currGainRatio = discrete1.getGainRatio();
 					currSubset = discrete1.getSubset();
 
-					InfoGainDiscrete discrete = new InfoGainDiscrete(target, currAttribute, instances);
-					currInfoGain = discrete.getInfoGain();
-					currSubset = discrete.getSubset();
-
-					currGainRatio = (double) currInfoGain / (double) currSplitinfo;
 				}
 				if (currGainRatio > gainRatio) {
 					gainRatio = currGainRatio;

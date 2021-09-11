@@ -1,9 +1,4 @@
-/**
- * Calculates the information gain of continuous attribute
- */
-
-
-package core;
+package gainratio;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,19 +6,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import core.Entropy;
 import definition.Attribute;
 import definition.Instance;
 
-
-public class InfoGainContinuous {
+public class GainRatioContinuous{
 	
-	protected Attribute attribute;
-	protected double threshold;
-	protected double infoGain = -1;
-	protected HashMap<String, ArrayList<Instance>> subset;
+	private Attribute attribute;
+	private double threshold;
+	private double gainRatio = -1;
+	private HashMap<String, ArrayList<Instance>> subset;
 	
 	/**
-	 * Constructor: initialize fields. This class is for calculating the information gain
+	 * Constructor: initialize fields. This class is for calculating the splitinformation
 	 * of continuous attribute. 
 	 * Use one cut to binary method. 
 	 * @param attribute
@@ -31,8 +26,8 @@ public class InfoGainContinuous {
 	 * @param instances
 	 * @throws IOException
 	 */
-	
-	public InfoGainContinuous(Attribute attribute, Attribute target, 
+
+	public GainRatioContinuous(Attribute attribute, Attribute target, 
 			ArrayList<Instance> instances) throws IOException {
 		
 		this.attribute = attribute;
@@ -71,49 +66,52 @@ public class InfoGainContinuous {
 				
 			}
 		};
-		Collections.sort(instances, comparator);
 		
-		/*
-		 (3) Get each position that target value change,
-			then calculate information gain of each position
-		    find the maximum position value to be the threshold 		
-		 */		 
+		Collections.sort(instances, comparator);
+	  
+		//instances.forEach((n)-> System.out.println(n));
+		// (2) 
 		int thresholdPos = 0;
 		for (int i = 0; i < instances.size() - 1; i++) {
 			HashMap<String, String> instancePair = instances.get(i).getAttributeValuePairs();
 			String instanceValue = instancePair.get(attributeName);
 			HashMap<String, String> instancePair2 = instances.get(i + 1).getAttributeValuePairs();
 			String instanceValue2 = instancePair2.get(attributeName);
-					
+		
+			
 			if (!instanceValue.equals(instanceValue2)) {
-				double currInfoGain = calculateConti(attribute, target, instances, i);
-				if (currInfoGain - infoGain > 0) {
-					infoGain = currInfoGain;
+				double currSplitInfo = calculateSplitInfo(attribute, target, instances, i);
+				double gain = calculateGain(attribute, target, instances, i);
+				
+				double currentGainRatio = gain/currSplitInfo;
+				
+				if(currentGainRatio > gainRatio) {
+					gainRatio = currentGainRatio;
 					thresholdPos = i;
 				}
+				
 			}
-		}	
+		}
+		
 		
 		// (4) Calculate threshold
 		HashMap<String, String> a = instances.get(thresholdPos).getAttributeValuePairs();
 		String aValue = a.get(attributeName);
 		HashMap<String, String> b = instances.get(thresholdPos).getAttributeValuePairs();
-		String bValue = b.get(attributeName);	
-		
-		try
-		{
-		  Double.parseDouble(aValue);
-		  Double.parseDouble(bValue);
-		}
-		catch(NumberFormatException e)
-		{
-		  //not a double
-			
+		String bValue = b.get(attributeName);
+
+		try {
+			Double.parseDouble(aValue);
+			Double.parseDouble(bValue);
+		} catch (NumberFormatException e) {
+			// not a double
+
 			aValue = "0.0";
 			bValue = "0.0";
-			
+
 		}
-		threshold = (Double.parseDouble(aValue) + Double.parseDouble(bValue)) / 2;	
+		threshold = (Double.parseDouble(aValue) + Double.parseDouble(bValue)) / 2;
+
 		
 		// Initialize subset
 		subset = new HashMap<String, ArrayList<Instance>>();
@@ -131,20 +129,61 @@ public class InfoGainContinuous {
 		subset.put(rightName, right);
 	}
 	
-	public static double calculateConti(Attribute attribute, Attribute target, 
+	
+	
+	/**
+	 * Calculate info gain 
+	 * @param attribute
+	 * @param target
+	 * @param instances
+	 * @param index
+	 * @return
+	 * @throws IOException
+	 */
+	public static double calculateGain(Attribute attribute, Attribute target, 
 			ArrayList<Instance> instances, int index) throws IOException {
 		
 		int totalN = instances.size();
 		double infoGain = Entropy.calculate(target, instances);
+		
 		int subL = index + 1;
 		int subR = instances.size() - index - 1;
-		double subResL = ((double) subL) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, 0, index);
-		double subResR = ((double) subR) / ((double) totalN) * 
-				Entropy.calculateConti(target, instances, index + 1, totalN - 1);
+		
+		double subResL = ((double) subL) / ((double) totalN) * Entropy.calculateContiEntropy(target, instances, 0, index);
+		double subResR = ((double) subR) / ((double) totalN) * Entropy.calculateContiEntropy(target, instances, index+1, totalN-1);
 		infoGain -= (subResL + subResR);
+		 
 		return infoGain;
 	}
+	
+	
+    /**
+     * Calculate split info 
+     * @param attribute
+     * @param target
+     * @param instances
+     * @param index
+     * @return
+     * @throws IOException
+     */
+	
+	public static double calculateSplitInfo(Attribute attribute, Attribute target, 
+			ArrayList<Instance> instances, int index) throws IOException {
+		
+		int totalN = instances.size();
+		double splitinfo = 0;
+		int subL = index + 1;
+		int subR = instances.size() - index - 1;
+		
+		double subResL = ((double) subL) / ((double) totalN);
+		splitinfo -= (double) subResL * ((double)(Math.log(subResL) / Math.log(2)));
+		
+		double subResR = ((double) subR) / ((double) totalN);
+		splitinfo -= (double) subResR * ((double)(Math.log(subResR) / Math.log(2)));
+		 
+		return splitinfo;
+	}
+	
 	
 	public Attribute getAttribute() {
 		return attribute;
@@ -154,8 +193,8 @@ public class InfoGainContinuous {
 		return threshold;
 	}
 	
-	public double getInfoGain() {
-		return infoGain;
+	public double getGainRatio() {
+		return gainRatio;
 	}
 	
 	public HashMap<String, ArrayList<Instance>> getSubset() {
@@ -164,6 +203,6 @@ public class InfoGainContinuous {
 	
 	public String toString() {
 		return "Attribute: " + attribute.getName() + "\n" + "Threshold: " + threshold + "\n" 
-				+ "InfoGain: " + infoGain + "\n" + "Subset: " + subset;
+				+ "splitinfo: " + gainRatio + "\n" + "Subset: " + subset;
 	}
 }

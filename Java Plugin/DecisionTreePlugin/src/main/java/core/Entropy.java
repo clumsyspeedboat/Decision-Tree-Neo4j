@@ -116,4 +116,45 @@ public class Entropy {
 	}
 	
 	
+	public static double calculateContiEntropy(Attribute target, ArrayList<Instance> instances, int start, int end)
+			throws IOException {
+		ArrayList<String> valuesOfTarget = target.getValues();
+		
+		String targetName = target.getName();
+		
+		HashMap<String, Integer> countValueOfTarget = new HashMap<String, Integer>();
+		for (String s : valuesOfTarget) {
+			countValueOfTarget.put(s, 0);
+		}
+		
+		int totalN = 0;
+		
+		for (int i = start; i <= end; i++) {
+			Instance instance = instances.get(i);
+			HashMap<String, String> attributeValuePairsOfInstance = instance.getAttributeValuePairs();
+			String valueOfInstanceAtTarget = attributeValuePairsOfInstance.get(targetName);
+			if (!countValueOfTarget.containsKey(valueOfInstanceAtTarget))
+				throw new IOException("Invalid input data");
+			countValueOfTarget.put(valueOfInstanceAtTarget, countValueOfTarget.get(valueOfInstanceAtTarget) + 1);
+			totalN++;
+		}
+		
+		double entropy = 0;
+		
+
+		for (String s : valuesOfTarget) {
+			int countSingleValue = countValueOfTarget.get(s);
+			
+			if (countSingleValue == 0)
+				continue;
+			if (countSingleValue == totalN)
+				return 0;
+			double pValue = ((double) countSingleValue) / ((double) totalN);
+			double itemRes = -pValue * (Math.log(pValue) / Math.log(2));
+			entropy += itemRes;
+		}
+		return entropy;
+	}
+	
+	
 }

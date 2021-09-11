@@ -172,12 +172,8 @@ public class GiniTreeTester {
 		
 		ContinuousProbability continuous = new ContinuousProbability(currAttribute, target, instanceSet);
 		double giniValue = continuous.getGiniValue();
-		System.out.println(giniValue);
-		
-		
+		System.out.println(giniValue);	
 	}
-	
-	
 
 
 }

@@ -32,7 +32,7 @@ public class CrossValidation {
 	
 	
 	/**
-	 * Constructor
+	 * Constructor which process the csv file 
 	 * @param trainData
 	 * @throws IOException
 	 */
@@ -52,8 +52,12 @@ public class CrossValidation {
 		this.totalInstances = input.getInstanceSet();
 
 		rand = new Random(totalInstances.size());
-		this.impurity = impurity;
 	}
+	
+	
+	/*
+	 * Constructor which process data from nodes in Neo4j
+	 */
 	
 	public CrossValidation(ArrayList<String> trainDataList, String targetAttr) throws IOException {
 		result = new ArrayList<Instance>();
@@ -70,7 +74,6 @@ public class CrossValidation {
 		this.totalInstances = input.getInstanceSet();
 
 		rand = new Random(totalInstances.size());
-		this.impurity = impurity;
 		
 	}
 	
