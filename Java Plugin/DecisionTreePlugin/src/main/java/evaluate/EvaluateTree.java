@@ -258,7 +258,9 @@ public class EvaluateTree {
 			predictions.add(testLabel);
 			String label = item.getAttributeValuePairs().get(target.getName());
 			actual.add(label);
-			
+			if(testLabel == null) {
+				continue;
+			}
 			
 			if(testLabel.equals(label)) {
 				correct++;
