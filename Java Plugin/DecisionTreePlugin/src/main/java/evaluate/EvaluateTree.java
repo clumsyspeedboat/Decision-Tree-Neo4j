@@ -266,9 +266,7 @@ public class EvaluateTree {
 				correct++;
 			}
 		}
-		
-		System.out.println(actual);
-		System.out.println(predictions);
+	
 		
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		

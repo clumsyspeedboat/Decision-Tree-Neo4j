@@ -81,8 +81,6 @@ public class EvaluateTreeGI extends EvaluateTree{
 			}
 			
 		}
-		System.out.println(actual);
-		System.out.println(predictions);
 	
 		confusionMatrix = calculateConfusionMatrix(actual, predictions);
 		//confusionMatrix = " ";
