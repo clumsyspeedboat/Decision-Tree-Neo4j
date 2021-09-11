@@ -39,13 +39,13 @@ public class EvaluateTree {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
 		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
-
 		
 		this.attributes = train.getAttributeSet();
 		this.target = train.getTargetAttribute();
 	
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();
+		
 		
 		result.addAll(testInstances);
 	}
@@ -68,6 +68,7 @@ public class EvaluateTree {
 
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();	
+		
 		
 		result.addAll(testInstances);
 	}
@@ -208,8 +209,15 @@ public class EvaluateTree {
 		 System.out.println(tn);
 		 System.out.println(fp);
 		 System.out.println(fn);
+		 
+		 double numerator = 1.0 * truePositive+trueNegative;
+		 double denominator = 1.0 * truePositive+trueNegative+falsePositive+falseNegative;
+		 double accuracy = numerator/denominator * 100;
+		 System.out.println("Accuracy:" + accuracy + "%");
+		 
 			 
-		 confusionMatrix = tp + "\n" + tn + "\n" + fp + "\n" + fn;
+		 confusionMatrix = tp + "\n" + tn + "\n" + fp + "\n" + fn + "\n Accuracy: "+  accuracy;
+		 
 		 return confusionMatrix;
 	}
 	
@@ -278,8 +286,7 @@ public class EvaluateTree {
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 		 
 		
-		System.out.println("Accuracy:" + score*100 + "%");
-		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + score*100 + "%";
+		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
 	}
 	
 	/**

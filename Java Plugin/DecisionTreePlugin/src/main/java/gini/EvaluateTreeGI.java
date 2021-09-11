@@ -92,7 +92,7 @@ public class EvaluateTreeGI extends EvaluateTree{
 		System.out.println("Time taken to generate prediction: " + predTime + " s\n");
 		 
 		
-		System.out.println("Accuracy:" + getScore()*100 + "%");
-		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + ", Accuracy:" + getScore()*100 + "%";
+		//System.out.println("Accuracy:" + getScore()*100 + "%");
+		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
 	}
 }

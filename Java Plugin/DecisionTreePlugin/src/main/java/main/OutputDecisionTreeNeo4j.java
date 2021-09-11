@@ -469,7 +469,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			return target + "False";
     		}else {
 		
-				EvaluateTree mine = new EvaluateTreeGI(trainDataList, testDataList, target);
+				EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target);
 
 				confusionMatrix = mine.calculateAccuracy();
 
@@ -511,7 +511,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			return target + "False";
     		}else {
 		
-				EvaluateTree mine = new EvaluateTreeGR(trainDataList, testDataList, target);
+				EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target);
 
 				confusionMatrix = mine.calculateAccuracy();
 
@@ -551,7 +551,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
+			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
+			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainFile, testFile, paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -565,7 +567,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			for (ArrayList<String> nodeDetail : tree.nodesBucket) {
 				connector.createNode("DTGini","create nodes in neo4j", nodeDetail);
 			}
-			
+		
 			for (ArrayList<String> relationshipDetail : tree.relationshipsBucket) {
 				System.out.println("Relationship " + relationshipDetail);
 				connector.createRelationship("DTGini","create relationship in neo4j \n", relationshipDetail);
@@ -592,7 +594,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
+			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
+			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainFile, testFile, paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -633,8 +637,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
+			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
+			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
 			
-			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], paths[2]);
+			EvaluateTree mine = new EvaluateTree(trainFile, testFile, paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 

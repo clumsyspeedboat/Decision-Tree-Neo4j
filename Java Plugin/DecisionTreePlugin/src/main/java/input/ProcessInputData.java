@@ -187,7 +187,7 @@ public class ProcessInputData {
 		
 		int datasetCount = nodesList.size();
 		
-		HashMap<String, HashSet<String>> myMap = new HashMap<String, HashSet<String>>();
+		LinkedHashMap<String, HashSet<String>> myMap = new LinkedHashMap<String, HashSet<String>>();
 		HashSet<String> uSet;
 
 		boolean isListEmpty = nodesList.isEmpty();
@@ -225,9 +225,30 @@ public class ProcessInputData {
 				String key = entry.getKey();
 
 				HashSet<String> value = entry.getValue();
-				int nUnique = entry.getValue().size();
+				boolean isNumerical = true;
+				for (String val : value)
+				{
+					try
+					{
+					  Double.parseDouble(val);
+					}
+					catch(NumberFormatException e)
+					{
+						isNumerical = false;
+					}
+				}
+				boolean isCategorical;
+				if(isNumerical == false)
+				{
+					isCategorical = true;
+				}
+				else
+				{
+					int nUnique = entry.getValue().size();
+					
+					isCategorical = 1.0 * nUnique / datasetCount < threshold;
+				}
 
-				boolean isCategorical = 1.0 * nUnique / datasetCount < threshold;
 				if (isCategorical == false) {
 					Attribute attr1 = new Attribute(key, "real");
 					attributeSet.add(attr1);
