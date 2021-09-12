@@ -15,6 +15,7 @@ import output.PrintTree;
 import static org.neo4j.driver.Values.parameters;
 
 import java.util.List;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -263,27 +264,33 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        	if(value.get(nodeKey).getClass().equals(String.class))
        			        	{
        			        		if(valueOfNode != "")
-       			        		{
-       			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
-       			        		}
-       			        		else
-       			        		{
-       			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
-       			        		}
+    			        		{
+    			        			String valueKey = ":" + value.get(nodeKey);
+    			        			valueOfNode = valueOfNode + ", " + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
+        			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
+    			        		}
+    			        		else
+    			        		{
+    			        			String valueKey = ":" + value.get(nodeKey);
+    			        			valueOfNode = nodeKey + valueKey.replaceAll("^\"|\"$", "");
+        			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
+    			        		}
        			   
        			        	}
        			        	else
        			        	{
        			        		if(valueOfNode != "")
-       			        		{
-       			        			String converValueToString = String.valueOf(value.get(nodeKey));
-               			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
-       			        		}
-       			        		else
-       			        		{
-       			        			String converValueToString = String.valueOf(value.get(nodeKey));
-               			        	valueOfNode =  nodeKey + ":" + converValueToString;
-       			        		}
+    			        		{
+    			        			String converValueToString = String.valueOf(value.get(nodeKey));
+            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
+            			        	//nodeData.add(nodeKey+":"+converValueToString);
+    			        		}
+    			        		else
+    			        		{
+    			        			String converValueToString = String.valueOf(value.get(nodeKey));
+            			        	valueOfNode =  nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
+            			        	//nodeData.add(nodeKey+":"+converValueToString);
+    			        		}
        			        		
        			        	}
        			        }
@@ -293,7 +300,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			}
        		 }
            }
-       	
+       	FileWriter writer = new FileWriter("D:/Personal_Project/Data/outputTest.txt"); 
+       	for(String str: testDataList) {
+       	  writer.write(str + System.lineSeparator());
+       	}
+       	writer.close();
        	return "The Data: " + listOfData;
    	}
     
@@ -325,12 +336,14 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        	{
     			        		if(valueOfNode != "")
     			        		{
-    			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
+    			        			String valueKey = ":" + value.get(nodeKey);
+    			        			valueOfNode = valueOfNode + ", " + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
         			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
     			        		}
     			        		else
     			        		{
-    			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
+    			        			String valueKey = ":" + value.get(nodeKey);
+    			        			valueOfNode = nodeKey + valueKey.replaceAll("^\"|\"$", "");
         			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
     			        		}
     			        	}
@@ -339,13 +352,13 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        		if(valueOfNode != "")
     			        		{
     			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
+            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
             			        	//nodeData.add(nodeKey+":"+converValueToString);
     			        		}
     			        		else
     			        		{
     			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode =  nodeKey + ":" + converValueToString;
+            			        	valueOfNode =  nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
             			        	//nodeData.add(nodeKey+":"+converValueToString);
     			        		}
     			        	}
@@ -356,6 +369,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			}
     		}
         }
+    	FileWriter writer = new FileWriter("D:/Personal_Project/Data/outputTrain.txt"); 
+       	for(String str: trainDataList) {
+       	  writer.write(str + System.lineSeparator());
+       	}
+       	writer.close();
     	return "The Data: " + listOfData;
 	}
     /**
