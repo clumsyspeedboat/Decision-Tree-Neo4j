@@ -266,7 +266,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        		if(valueOfNode != "")
     			        		{
     			        			String valueKey = ":" + value.get(nodeKey);
-    			        			valueOfNode = valueOfNode + ", " + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
+    			        			valueOfNode = valueOfNode + "," + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
         			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
     			        		}
     			        		else
@@ -282,7 +282,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			        		if(valueOfNode != "")
     			        		{
     			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
+            			        	valueOfNode = valueOfNode + "," + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
             			        	//nodeData.add(nodeKey+":"+converValueToString);
     			        		}
     			        		else
@@ -337,7 +337,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        		if(valueOfNode != "")
     			        		{
     			        			String valueKey = ":" + value.get(nodeKey);
-    			        			valueOfNode = valueOfNode + ", " + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
+    			        			valueOfNode = valueOfNode + "," + nodeKey +  valueKey.replaceAll("^\"|\"$", "");
         			        		//nodeData.add(nodeKey+":"+value.get(nodeKey));
     			        		}
     			        		else
@@ -352,7 +352,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			        		if(valueOfNode != "")
     			        		{
     			        			String converValueToString = String.valueOf(value.get(nodeKey));
-            			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
+            			        	valueOfNode = valueOfNode + "," + nodeKey + ":" + converValueToString.replaceAll("^\"|\"$", "");
             			        	//nodeData.add(nodeKey+":"+converValueToString);
     			        		}
     			        		else
