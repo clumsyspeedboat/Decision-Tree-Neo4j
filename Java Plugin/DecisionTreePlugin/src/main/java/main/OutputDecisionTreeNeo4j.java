@@ -300,11 +300,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        			}
        		 }
            }
-       	FileWriter writer = new FileWriter("D:/Personal_Project/Data/outputTest.txt"); 
-       	for(String str: testDataList) {
-       	  writer.write(str + System.lineSeparator());
-       	}
-       	writer.close();
        	return "The Data: " + listOfData;
    	}
     
@@ -369,11 +364,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			}
     		}
         }
-    	FileWriter writer = new FileWriter("D:/Personal_Project/Data/outputTrain.txt"); 
-       	for(String str: trainDataList) {
-       	  writer.write(str + System.lineSeparator());
-       	}
-       	writer.close();
     	return "The Data: " + listOfData;
 	}
     /**
@@ -569,9 +559,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
-			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
-			EvaluateTreeGI mine = new EvaluateTreeGI(trainFile, testFile, paths[2]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -612,9 +600,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 
 			String[] paths = path.split(",");
 			
-			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
-			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
-			EvaluateTreeGR mine = new EvaluateTreeGR(trainFile, testFile, paths[2]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -655,10 +641,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV(paths[0]);
-			ArrayList<String> testFile = ProcessInputData.CustomListFromCSV(paths[1]);
 			
-			EvaluateTree mine = new EvaluateTree(trainFile, testFile, paths[2]);
+			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], paths[2]);
 
 			confusionMatrix = mine.calculateAccuracy();
 
