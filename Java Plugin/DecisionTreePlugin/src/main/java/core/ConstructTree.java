@@ -22,9 +22,9 @@ public class ConstructTree {
 	
 	public ConstructTree(String fileName, String targetAttr) throws IOException {
 		ProcessInputData input = new ProcessInputData(fileName, targetAttr);
-		attributes = input.getAttributeSet();
-		instances = input.getInstanceSet();
-		target = input.getTargetAttribute();
+		this.attributes = input.getAttributeSet();
+		this.instances = input.getInstanceSet();
+		this.target = input.getTargetAttribute();
 	}
 
 	

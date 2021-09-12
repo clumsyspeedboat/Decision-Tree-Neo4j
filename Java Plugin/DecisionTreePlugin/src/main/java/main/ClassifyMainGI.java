@@ -1,5 +1,6 @@
 package main;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -25,9 +26,10 @@ public class ClassifyMainGI {
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
 		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],Constants.TARGET_ATTRIBUTE);
-		ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/train.csv");
-		ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/test.csv");
+		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
+		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
+
 	
 	    mine.calculateAccuracy();
 
