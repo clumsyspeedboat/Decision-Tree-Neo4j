@@ -1,62 +1,77 @@
-= Neo4j Procedure Template
-:branch: 4.1
-:root: https://github.com/neo4j-examples/neo4j-procedure-template/blob/{branch}/src
+This is an instruction on how to run **Decision Tree Plugin (DTP)** in Neo4j
 
-This project is an example you can use to build user defined procedures, functions and aggregation functions in Neo4j.
-It contains two procedures, for reading and updating a full-text index.
+## 1. Clone the repository
+The first step is to clone the repository from the github page.
 
-To try this out, simply clone this repository and have a look at the source and test code (including Test-Server-Setup).
+<a href="https://ibb.co/zrWVTYp"><img src="https://i.ibb.co/nbqMNv9/image-2021-02-01-042820.png" alt="image-2021-02-01-042820" border="0"></a>
 
-[Note]
-This project requires a Neo4j {branch}.x dependency.
+## 2. Build Maven file for the source code
+The next step is to use maven, to build a jar-file with the procedure for this project. The user need to package the project with Maven. This step need to use software such as eclipse or IntelliJ.
 
+<a href="https://ibb.co/dt7r9pN"><img src="https://i.ibb.co/FXnKvYQ/image-2021-02-01-043415.png" alt="image-2021-02-01-043415" border="0"></a>
 
-=== User Defined Procedure
+## 3. Copy Jar file to Neo4j plugins directory
+After the 2nd step a Jar file will be created.
 
-The user defined procedure allows you to get the incoming and outgoing relationships for a given node.
+<a href="https://ibb.co/gDgTGht"><img src="https://i.ibb.co/2jKtwHc/image-2021-02-01-043806.png" alt="image-2021-02-01-043806" border="0"></a>
 
-See link:{root}/main/java/example/GetRelationshipTypes.java[`GetRelationshipTypes.java`] and the link:{root}/test/java/example/GetRelationshipTypesTests.java[`GetRelationshipTypesTests.java`].
+The user then need to copy this file and paste it into the Neo4j plugins directory.
 
-[source,cypher]
-----
-MATCH (n:Person)
-CALL example.getRelationshipTypes(n);
-----
+<a href="https://ibb.co/dggXd53"><img src="https://i.ibb.co/NSSf8yk/image-2021-02-01-044007.png" alt="image-2021-02-01-044007" border="0"></a>
 
-=== User Defined Function
+## 4. Copy two additional files to Neo4j plugins directory
+The next step is to download 2 additional files (link below) and copy them into the Neo4j plugins directory.
 
-The user defined function is a simple join function that joins a list of strings using a delimiter.
+[commons-compiler-tests-3.0.8.jar](https://jar-download.com/artifacts/org.codehaus.janino/commons-compiler/3.0.8/source-code)
 
-See link:{root}/main/java/example/Join.java[`Join.java`] and the link:{root}/test/java/example/JoinTest.java[`JoinTest.java`].
+[janino-3.0.8.jar](https://jar-download.com/artifacts/org.codehaus.janino/janino/3.0.8/source-code)
 
-[source,cypher]
-----
-RETURN example.join(['A','quick','brown','fox'],' ') as sentence
-----
+<a href="https://ibb.co/wNSvjwM"><img src="https://i.ibb.co/PZcS09w/image-2021-02-01-044602.png" alt="image-2021-02-01-044602" border="0"></a>
 
-=== User Defined Aggregation Function
+## 5. Edit Neo4j/conf/neo4j.conf file
+Add the line below in to your Neo4j/conf/neo4j.conf file
 
-The aggregation function `example.last` returns the last row of an aggregation.
+**dbms.security.procedures.unrestricted=com.maxdemarzi.* **   
 
-[source,cypher]
-----
-MATCH (n:Person)
-WITH n ORDER BY n.born
-RETURN n.born, example.last(n) as last
-----
+## 6. Create the Schema in Neo4j
+Then to create the Schema in Neo4j. The user need to run the line below
 
-See link:{root}/main/java/example/Last.java[`Last.java`] and the link:{root}/test/java/example/LastTest.java[`LastTest.java`].
+**CALL com.maxdemarzi.schema.generate**
 
-== Building
+## 7. Create test data
+Then create the test data in Neo4j
 
-This project uses maven, to build a jar-file with the procedure in this
-project, simply package the project with maven:
+**CREATE (tree:Tree { id: 'bar entrance' })**
 
-    mvn clean package
+**CREATE (over21_rule:Rule { name: 'Over 21?', parameter_names: 'age', parameter_types:'int', expression:'age >= 21' })**
 
-This will produce a jar-file,`target/procedure-template-1.0.0-SNAPSHOT.jar`,
-that can be deployed in the `plugin` directory of your Neo4j instance.
+**CREATE (gender_rule:Rule { name: 'Over 18 and female', parameter_names: 'age,gender', parameter_types:'int,String', expression:'(age >= 18) && gender.equals(\"female\")' })**
 
-== License
+**CREATE (answer_yes:Answer { id: 'yes'})**
 
-Apache License V2, see LICENSE
+**CREATE (answer_no:Answer { id: 'no'})**
+
+**CREATE (tree)-[:HAS]->(over21_rule)**
+
+**CREATE (over21_rule)-[:IS_TRUE]->(answer_yes)**
+
+**CREATE (over21_rule)-[:IS_FALSE]->(gender_rule)**
+
+**CREATE (gender_rule)-[:IS_TRUE]->(answer_yes)**
+
+**CREATE (gender_rule)-[:IS_FALSE]->(answer_no)**
+
+## 8. Try to call the Decision Tree in Neo4j
+To call the decision tree in Neo4j run the example lines below
+
+**CALL com.maxdemarzi.traverse.decision_tree('bar entrance', {gender:'male', age:'20'}) yield path return path;**
+
+<a href="https://ibb.co/RvC1nqX"><img src="https://i.ibb.co/cgNP5jW/image-2021-02-01-045557.png" alt="image-2021-02-01-045557" border="0"></a>
+
+**CALL com.maxdemarzi.traverse.decision_tree('bar entrance', {gender:'female', age:'19'}) yield path return path;**
+
+<a href="https://ibb.co/6ZGhfZX"><img src="https://i.ibb.co/Jd8LMd3/image-2021-02-01-045716.png" alt="image-2021-02-01-045716" border="0"></a>
+
+**CALL com.maxdemarzi.traverse.decision_tree('bar entrance', {gender:'male', age:'23'}) yield path return path;**
+
+<a href="https://ibb.co/1ZnSwdW"><img src="https://i.ibb.co/H72Jkx8/image-2021-02-01-045808.png" alt="image-2021-02-01-045808" border="0"></a>
