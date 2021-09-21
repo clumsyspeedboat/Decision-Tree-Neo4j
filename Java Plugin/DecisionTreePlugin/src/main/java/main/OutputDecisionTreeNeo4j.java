@@ -756,7 +756,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from graph database")
-	public String crossValidationFromDB(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String crossValidationDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -791,7 +791,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
     @UserFunction
     @Description("cross validation time for data from csv")
-	public String crossValidationFromCSV(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String crossValidationCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
