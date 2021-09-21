@@ -423,7 +423,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeInfoGainFromDB(@Name("target") String target) throws Exception {
+    public String createTreeInfoGain(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -465,7 +465,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGiniFromDB(@Name("target") String target) throws Exception {
+    public String createTreeGini(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -507,7 +507,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGainRatioFromDB(@Name("target") String target) throws Exception {
+    public String createTreeGainRatio(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -550,7 +550,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGini(@Name("path") String path) throws Exception
+    public String createTreeGiniCsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -591,7 +591,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeGainRatio(@Name("path") String path) throws Exception
+    public String createTreeGainRatioCsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -633,7 +633,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeInfoGain(@Name("path") String path) throws Exception
+    public String createTreeInfoGainCsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -756,7 +756,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from graph database")
-	public String crossValidationFromDB(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String crossValidationDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -791,7 +791,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
     @UserFunction
     @Description("cross validation time for data from csv")
-	public String crossValidationFromCSV(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String crossValidationCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
