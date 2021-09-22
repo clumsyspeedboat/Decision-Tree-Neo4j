@@ -8,6 +8,7 @@ package cv;
 import core.ConstructTree;
 import definition.Attribute;
 import definition.Instance;
+import gainratio.ConstructTreeGR;
 import input.ProcessInputData;
 import node.TreeNode;
 
@@ -157,7 +158,7 @@ public class CrossValidation {
 	 * @return the result of cross validation
 	 * @throws IOException
 	 */
-	public ArrayList<Double> validate(int crossValidationN) throws IOException {
+	public ArrayList<Double> validate(int crossValidationN, String algorithmType) throws IOException {
 		shuffle(crossValidationN);
 		scores = new ArrayList<Double>();
 
@@ -178,8 +179,19 @@ public class CrossValidation {
 			}
             
 			long startTime = System.currentTimeMillis();
-
-			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
+			ConstructTree tree;
+			if(algorithmType == "InfoGain")
+			{
+				tree = new ConstructTree(trainInstances, attributes, target);
+			}
+			else if(algorithmType == "GainRatio")
+			{
+				tree = new ConstructTreeGR(trainInstances, attributes, target);
+			}
+			else
+			{
+				tree = new ConstructTreeGR(trainInstances, attributes, target);
+			}
 			root = tree.construct();
 			
 			long endTime = System.currentTimeMillis();
