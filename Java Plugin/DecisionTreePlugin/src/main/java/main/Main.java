@@ -21,7 +21,7 @@ public class Main {
         CrossValidation cv = new CrossValidation(trainList, "DEATH_EVENT");
         //CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure.csv", "DEATH_EVENT");
 
-        ArrayList<Double> final_score = cv.validate(10);
+        ArrayList<Double> final_score = cv.validate(10,"InfoGain");
         //ArrayList<Double> final_score_P = cvP.validate(10);
         
         

@@ -755,8 +755,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	}
     
     @UserFunction
-    @Description("cross validation time for data from graph database")
-	public String crossValidationDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+    @Description("cross validation time for data from graph database for InfoGain")
+	public String crossValidationInfoGainDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -766,7 +766,77 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			 CrossValidation cv = new CrossValidation(autoSplitDataList, target);
 
-	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold));	        
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"InfoGain");	        
+	        
+	        double r = 0;
+	        double gt = 0;
+	        
+	        for(int i = 0; i < final_score.size(); i++) {
+	            r += final_score.get(i);
+	        }
+	        
+	        if(cv.getCvGenerationTime() != null) {
+	        	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+	        	for(int i = 0; i < totalGenerationTime.size(); i++) {
+	                gt += totalGenerationTime.get(i);
+	                
+	            }
+	        }
+	       
+	        String accuracyPruning = "Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%";
+	        String timePruning = "Cross Validation Generation Time before pruning: " + (gt/10) + "sec";
+	        return accuracyPruning + " \n " + timePruning ;
+		}
+	}
+    
+    @UserFunction
+    @Description("cross validation time for data from graph database for GainRatio")
+	public String crossValidationGainRatioDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	{
+		if(target == null)
+		{
+			return null;
+		}
+		else
+		{
+			 CrossValidation cv = new CrossValidation(autoSplitDataList, target);
+
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"GainRatio");	        
+	        
+	        double r = 0;
+	        double gt = 0;
+	        
+	        for(int i = 0; i < final_score.size(); i++) {
+	            r += final_score.get(i);
+	        }
+	        
+	        if(cv.getCvGenerationTime() != null) {
+	        	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+	        	for(int i = 0; i < totalGenerationTime.size(); i++) {
+	                gt += totalGenerationTime.get(i);
+	                
+	            }
+	        }
+	       
+	        String accuracyPruning = "Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%";
+	        String timePruning = "Cross Validation Generation Time before pruning: " + (gt/10) + "sec";
+	        return accuracyPruning + " \n " + timePruning ;
+		}
+	}
+    
+    @UserFunction
+    @Description("cross validation time for data from graph database for GiniIndex")
+	public String crossValidationGiniIndexDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	{
+		if(target == null)
+		{
+			return null;
+		}
+		else
+		{
+			 CrossValidation cv = new CrossValidation(autoSplitDataList, target);
+
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"GiniIndex");	        
 	        
 	        double r = 0;
 	        double gt = 0;
@@ -790,8 +860,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	}
 	
     @UserFunction
-    @Description("cross validation time for data from csv")
-	public String crossValidationCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+    @Description("cross validation time for data from csv for InfoGain")
+	public String crossValidationInfoGainCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
@@ -803,7 +873,81 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			
 			CrossValidation cv = new CrossValidation(customList, target);
 
-	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold));	        
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"InfoGain");	        
+	        
+	        double r = 0;
+	        double gt = 0;
+	        
+	        for(int i = 0; i < final_score.size(); i++) {
+	            r += final_score.get(i);
+	        }
+	        
+	        if(cv.getCvGenerationTime() != null) {
+	        	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+	        	for(int i = 0; i < totalGenerationTime.size(); i++) {
+	                gt += totalGenerationTime.get(i);
+	                
+	            }
+	        }
+	       
+	        String accuracyPruning = "Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%";
+	        String timePruning = "Cross Validation Generation Time before pruning: " + (gt/10) + "sec";
+	        return accuracyPruning + " \n " + timePruning ;
+		}
+	}
+    
+    @UserFunction
+    @Description("cross validation time for data from csv for GainRatio")
+	public String crossValidationGainRatioCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
+			
+			CrossValidation cv = new CrossValidation(customList, target);
+
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"GainRatio");	        
+	        
+	        double r = 0;
+	        double gt = 0;
+	        
+	        for(int i = 0; i < final_score.size(); i++) {
+	            r += final_score.get(i);
+	        }
+	        
+	        if(cv.getCvGenerationTime() != null) {
+	        	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+	        	for(int i = 0; i < totalGenerationTime.size(); i++) {
+	                gt += totalGenerationTime.get(i);
+	                
+	            }
+	        }
+	       
+	        String accuracyPruning = "Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%";
+	        String timePruning = "Cross Validation Generation Time before pruning: " + (gt/10) + "sec";
+	        return accuracyPruning + " \n " + timePruning ;
+		}
+	}
+    
+    @UserFunction
+    @Description("cross validation time for data from csv for GiniIndex")
+	public String crossValidationGiniIndexCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	{
+		if(path == null)
+		{
+			return null;
+		}
+		else
+		{
+			ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
+			
+			CrossValidation cv = new CrossValidation(customList, target);
+
+	        ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold),"GiniIndex");	        
 	        
 	        double r = 0;
 	        double gt = 0;
