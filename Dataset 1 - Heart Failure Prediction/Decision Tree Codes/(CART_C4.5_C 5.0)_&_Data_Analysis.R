@@ -260,9 +260,15 @@ tree2 <- J48(DEATH_EVENT~., data = data_matrix)
 e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
 
-plot(tree2)
 
-print(e)
+cf <- as.data.frame(as.table(e$confusionMatrix))
+
+a <- sum(cf[1,3],cf[4,3])
+b <- sum(cf[1,3],cf[2,3],cf[3,3],cf[4,3])
+
+corrPred = (a/b)*100
+accuracy[i] = corrPred
+
 
 time_taken1 <- end.time1 -start.time1
 time_taken1

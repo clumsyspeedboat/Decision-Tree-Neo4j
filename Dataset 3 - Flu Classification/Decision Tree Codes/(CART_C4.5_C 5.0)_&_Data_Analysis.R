@@ -28,6 +28,9 @@ library("RWeka")
 # Creating a data matrix #
 data <- file.choose()
 data_matrix <- read.csv(data, header = TRUE, sep = ",", na.strings=c("","NA"))
+
+data_matrix$RiskFactors <- gsub(",", "+", data_matrix$RiskFactors)
+
 # data_matrix[data_matrix == ""] <- NA
 
 # Selecting necessary columns for Decision Tree Implementation #
@@ -126,8 +129,6 @@ colnames(gini_ind) <- "Gini Index"
 accuracy <- vector("numeric", 30)
 time <- vector("numeric", 30)
 
-accuracy = 0
-time = 0
 
 for (i in 1:2) {
 options(digits.secs = 6)
@@ -141,6 +142,10 @@ plot(tree1)
 Prediction1 <- confusionMatrix(tree1)
 
 print(Prediction1)
+
+cf <- as.data.frame(as.table(Prediction1$table))
+corrPred = sum(cf[1,3],cf[4,3])
+accuracy[i] = corrPred
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
@@ -167,9 +172,15 @@ tree2 <- J48(Diagnosis~., data = data_matrix)
 e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
 
-plot(tree2)
+cf <- as.data.frame(as.table(e$confusionMatrix))
 
-print(e)
+a <- sum(cf[1,3],cf[4,3])
+b <- sum(cf[1,3],cf[2,3],cf[3,3],cf[4,3])
+
+corrPred = (a/b)*100
+accuracy[i] = corrPred
+
+
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
