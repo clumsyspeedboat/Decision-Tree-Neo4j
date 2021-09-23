@@ -782,12 +782,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	                
 	            }
 	        }
-	       
-	        String accuracyPruning = "Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%";
-	        String timePruning = "Cross Validation Generation Time before pruning: " + (gt/10) + "sec";
+
+	        String accuracyPruning = "Cross Validation Accuracy: " + (r / 10) * 100 + "%";
+	        String timePruning = "Cross Validation Generation Time: " + (gt/10) + "sec";
 	        return accuracyPruning + " \n " + timePruning ;
 		}
 	}
+    
+   
+    
+    
     
     @UserFunction
     @Description("cross validation time for data from graph database for GainRatio")
