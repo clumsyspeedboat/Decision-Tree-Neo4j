@@ -8,6 +8,7 @@ cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
 if(!require("ggplot2")) install.packages("ggplot2")       # Visualization
+if(!require("caret")) install.packages("caret")  
 if(!require("factoextra")) install.packages("factoextra") # PCA
 if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
 if(!require("DescTools")) install.packages("DescTools")   # Gini Index
@@ -17,6 +18,7 @@ if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
 
 library("ggplot2")
+library("caret")
 library("factoextra")
 library("FSelector")
 library("DescTools")
@@ -203,125 +205,40 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-# Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
-
-TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-
-TrainingSet$age <- as.numeric(TrainingSet$age)
-TrainingSet$anaemia <- as.factor(TrainingSet$anaemia)
-TrainingSet$creatinine_phosphokinase <- as.numeric(TrainingSet$creatinine_phosphokinase)
-TrainingSet$diabetes <- as.factor(TrainingSet$diabetes)
-TrainingSet$ejection_fraction <- as.numeric(TrainingSet$ejection_fraction)
-TrainingSet$high_blood_pressure <- as.factor(TrainingSet$high_blood_pressure)
-TrainingSet$platelets <- as.numeric(TrainingSet$platelets)
-TrainingSet$serum_creatinine <- as.numeric(TrainingSet$serum_creatinine)
-TrainingSet$serum_sodium <- as.numeric(TrainingSet$serum_sodium)
-TrainingSet$sex <- as.factor(TrainingSet$sex)
-TrainingSet$smoking <- as.factor(TrainingSet$smoking)
-TrainingSet$time <- as.numeric(TrainingSet$time)
-TrainingSet$DEATH_EVENT <- as.factor(TrainingSet$DEATH_EVENT)
-
-
-TestingSet$age <- as.numeric(TestingSet$age)
-TestingSet$anaemia <- as.factor(TestingSet$anaemia)
-TestingSet$creatinine_phosphokinase <- as.numeric(TestingSet$creatinine_phosphokinase)
-TestingSet$diabetes <- as.factor(TestingSet$diabetes)
-TestingSet$ejection_fraction <- as.numeric(TestingSet$ejection_fraction)
-TestingSet$high_blood_pressure <- as.factor(TestingSet$high_blood_pressure)
-TestingSet$platelets <- as.numeric(TestingSet$platelets)
-TestingSet$serum_creatinine <- as.numeric(TestingSet$serum_creatinine)
-TestingSet$serum_sodium <- as.numeric(TestingSet$serum_sodium)
-TestingSet$sex <- as.factor(TestingSet$sex)
-TestingSet$smoking <- as.factor(TestingSet$smoking)
-TestingSet$time <- as.numeric(TestingSet$time)
-TestingSet$DEATH_EVENT <- as.factor(TestingSet$DEATH_EVENT)
-
-
 ###########################################
-# CART #
+# CART # --> Gini Index
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree1 <- rpart(DEATH_EVENT ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+train.control <- trainControl(method = 'cv', number = 10)
+tree1 <- train(DEATH_EVENT ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
 end.time1 <- Sys.time()
 
-rpart.plot(tree1)
+plot(tree1)
 
-start.time2 <- Sys.time()
-Prediction1 <- predict(tree1, newdata=TestingSet,type = 'class')
-end.time2 <- Sys.time()
+Prediction1 <- confusionMatrix(tree1)
 
-# Confusion Matrix #
-
-levels <- levels(Prediction1)
-levels <- levels[order(levels)]    
-cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$DEATH_EVENT, levels))
-cm1
+print(Prediction1)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
 ###########################################
 
 
 ###########################################
-# C4.5 #
+# C4.5 # --> Gain Ratio
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(DEATH_EVENT~., data = TrainingSet)
+tree2 <- J48(DEATH_EVENT~., data = data_matrix)
+e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
+
 plot(tree2)
 
-start.time2 <- Sys.time()
-Prediction2 <- predict(tree2, newdata = TestingSet, type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels2 <- levels(Prediction2)
-levels2 <- levels[order(levels2)]    
-cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$DEATH_EVENT, levels2))
-cm2
+print(e)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
-###########################################
-
-
-###########################################
-# C5.0 #
-########
-
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-tree3 <- C5.0(DEATH_EVENT~., data = TrainingSet)
-end.time1 <- Sys.time()
-plot(tree3)
-
-start.time2 <- Sys.time()
-Prediction3 <- predict(tree3, newdata = TestingSet, type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels3 <- levels(Prediction3)
-levels3 <- levels[order(levels3)]    
-cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$DEATH_EVENT, levels3))
-cm3
-
-time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
-time_taken1
-time_taken2
-
 ###########################################
 ######################################################################################

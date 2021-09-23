@@ -8,17 +8,16 @@ cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
 if(!require("factoextra")) install.packages("factoextra") # PCA
+if(!require("caret")) install.packages("caret") 
 if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
 if(!require("DescTools")) install.packages("DescTools")   # Gini Index
 if(!require("rpart")) install.packages("rpart")           # Decision Tree : CART (gini)
 if(!require("rpart.plot")) install.packages("rpart.plot") # Decision Tree plot : CART
 if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.0 (gain ratio)
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
-Sys.setenv(JAVA_HOME='C:\\Program Files\\Java\\jre7') # for 64-bit version
-Sys.setenv(JAVA_HOME='C:\\Program Files (x86)\\Java\\jre7') # for 32-bit version
-library(rJava)
 
 library("factoextra")
+library("caret")
 library("FSelector")
 library("DescTools")
 library("rpart")
@@ -139,126 +138,44 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-#------------------------------------------------
-"Train-Test Data Split"
-#------------------------------------------------
-training_size <- 0.5 #extracting Percentage
-n = nrow(data_matrix)
-smp_size <- floor(training_size * n)  
-index<- sample(seq_len(n),size = smp_size)
-
-# Breaking into Training and Testing Sets:
-TrainingSet <- data_matrix[index,]
-TestingSet <- data_matrix[-index,]
-
-######   or   ######  
-
-# Choosing pre-partitioned Training Set and Testing Set of the Heart Failure Prediction Data Set #
-TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-
-#####################
-
-## Transform Variables ##
-TrainingSet$Patient.Type <- as.factor(TrainingSet$Patient.Type)
-TestingSet$Patient.Type <- as.factor(TestingSet$Patient.Type)
-
-n <- NCOL(TrainingSet)
-
-for (i in 1:(n-1)) {
+data_matrix[,1:50] <- as.numeric(unlist(data_matrix[,1:50])) 
+data_matrix[,51] <- as.factor(data_matrix[,51])
   
-  TrainingSet[,i] <- as.numeric(TrainingSet[,i])
-  
-}
-
-
-for (i in 1:(n-1)) {
-  
-  TestingSet[,i] <- as.numeric(TestingSet[,i])
-  
-}
-
 ##########################################
 # CART #
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree1 <- rpart(Patient.Type ~.,data=TrainingSet, method = 'class', parms = list(split = "gini"))
+train.control <- trainControl(method = 'cv', number = 10)
+tree1 <- train(Patient.Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
 end.time1 <- Sys.time()
 
-rpart.plot(tree1)
+plot(tree1)
 
-start.time2 <- Sys.time()
-Prediction1 <- predict(tree1, newdata=TestingSet,type = 'class')
-end.time2 <- Sys.time()
+Prediction1 <- confusionMatrix(tree1)
 
-# Confusion Matrix #
-
-levels <- levels(Prediction1)
-levels <- levels[order(levels)]    
-cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Patient.Type, levels))
-cm1
+print(Prediction1)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
 ###########################################
 
+
 ###########################################
-# C4.5 #
+# C4.5 # --> Gain Ratio
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(Patient.Type~., data = TrainingSet)
+tree2 <- J48(Patient.Type~., data = data_matrix)
+e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
+
 end.time1 <- Sys.time()
+
 plot(tree2)
 
-start.time2 <- Sys.time()
-Prediction2 <- predict(tree2, newdata = TestingSet, type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels2 <- levels(Prediction2)
-levels2 <- levels[order(levels2)]    
-cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$Patient.Type, levels2))
-cm2
+print(e)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
 ###########################################
-
-###########################################
-# C5.0 #
-########
-
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-tree3 <- C5.0(Patient.Type~., data = TrainingSet)
-end.time1 <- Sys.time()
-plot(tree3)
-
-start.time2 <- Sys.time()
-Prediction3 <- predict(tree3, newdata = TestingSet, type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels3 <- levels(Prediction3)
-levels3 <- levels[order(levels3)]    
-cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Patient.Type, levels3))
-cm3
-
-time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
-time_taken1
-time_taken2
-
-###########################################
+##############################################################
