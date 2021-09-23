@@ -119,136 +119,39 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-#------------------------------------------------
-"Train-Test Data Split"
-#------------------------------------------------
-####################
-
-# Split the original data_matrix #
-training_size <- 0.75 #extracting Percentage
-n = nrow(data_matrix)
-smp_size <- floor(training_size * n)  
-index<- sample(seq_len(n),size = smp_size, replace = FALSE)
-
-# Breaking into Training and Testing Sets:
-TrainingSet <- data_matrix[index,]
-TestingSet <- data_matrix[-index,]
-
-# Export CSV #
-# write.csv(TrainingSet, file = "Training Set.csv", row.names = FALSE)
-# write.csv(TestingSet, file = "Testing Set.csv", row.names = FALSE)
-
-######   or   ######  
-
-# Choosing pre-partitioned Training Set and Testing Set #
-TrainingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-TestingSet = read.csv(file.choose(), header = TRUE, sep = ",")
-
-# Transform Variables #
-
-# Training data #
-
-for (i in 1:2) {
-  TrainingSet[,i] <- as.numeric(TrainingSet[,i])
-}
-
-for (i in 3:13) {
-  TrainingSet[,i] <- as.factor(TrainingSet[,i])
-}
-
-# Testing data #
-
-for (i in 1:2) {
-  TestingSet[,i] <- as.numeric(TestingSet[,i])
-}
-
-for (i in 3:13) {
-  TestingSet[,i] <- as.factor(TestingSet[,i])
-}
-
 ##########################################
-# CART #
+# CART # --> Gini Index
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree1 <- rpart(Diagnosis ~.,data=TrainingSet[,-4], method = 'class', parms = list(split = "gini"))
+train.control <- trainControl(method = 'cv', number = 10)
+tree1 <- train(Diagnosis ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
 end.time1 <- Sys.time()
 
-rpart.plot(tree1)
+plot(tree1)
 
-start.time2 <- Sys.time()
-Prediction1 <- predict(tree1, newdata=TestingSet[,-4],type = 'class')
-end.time2 <- Sys.time()
+Prediction1 <- confusionMatrix(tree1)
 
-# Confusion Matrix #
-
-levels <- levels(Prediction1)
-levels <- levels[order(levels)]    
-cm1 <- table(ordered(Prediction1,levels), ordered(TestingSet$Diagnosis, levels))
-cm1
+print(Prediction1)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
 ###########################################
 
 ###########################################
-# C4.5 #
+# C4.5 # --> Gain Ratio
 ########
-
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(Diagnosis~., data = TrainingSet[,-4])
+tree2 <- J48(Diagnosis~., data = data_matrix)
+e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
 
-plot(tree2, type = "simple")
+plot(tree2)
 
-start.time2 <- Sys.time()
-Prediction2 <- predict(tree2, newdata = TestingSet[,-4], type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels2 <- levels(Prediction2)
-levels2 <- levels[order(levels2)]    
-cm2 <- table(ordered(Prediction2,levels2), ordered(TestingSet$Diagnosis, levels2))
-cm2
+print(e)
 
 time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
 time_taken1
-time_taken2
-
 ###########################################
-
-###########################################
-# C5.0 #
-########
-
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-tree3 <- C5.0(Diagnosis~., data = TrainingSet[,-4], trials = 100)
-end.time1 <- Sys.time()
-
-plot(tree3, type = "simple")
-
-start.time2 <- Sys.time()
-Prediction3 <- predict(tree3, newdata = TestingSet[,-4], type = "class")
-end.time2 <- Sys.time()
-
-# Confusion Matrix #
-
-levels3 <- levels(Prediction3)
-levels3 <- levels[order(levels3)]    
-cm3 <- table(ordered(Prediction3,levels3), ordered(TestingSet$Diagnosis, levels3))
-cm3
-
-time_taken1 <- end.time1 -start.time1
-time_taken2 <- end.time2 -start.time2
-time_taken1
-time_taken2
-
-###########################################
+#####################################################
