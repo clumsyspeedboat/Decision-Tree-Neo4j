@@ -8,6 +8,17 @@ import cv.CrossValidation;
 import cv.CrossValidationWithPruning;
 import input.ProcessInputData;
 import output.PrintTree;
+/**
+ * This class is used to run cross validation on the entire sample 
+ * Dataset1 - heart_failure_original.csv . Target - 'DEATH_EVENT'
+ * Dataset2 - flu_classification_original.csv. Target - 'Diagnosis'
+ * Dataset3 - metaprotein_original.csv. Target - 'PatientType'
+ * 
+ * AlgorithmType - 'InfoGain', 'GiniIndex', 'GainRatio'
+ *
+ * @author Nasim
+ *
+ */
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -16,10 +27,12 @@ public class Main {
         System.out.println("===============================================================");
         
        
-        ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/heart_failure.csv");
+//        ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/metaprotein_original.csv");
         
-        CrossValidation cv = new CrossValidation(trainList, "DEATH_EVENT");
-        //CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure.csv", "DEATH_EVENT");
+        CrossValidation cv = new CrossValidation("data/metaprotein_original.csv", "PatientType");
+        
+//        CrossValidation cv = new CrossValidation(trainList, "Patient_Type");
+//        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure.csv", "Patient_Type");
 
         ArrayList<Double> final_score = cv.validate(10,"InfoGain");
         //ArrayList<Double> final_score_P = cvP.validate(10);
@@ -46,9 +59,9 @@ public class Main {
         PrintTree print = new PrintTree();
 
        
-        System.out.println("Cross Validation Accuracy before Pruning: " + (r / 10) * 100 + "%");
+        System.out.println("Cross Validation Accuracy without Pruning: " + (r / 10) * 100 + "%");
        // System.out.println("Cross Validation Accuracy after Pruning: " + (rP / 10)* 100 + "%");
-        System.out.println("Cross Validation Generation Time before pruning: " + (gt/10) + "sec");
+        System.out.println("Cross Validation Generation Time without pruning: " + (gt/10) + "sec");
         
         // Calculate and print total time taken.
         

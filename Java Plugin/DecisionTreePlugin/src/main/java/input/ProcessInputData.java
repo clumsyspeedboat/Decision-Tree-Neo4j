@@ -8,6 +8,7 @@ package input;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -121,6 +122,13 @@ public class ProcessInputData {
 		
 		
 
+		makeAttributeSet(targetAtt, myMap, datasetCount);
+ 
+	}
+
+
+	private void makeAttributeSet(String targetAtt, LinkedHashMap<String, HashSet<String>> myMap, int datasetCount)
+			throws IOException {
 		HashSet<String> targetColumn = myMap.get(targetAtt);
 	
 		int index = 0;
@@ -171,7 +179,6 @@ public class ProcessInputData {
 			}
 			index++;
 		}
- 
 	}
 	
 
@@ -200,6 +207,7 @@ public class ProcessInputData {
 				
 				for(String l: lineArr) {
 					String[] attArray = l.trim().split(":");
+				
 					
 					item.addAttribute(attArray[0], attArray[1]);
 				
@@ -215,54 +223,35 @@ public class ProcessInputData {
 				instanceSet.add(item);
 			}
 			
-			HashSet<String> target = myMap.get(targetAtt);
 			
-			double threshold = 1.0 * target.size() / datasetCount + 0.01;
-		    
-			int index=0;
+			makeAttributeSet(targetAtt, myMap, datasetCount);
 			
-			for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) {
-				String key = entry.getKey();
-
-				HashSet<String> value = entry.getValue();
-				boolean isNumerical = true;
-				for (String val : value)
-				{
-					try
-					{
-					  Double.parseDouble(val);
-					}
-					catch(NumberFormatException e)
-					{
-						isNumerical = false;
-					}
-				}
-				boolean isCategorical;
-				if(isNumerical == false)
-				{
-					isCategorical = true;
-				}
-				else
-				{
-					int nUnique = entry.getValue().size();
-					
-					isCategorical = 1.0 * nUnique / datasetCount < threshold;
-				}
-
-				if (isCategorical == false) {
-					Attribute attr1 = new Attribute(key, "real");
-					attributeSet.add(attr1);
-				}else{
-					String str = "{" + String.join(",", value) + "}";
-					Attribute attr2 = new Attribute(key, str);
-					attributeSet.add(attr2);
-				}
-				if(attributeSet.get(index).getName().equals(targetAtt)) {
-					targetAttributeIndex = index;
-					targetAttribute = attributeSet.get(index);
-				}
-				index++;
-			}
+			/*
+			 * HashSet<String> target = myMap.get(targetAtt);
+			 * 
+			 * double threshold = 1.0 * target.size() / datasetCount + 0.01;
+			 * 
+			 * int index = 0;
+			 * 
+			 * for (Map.Entry<String, HashSet<String>> entry : myMap.entrySet()) { String
+			 * key = entry.getKey();
+			 * 
+			 * HashSet<String> value = entry.getValue(); boolean isNumerical = true; for
+			 * (String val : value) { try { Double.parseDouble(val); } catch
+			 * (NumberFormatException e) { isNumerical = false; } } boolean isCategorical;
+			 * if (isNumerical == false) { isCategorical = true; } else { int nUnique =
+			 * entry.getValue().size();
+			 * 
+			 * isCategorical = 1.0 * nUnique / datasetCount < threshold; }
+			 * 
+			 * if (isCategorical == false) { Attribute attr1 = new Attribute(key, "real");
+			 * attributeSet.add(attr1); } else { String str = "{" + String.join(",", value)
+			 * + "}"; Attribute attr2 = new Attribute(key, str); attributeSet.add(attr2); }
+			 * if (attributeSet.get(index).getName().equals(targetAtt)) {
+			 * targetAttributeIndex = index; targetAttribute = attributeSet.get(index); }
+			 * index++; }
+			 */
+			 
 		}
 	}
 

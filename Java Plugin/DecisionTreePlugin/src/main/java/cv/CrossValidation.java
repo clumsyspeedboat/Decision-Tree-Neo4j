@@ -9,6 +9,7 @@ import core.ConstructTree;
 import definition.Attribute;
 import definition.Instance;
 import gainratio.ConstructTreeGR;
+import gini.ConstructTreeGI;
 import input.ProcessInputData;
 import node.TreeNode;
 
@@ -47,7 +48,6 @@ public class CrossValidation {
 
 		this.target = input.getTargetAttribute();
 		
-
 		this.testBundles = new ArrayList<ArrayList<Instance>>();
 
 		this.totalInstances = input.getInstanceSet();
@@ -190,7 +190,7 @@ public class CrossValidation {
 			}
 			else
 			{
-				tree = new ConstructTreeGR(trainInstances, attributes, target);
+				tree = new ConstructTreeGI(trainInstances, attributes, target);
 			}
 			root = tree.construct();
 			
@@ -218,7 +218,7 @@ public class CrossValidation {
 	public ArrayList<Double> getCvGenerationTime() {
 		return cvGenerationTime;
 	}
-
+	
 
 	/**
 	 * 
