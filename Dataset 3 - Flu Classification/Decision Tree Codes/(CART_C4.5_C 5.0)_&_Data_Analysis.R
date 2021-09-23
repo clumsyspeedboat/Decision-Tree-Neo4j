@@ -7,6 +7,7 @@ cat("\f")       # Clear old outputs
 rm(list=ls())   # Clear all variables
 
 if(!require("ggplot2")) install.packages("ggplot2")       # Visualization
+if(!require("caret")) install.packages("caret") 
 if(!require("factoextra")) install.packages("factoextra") # PCA
 if(!require("FSelector")) install.packages("FSelector")   # Information Gain & Gain Ratio
 if(!require("DescTools")) install.packages("DescTools")   # Gini Index
@@ -16,6 +17,7 @@ if(!require("C50")) install.packages("C50")               # Decision Tree : C 5.
 if(!require("RWeka")) install.packages("RWeka")           # Decision Tree : C 4.5 (gain ratio)
 
 library("ggplot2")
+library("caret")
 library("factoextra")
 library("FSelector")
 library("DescTools")
@@ -29,7 +31,6 @@ library("RWeka")
 data <- file.choose()
 data_matrix <- read.csv(data, header = TRUE, sep = ",", na.strings=c("","NA"))
 
-data_matrix$RiskFactors <- gsub(",", "+", data_matrix$RiskFactors)
 
 # data_matrix[data_matrix == ""] <- NA
 
@@ -130,7 +131,7 @@ accuracy <- vector("numeric", 30)
 time <- vector("numeric", 30)
 
 
-for (i in 1:2) {
+for (i in 1:30) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
 train.control <- trainControl(method = 'cv', number = 10)
@@ -162,13 +163,13 @@ sum(time)/30
 # C4.5 # --> Gain Ratio
 ########
 
-accuracy = 0
-time = 0
+accuracy1 <- vector("numeric", 30)
+time1 <- vector("numeric", 30)
 
 for (i in 1:2) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(Diagnosis~., data = data_matrix)
+tree2 <- J48(Diagnosis~., data = data_matrix[,-4])
 e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
 
@@ -178,17 +179,17 @@ a <- sum(cf[1,3],cf[4,3])
 b <- sum(cf[1,3],cf[2,3],cf[3,3],cf[4,3])
 
 corrPred = (a/b)*100
-accuracy[i] = corrPred
+accuracy1[i] = corrPred
 
 
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
-time[i] <- time_taken1
+time1[i] <- time_taken1
 
 }
 
-sum(accuracy)/30
-sum(time)/30
+sum(accuracy1)/2
+sum(time1)/2
 ###########################################
 #####################################################
