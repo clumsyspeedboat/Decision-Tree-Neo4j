@@ -208,26 +208,52 @@ colnames(gini_ind) <- "Gini Index"
 ###########################################
 # CART # --> Gini Index
 ########
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-train.control <- trainControl(method = 'cv', number = 10)
-tree1 <- train(DEATH_EVENT ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
-end.time1 <- Sys.time()
 
-plot(tree1)
+accuracy = 0
+time = 0
 
-Prediction1 <- confusionMatrix(tree1)
+for (i in 1:2) {
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  train.control <- trainControl(method = 'cv', number = 10)
+  tree1 <- train(DEATH_EVENT ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
+  end.time1 <- Sys.time()
+  
+  plot(tree1)
+  
+  Prediction1 <- confusionMatrix(tree1)
+  
+  print(Prediction1)
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  corrPred = sum(cf[1,3],cf[4,3])
+  accuracy[i] = corrPred
+  
+  
+  
+  time_taken1 <- end.time1 -start.time1
+  time_taken1
+  time[i] <- time_taken1
 
-print(Prediction1)
+}
 
-time_taken1 <- end.time1 -start.time1
-time_taken1
+sum(accuracy)/30
+sum(time)/30
+
+
 ###########################################
 
 
 ###########################################
 # C4.5 # --> Gain Ratio
 ########
+
+accuracy = 0
+time = 0
+
+for (i in 1:30) {
+  
 options(digits.secs = 6)
 start.time1 <- Sys.time()
 tree2 <- J48(DEATH_EVENT~., data = data_matrix)
@@ -240,5 +266,12 @@ print(e)
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
+time[i] <- time_taken1
+
+}
+
+sum(accuracy)/30
+sum(time)/30
+
 ###########################################
 ######################################################################################

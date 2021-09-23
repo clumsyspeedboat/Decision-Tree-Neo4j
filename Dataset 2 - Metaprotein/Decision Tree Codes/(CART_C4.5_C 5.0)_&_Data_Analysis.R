@@ -144,6 +144,14 @@ data_matrix[,51] <- as.factor(data_matrix[,51])
 ##########################################
 # CART #
 ########
+
+accuracy <- vector("numeric", 30)
+time <- vector("numeric", 30)
+
+accuracy = 0
+time = 0
+
+for (i in 1:2) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
 train.control <- trainControl(method = 'cv', number = 10)
@@ -158,12 +166,24 @@ print(Prediction1)
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
+time[i] <- time_taken1
+
+}
+
+sum(accuracy)/30
+sum(time)/30
+
 ###########################################
 
 
 ###########################################
 # C4.5 # --> Gain Ratio
 ########
+
+accuracy = 0
+time = 0
+
+for (i in 1:2) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
 tree2 <- J48(Patient.Type~., data = data_matrix)
@@ -177,5 +197,11 @@ print(e)
 
 time_taken1 <- end.time1 -start.time1
 time_taken1
+time[i] <- time_taken1
+
+}
+
+sum(accuracy)/30
+sum(time)/30
 ###########################################
 ##############################################################
