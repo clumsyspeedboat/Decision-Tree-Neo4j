@@ -2,17 +2,17 @@ package main;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import cv.CrossValidation;
-import cv.CrossValidationWithPruning;
 import input.ProcessInputData;
 import output.PrintTree;
 /**
  * This class is used to run cross validation on the entire sample 
  * Dataset1 - heart_failure_original.csv . Target - 'DEATH_EVENT'
- * Dataset2 - flu_classification_original.csv. Target - 'Diagnosis'
- * Dataset3 - metaprotein_original.csv. Target - 'PatientType'
+ * Dataset2 - flu_classification.csv. Target - 'Diagnosis'
+ * Dataset3 - metaprotein_50.csv. Target - 'Patient_Type'
  * 
  * AlgorithmType - 'InfoGain', 'GiniIndex', 'GainRatio'
  *
@@ -23,63 +23,42 @@ import output.PrintTree;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Scanner in = new Scanner(System.in);
-        System.out.println("===============================================================");
-        
-       
-//        ArrayList<String> trainList = ProcessInputData.CustomListFromCSV("data/metaprotein_original.csv");
-        
-        CrossValidation cv = new CrossValidation("data/metaprotein_original.csv", "PatientType");
-        
-//        CrossValidation cv = new CrossValidation(trainList, "Patient_Type");
-//        CrossValidationWithPruning cvP = new CrossValidationWithPruning("data/heart_failure.csv", "Patient_Type");
+		Scanner in = new Scanner(System.in);
+		System.out.println("===============================================================");
 
-        ArrayList<Double> final_score = cv.validate(10,"InfoGain");
-        //ArrayList<Double> final_score_P = cvP.validate(10);
-        
-        
-        double r = 0;
-        //double rP = 0;
-        double gt = 0;
-        
-        for(int i = 0; i < final_score.size(); i++) {
-            r += final_score.get(i);
-            //rP += final_score_P.get(i);
-        }
-        
-       
-        if(cv.getCvGenerationTime() != null) {
-        	ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-        	for(int i = 0; i < totalGenerationTime.size(); i++) {
-                gt += totalGenerationTime.get(i);
-                
-            }
-        }
+		CrossValidation cv = new CrossValidation("data/metaprotein_50.csv", "Diagnosis");
 
-        PrintTree print = new PrintTree();
+		ArrayList<Double> final_score = cv.validate(10, "GiniIndex");
 
-       
-        System.out.println("Cross Validation Accuracy without Pruning: " + (r / 10) * 100 + "%");
-       // System.out.println("Cross Validation Accuracy after Pruning: " + (rP / 10)* 100 + "%");
-        System.out.println("Cross Validation Generation Time without pruning: " + (gt/10) + "sec");
-        
-        // Calculate and print total time taken.
-        
-        
-        	
-		/*System.out.println("**********************");
-		System.out.println("Do you want to see the tree before pruning? (y/n)");
-		String printTreeBefore = in.nextLine();
-		if (printTreeBefore.equals("y")) {
-			System.out.println("Tree before Pruning: \n" + print.printDFS(cv.getRoot()));
+		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+
+		ArrayList<Double> totalRepeatsAccuracy = new ArrayList<>();
+		ArrayList<Double> totalRepeatsTime = new ArrayList<>();
+
+		for (int i = 0; i < 30; i++) {
+
+			double accuracy = calculateAverage(final_score);
+			double gTime = calculateAverage(totalGenerationTime);
+
+			totalRepeatsAccuracy.add(accuracy);
+			totalRepeatsTime.add(gTime);
+
 		}
-		System.out.println("**********************");
-		System.out.println("Do you want to see the tree after pruning? (y/n)");
-		String printTreeAfter = in.nextLine();
-		if (printTreeAfter.equals("y")) {
-			System.out.println("Tree after Pruning: \n" + print.printDFS(cvP.getRoot()));
-		}*/
-		
-        in.close();
+
+		System.out.println("Accuracy:" + calculateAverage(totalRepeatsAccuracy) * 100 + "%");
+		System.out.println("GenerationTime:" + calculateAverage(totalRepeatsTime) + "sec");
+
+		in.close();
     }
+    
+    private static double calculateAverage(ArrayList<Double> final_score) {
+        return final_score.stream()
+                    .mapToDouble(d -> d)
+                    .average()
+                    .orElse(0.0);
+    }
+    
+    
+    
+    
 }

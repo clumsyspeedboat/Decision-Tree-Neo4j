@@ -120,8 +120,6 @@ public class ProcessInputData {
 			}
 		}
 		
-		
-
 		makeAttributeSet(targetAtt, myMap, datasetCount);
  
 	}

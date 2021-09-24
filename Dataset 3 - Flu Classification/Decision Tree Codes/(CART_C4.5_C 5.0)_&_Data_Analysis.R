@@ -141,7 +141,7 @@ time <- vector("numeric", 30)
 for (i in 1:30) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-train.control <- trainControl(method = 'cv', number = 10)
+train.control <- trainControl(method = 'cv', number = 40)
 tree1 <- train(Diagnosis ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
 end.time1 <- Sys.time()
 
@@ -173,11 +173,15 @@ sum(time)/30
 accuracy1 <- vector("numeric", 30)
 time1 <- vector("numeric", 30)
 
-for (i in 1:2) {
+for (i in 1:30) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
 tree2 <- J48(Diagnosis~., data = data_matrix)
+<<<<<<< Updated upstream
 e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
+=======
+e <- evaluate_Weka_classifier(tree2, numFolds = 40, class = TRUE)
+>>>>>>> Stashed changes
 end.time1 <- Sys.time()
 
 cf <- as.data.frame(as.table(e$confusionMatrix))
@@ -196,7 +200,7 @@ time1[i] <- time_taken1
 
 }
 
-sum(accuracy1)/2
-sum(time1)/2
+sum(accuracy1)/30
+sum(time1)/30
 ###########################################
 #####################################################
