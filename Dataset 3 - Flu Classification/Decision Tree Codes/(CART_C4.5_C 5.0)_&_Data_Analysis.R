@@ -30,13 +30,6 @@ library("RWeka")
 # Creating a data matrix #
 data <- file.choose()
 data_matrix <- read.csv(data, header = TRUE, sep = ",", na.strings=c("","NA"))
-
-typeof(data_matrix$Age) 
-
-data_matrix <- data_matrix[,-4]
-write.csv(data_matrix, file = "Flu_Classification1.csv", row.names = FALSE, quote = FALSE)
-
-
 # data_matrix[data_matrix == ""] <- NA
 
 # Selecting necessary columns for Decision Tree Implementation #
