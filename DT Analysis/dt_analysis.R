@@ -61,6 +61,10 @@ neo4j_csv_gini <- mean(dt_neo_csv$generation_time[which(dt_neo_csv$splitting_cri
 neo4j_csv_infogain <- mean(dt_neo_csv$generation_time[which(dt_neo_csv$splitting_criterion == "info gain")])
 neo4j_csv_gainratio <- mean(dt_neo_csv$generation_time[which(dt_neo_csv$splitting_criterion == "gain ratio")])
 
+neo4j_db_gini <- mean(dt_neo_db$generation_time[which(dt_neo_db$splitting_criterion == "gini")])
+neo4j_db_infogain <- mean(dt_neo_db$generation_time[which(dt_neo_db$splitting_criterion == "info gain")])
+neo4j_db_gainratio <- mean(dt_neo_db$generation_time[which(dt_neo_db$splitting_criterion == "gain ratio")])
+
 dt1_gt <- mean(dt1$generation_time)
 dt2_gt <- mean(dt2$generation_time)
 dt3_gt <- mean(dt3$generation_time)
