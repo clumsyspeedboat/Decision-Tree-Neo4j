@@ -31,6 +31,11 @@ library("RWeka")
 data <- file.choose()
 data_matrix <- read.csv(data, header = TRUE, sep = ",", na.strings=c("","NA"))
 
+typeof(data_matrix$Age) 
+
+data_matrix <- data_matrix[,-4]
+write.csv(data_matrix, file = "Flu_Classification1.csv", row.names = FALSE, quote = FALSE)
+
 
 # data_matrix[data_matrix == ""] <- NA
 
@@ -55,9 +60,11 @@ for (i in 1:2) {
     data_matrix[,i] <- as.numeric(data_matrix[,i])
 }
   
-for (i in 3:13) {
+for (i in 3:12) {
   data_matrix[,i] <- as.factor(data_matrix[,i])
 }
+
+write.csv(data_matrix, file = "Flu_Classification1.csv", quote = FALSE, row.names = FALSE) 
 
 ###################
 ## Data Analysis ##
@@ -169,7 +176,7 @@ time1 <- vector("numeric", 30)
 for (i in 1:2) {
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(Diagnosis~., data = data_matrix[,-4])
+tree2 <- J48(Diagnosis~., data = data_matrix)
 e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
 end.time1 <- Sys.time()
 
