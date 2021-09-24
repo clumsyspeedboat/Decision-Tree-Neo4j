@@ -676,7 +676,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confusionMatrixIG(@Name("path") String path,@Name("target") String target) throws Exception
+	public String confmIG(@Name("path") String path,@Name("target") String target) throws Exception
 	{
 		if(path == null)
 		{
@@ -706,7 +706,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
-	public String confusionMatrixGR(@Name("path") String path) throws Exception
+	public String confmGR(@Name("path") String path) throws Exception
 	{
 		if(path == null)
 		{
@@ -735,7 +735,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
-	public String confusionMatrixGI(@Name("path") String path) throws Exception
+	public String confmGI(@Name("path") String path) throws Exception
 	{
 		if(path == null)
 		{
@@ -756,7 +756,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from graph database for InfoGain")
-	public String cvIGDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvIG(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -790,7 +790,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
   
     @UserFunction
     @Description("cross validation time for data from graph database for GainRatio")
-	public String cvGRDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvGR(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
@@ -820,7 +820,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from graph database for GiniIndex")
-	public String cvGIDb(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvGI(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(target == null)
 		{
