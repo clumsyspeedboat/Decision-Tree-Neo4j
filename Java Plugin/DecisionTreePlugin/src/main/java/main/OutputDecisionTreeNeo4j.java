@@ -17,6 +17,8 @@ import static org.neo4j.driver.Values.parameters;
 import java.util.List;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -45,6 +47,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	private static ArrayList<String> testDataList =  new ArrayList<String>();
 	private static ArrayList<String> trainDataList =  new ArrayList<String>();
 	private static ArrayList<String> autoSplitDataList =  new ArrayList<String>();
+	private static ArrayList<String> mapNodeList =  new ArrayList<String>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
@@ -138,6 +141,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 					                            "' , propname: '" + relationshipDetail.get(0) + "' }]->(b)" +
 					                            " RETURN type(r)");
                     return result.single().get( 0 ).asString();
+                }
+            } );
+        }
+    }
+    
+    public void kmeanRelationship(final String dtType, final String message, final String nodeCentroid, final String nodeCluster)
+    {
+    	final String name = "kmean";
+        try ( Session session = driver.session() )
+        {
+            String greeting = session.writeTransaction( new TransactionWork<String>()
+            {
+                @Override
+                public String execute( Transaction tx )
+                {
+                	//a is present for the node
+            		Result result = tx.run( "MERGE (a {" + nodeCentroid +"}) " +
+            				"MERGE (b {" + nodeCluster +"}) " +
+            				"MERGE (a)-[:link]->(b) "
+            				+ "RETURN a.message");
+				    return result.single().get( 0 ).asString();
                 }
             } );
         }
@@ -237,7 +261,57 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        	return "The Data has been split -  Train Ratio: " + trainRatio + " Test Ratio: " + testRatio;
    	}
     
-    
+    @UserFunction
+    public String mapNodes(@Name("nodeType") String nodeType) throws Exception
+   	{
+       	String listOfData = "";
+       	mapNodeList.clear();
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
+           {
+       		queryData(nodeType);
+       		for (Record key : dataKey) {
+       			List<Pair<String,Value>> values = key.fields();
+       			for (Pair<String,Value> nodeValues: values) {
+       				String valueOfNode = "";
+       				if ("n".equals(nodeValues.key())) { 
+       			        Value value = nodeValues.value();
+       			        for (String nodeKey : value.keys())
+       			        {
+       			        	if(value.get(nodeKey).getClass().equals(String.class))
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			valueOfNode = valueOfNode + ", " + nodeKey + ":" + value.get(nodeKey);
+       			        		}
+       			        		else
+       			        		{
+       			        			valueOfNode = nodeKey + ":" + value.get(nodeKey);
+       			        		}
+       			   
+       			        	}
+       			        	else
+       			        	{
+       			        		if(valueOfNode != "")
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode = valueOfNode + ", " + nodeKey + ":" + converValueToString;
+       			        		}
+       			        		else
+       			        		{
+       			        			String converValueToString = String.valueOf(value.get(nodeKey));
+               			        	valueOfNode =  nodeKey + ":" + converValueToString;
+       			        		}   			        		
+       			        	}
+       			        }
+       			        mapNodeList.add(valueOfNode);
+       			    }
+       				listOfData = listOfData + valueOfNode + " | ";
+       			}
+       		}
+           }
+       	return "Map all node data: " + listOfData;
+   	}
+       		
     
     /**
      * This function is used to query the test dataset from Neo4j and populate the global arraylist of Java Code
@@ -955,5 +1029,27 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	        return accuracyPruning + " \n " + timePruning ;
 		}
 	}
-
+    
+    @UserFunction
+    @Description("Kmean clustering function")
+	public String kmean(@Name("nodeType") String nodeType, @Name("numberOfCentroid") String numberOfCentroid, @Name("numberOfInteration") String numberOfInteration) throws Exception
+	{
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
+        {
+			String kMeanAfterClustering = "";
+			HashMap<String, ArrayList<String>> kmeanAssign = new HashMap<String, ArrayList<String>>();
+			int numberOfCentroidInt = Integer.parseInt(numberOfCentroid);
+			int numberOfInterationInt = Integer.parseInt(numberOfInteration);
+			kmeanAssign = Unsupervised.KmeanClust(mapNodeList, numberOfCentroidInt, numberOfInterationInt);
+			for (String centroid: kmeanAssign.keySet()) {
+        		ArrayList<String> clusterNode = kmeanAssign.get(centroid);
+        		for (String node : clusterNode)
+        		{
+        			connector.kmeanRelationship(nodeType,"create relationship in kmean node",centroid,node);
+        		}
+    		    
+    		}
+	        return kMeanAfterClustering ;
+		}
+	}
 }

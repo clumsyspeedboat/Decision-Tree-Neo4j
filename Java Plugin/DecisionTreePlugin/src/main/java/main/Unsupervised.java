@@ -1,0 +1,175 @@
+package main;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+import scala.util.Random;
+
+public class Unsupervised {
+	
+	public static ArrayList<String> dummyData(){
+		ArrayList<String> data = new ArrayList<String>();
+//		String line1 ="anaemia:0,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:582,platelets:265000.0,DEATH_EVENT:1,high_blood_pressure:1,smoking:0,time:4,serum_sodium:130,diabetes:0,age:75";
+//		String line2 ="anaemia:0,serum_creatinine:1.1,sex:1,ejection_fraction:38,creatinine_phosphokinase:7861,platelets:263358.03,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:6,serum_sodium:136,diabetes:0,age:55";
+//		String line3 ="anaemia:0,serum_creatinine:1.3,sex:1,ejection_fraction:20,creatinine_phosphokinase:146,platelets:162000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:1,time:7,serum_sodium:129,diabetes:0,age:65";
+//		String line4 ="anaemia:1,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:111,platelets:210000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:7,serum_sodium:137,diabetes:0,age:50";
+//		String line5 ="anaemia:1,serum_creatinine:2.7,sex:0,ejection_fraction:20,creatinine_phosphokinase:160,platelets:327000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:8,serum_sodium:116,diabetes:1,age:65|anaemia:1,serum_creatinine:2.1,sex:1,ejection_fraction:40,creatinine_phosphokinase:47,platelets:204000.0,DEATH_EVENT:1,high_blood_pressure:1,smoking:1,time:8,serum_sodium:132,diabetes:0,age:90";
+		String line1 = "anaemia:0,serum_creatinine:1.9";
+		String line2 = "anaemia:0,serum_creatinine:1.1";
+		String line3 = "anaemia:0,serum_creatinine:1.3";
+		String line4 = "anaemia:1,serum_creatinine:1.9";
+		String line5 = "anaemia:1,serum_creatinine:2.7";
+		data.add(line1);
+		data.add(line2);
+		data.add(line3);
+		data.add(line4);
+		data.add(line5);
+		return data;
+	}
+	
+	public static HashMap<String, ArrayList<String>> KmeanClust (ArrayList<String> inputData, int centroidNumbers, int numberOfInteration)
+	{
+		HashMap<String, ArrayList<String>> kmeanAssign = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> listOfCentroid = new ArrayList<String>();
+//		inputData = dummyData();
+		ArrayList<String> listOfRemain = new ArrayList<String>(inputData);
+		for(int i = 0; i < centroidNumbers; i++)
+		{
+			Random rand = new Random();
+			int randomNum = rand.nextInt((listOfRemain.size()-1 - 0) + 1) + 0;
+			listOfCentroid.add(listOfRemain.get(randomNum));
+			listOfRemain.remove(randomNum);
+		}
+		HashMap<String, ArrayList<String>> hashClusterAssign = distanceAssign(listOfCentroid,listOfRemain);
+		kmeanAssign = kmeanInteration(hashClusterAssign,numberOfInteration,inputData);
+		for (String name: kmeanAssign.keySet()) {
+		    ArrayList<String> something = kmeanAssign.get(name);
+		    System.out.println(name);
+		    System.out.println(something);
+		}
+		return kmeanAssign;
+	}
+	
+	public static HashMap<String, ArrayList<String>> kmeanInteration (HashMap<String, ArrayList<String>> clusterAssign, int numberOfInteration, ArrayList<String> inputData)
+	{
+		ArrayList<String> listOfCentroid = new ArrayList<String>();
+		ArrayList<String> listOfNewCentroid = new ArrayList<String>();
+		for(int i = 0; i < numberOfInteration; i++)
+		{
+			listOfCentroid.clear();
+			if(i == 0)
+			{
+				for (String key : clusterAssign.keySet()) 
+				{
+					clusterAssign.get(key).add(key);
+					String newCentroid = calculateNewCentroid(clusterAssign.get(key));
+					listOfCentroid.add(newCentroid);
+				}	
+			}
+			else
+			{
+				for (String key: clusterAssign.keySet())
+				{
+					String newCentroid = calculateNewCentroid(clusterAssign.get(key));
+					listOfCentroid.add(newCentroid);
+				}
+			}
+		}
+		return clusterAssign;
+	}
+	
+	public static String calculateNewCentroid (ArrayList<String> listOfNodesInCluster)
+	{
+		String[] atrributeName = new String[listOfNodesInCluster.get(0).split(",").length];
+		Double[] atrributeValue = new Double[listOfNodesInCluster.get(0).split(",").length];
+		for (String node : listOfNodesInCluster)
+		{
+			for (int i=0; i<atrributeValue.length;i++)
+			{
+				if(atrributeValue[i]==null)
+				{
+					atrributeValue[i] = Double.parseDouble(node.split(",")[i].split(":")[1]);
+					atrributeName[i] = node.split(",")[i].split(":")[0];
+				}
+				else
+				{
+					atrributeValue[i] = atrributeValue[i] + Double.parseDouble(node.split(",")[i].split(":")[1]);
+				}
+			}
+		}
+		String newCentroid = "";
+		for (int i = 0; i < atrributeValue.length; i++)
+		{
+			atrributeValue[i] = atrributeValue[i]/listOfNodesInCluster.size();
+			if (i == 0)
+			{
+				newCentroid = newCentroid + atrributeName[i] + ":" + atrributeValue[i];
+			}
+			else
+			{
+				newCentroid = newCentroid + "," +atrributeName[i] + ":" + atrributeValue[i] + ",";
+			}
+		}
+		return newCentroid;
+	}
+	
+	public static HashMap<String, ArrayList<String>> distanceAssign (ArrayList<String> listOfCentroid, ArrayList<String> listOfRemain)
+	{
+		HashMap<String, ArrayList<String>> hashClusterAssign = new HashMap<String, ArrayList<String>>();
+		for(int i = 0; i < listOfRemain.size(); i++)
+		{
+			double minDistance = 0;
+			ArrayList<String> cluster = new ArrayList<String>();
+			String clusterNode = "";
+			for(int j = 0; j < listOfCentroid.size(); j++)
+			{
+				double distance = calculateDistance(listOfRemain.get(i),listOfCentroid.get(j));
+				if(minDistance == 0)
+				{
+					minDistance = distance;
+					clusterNode = listOfCentroid.get(j);
+				}
+				else if(distance<minDistance)
+				{
+					minDistance = distance;
+					clusterNode = listOfCentroid.get(j);
+				}
+			}
+			ArrayList<String> valueHashMap = hashClusterAssign.get(clusterNode);
+			if(valueHashMap != null)
+			{
+				valueHashMap.add(listOfRemain.get(i));
+			}
+			else
+			{
+				ArrayList<String> tempArray = new ArrayList<String>();
+				tempArray.add(listOfRemain.get(i));
+				hashClusterAssign.put(clusterNode, tempArray);
+			}
+		}
+		return hashClusterAssign;
+	}
+	
+	public static double calculateDistance (String start, String end)
+	{
+		double distance = 0;
+		String[] startSplit =  start.split(",");
+		String[] endSplit = end.split(",");
+		for(int i = 0; i < startSplit.length; i++)
+		{
+			float startValue = Float.parseFloat(startSplit[i].split(":")[1]);
+			float endValue = Float.parseFloat(endSplit[i].split(":")[1]);
+			distance = distance + Math.pow((startValue-endValue),2);
+		}
+		distance = Math.sqrt(distance);
+		return distance;
+		
+	}
+
+//	public static void main(String[] args) {
+//		ArrayList<String> inputData = dummyData();
+//		KmeanClust(inputData,2,5);
+//	}
+}
