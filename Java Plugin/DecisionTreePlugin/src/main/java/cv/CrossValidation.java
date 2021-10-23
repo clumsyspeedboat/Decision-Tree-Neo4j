@@ -31,9 +31,11 @@ public class CrossValidation {
 	private ArrayList<Instance> result;
 	private ArrayList<Instance> totalInstances;
 	private ArrayList<Double> scores;
+	private double scoresAverage;
 	Random rand;
 	String impurity; 
 	private ArrayList<Double> cvGenerationTime;
+	private double cvGenerationTimeAverage;
 	private ArrayList<Double> mccArray;
 	private double mccAverage;
 	
@@ -327,6 +329,26 @@ public class CrossValidation {
 	
 	public ArrayList<Double> getCvGenerationTime() {
 		return cvGenerationTime;
+	}
+	
+	public double getCvGenerationTimeAverage() {
+		double time = 0.0;
+		for(double i : cvGenerationTime)
+		{
+			time = time + i;
+		}
+		cvGenerationTimeAverage = time/cvGenerationTime.size();
+		return cvGenerationTimeAverage;
+	}
+	
+	public double getScoreAverage() {
+		double score = 0.0;
+		for(double i : scores)
+		{
+			score = score + i;
+		}
+		scoresAverage = score/scores.size();
+		return scoresAverage;
 	}
 	
 

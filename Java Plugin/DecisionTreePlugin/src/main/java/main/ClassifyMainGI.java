@@ -35,7 +35,7 @@ public class ClassifyMainGI {
 		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/flu_classification.csv");
 		CrossValidation cv = new CrossValidation(customList, "Diagnosis");
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("50"), "InfoGain");
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("40"), "InfoGain");
 		double mcc = cv.getMccAverage();
 		System.out.println("calculated mcc: " + mcc);
 		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();

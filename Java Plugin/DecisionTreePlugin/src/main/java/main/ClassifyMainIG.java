@@ -3,6 +3,8 @@ package main;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import cv.CrossValidation;
 import evaluate.EvaluateTree;
 import gini.EvaluateTreeGI;
 import input.ProcessInputData;
@@ -25,17 +27,29 @@ public class ClassifyMainIG {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-	    EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
+	    //EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
 		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/train.csv");
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/test.csv");
 		//EvaluateTree mine = new EvaluateTree(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
-	
-		mine.calculateAccuracy();
+	    
+	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/heart_failure_original.csv");
+		CrossValidation cv = new CrossValidation(customList, "DEATH_EVENT");
+		
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("20"), "GainRatio");
+		double mcc = cv.getMccAverage();
+		double generateTime = cv.getCvGenerationTimeAverage();
+		double score = cv.getScoreAverage();
+		System.out.println("calculated average mcc: " + mcc);
+		System.out.println("calculated average generateTime: " + generateTime);
+		System.out.println("calculated average accuracy: " + score);
+		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+	    
+		//mine.calculateAccuracy();
 
 	    PrintTree tree = new PrintTree();
-	    System.out.println(tree.printDFS(mine.getRoot()));
+	    //System.out.println(tree.printDFS(mine.getRoot()));
 	    
-		tree.createNodesForGraph(mine.getRoot());
+		//tree.createNodesForGraph(mine.getRoot());
 		
 		in.close();
 	}
