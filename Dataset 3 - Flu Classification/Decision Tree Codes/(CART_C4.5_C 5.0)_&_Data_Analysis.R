@@ -57,8 +57,6 @@ for (i in 3:12) {
   data_matrix[,i] <- as.factor(data_matrix[,i])
 }
 
-write.csv(data_matrix, file = "Flu_Classification1.csv", quote = FALSE, row.names = FALSE) 
-
 ###################
 ## Data Analysis ##
 ###################
@@ -123,77 +121,145 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-##########################################
+###########################################
 # CART # --> Gini Index
 ########
 
-accuracy <- vector("numeric", 30)
-time <- vector("numeric", 30)
-
+accuracy = vector("numeric")
+time = vector("numeric")
+mcc = vector("numeric")
+cf = matrix("numeric")
 
 for (i in 1:30) {
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-train.control <- trainControl(method = 'cv', number = 40)
-tree1 <- train(Diagnosis ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
-end.time1 <- Sys.time()
-
-plot(tree1)
-
-Prediction1 <- confusionMatrix(tree1)
-
-print(Prediction1)
-
-cf <- as.data.frame(as.table(Prediction1$table))
-corrPred = sum(cf[1,3],cf[4,3])
-accuracy[i] = corrPred
-
-time_taken1 <- end.time1 -start.time1
-time_taken1
-time[i] <- time_taken1
-
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  train.control <- trainControl(method = 'cv', number = 20)
+  tree1 <- train(Diagnosis ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
+  end.time1 <- Sys.time()
+  
+  Prediction1 <- confusionMatrix(tree1)
+  
+  print(Prediction1)
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  
+  tp <- cf[1,3]
+  tn <- cf[4,3]
+  fp <- cf[3,3]
+  fn <- cf[2,3]
+  
+  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  accuracy[i] = corrPred/100
+  
+  mccNum <- (tp*tn)-(fp*fn)
+  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+  
+  numMcc <- mccNum/mccDen
+  mcc[i] = numMcc
+  
+  time_taken1 <- end.time1 -start.time1
+  time_taken1
+  time[i] <- time_taken1
+  
 }
 
 sum(accuracy)/30
 sum(time)/30
+sum(mcc)/30
 
 ###########################################
+
+###########################################
+# ID3 # --> Information Gain
+########
+
+accuracy = vector("numeric")
+time = vector("numeric")
+mcc = vector("numeric")
+cf = matrix("numeric")
+
+for (i in 1:30) {
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  train.control <- trainControl(method = 'cv', number = 20)
+  tree1 <- train(Diagnosis ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
+  end.time1 <- Sys.time()
+  
+  Prediction1 <- confusionMatrix(tree1)
+  
+  print(Prediction1)
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  
+  tp <- cf[1,3]
+  tn <- cf[4,3]
+  fp <- cf[3,3]
+  fn <- cf[2,3]
+  
+  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  accuracy[i] = corrPred/100
+  
+  mccNum <- (tp*tn)-(fp*fn)
+  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+  
+  numMcc <- mccNum/mccDen
+  mcc[i] = numMcc
+  
+  time_taken1 <- end.time1 -start.time1
+  time_taken1
+  time[i] <- time_taken1
+  
+}
+
+sum(accuracy)/30
+sum(time)/30
+sum(mcc)/30
+
+###########################################
+
 
 ###########################################
 # C4.5 # --> Gain Ratio
 ########
 
-accuracy1 <- vector("numeric", 30)
-time1 <- vector("numeric", 30)
+accuracy = vector("numeric",30)
+time = vector("numeric",30)
 
 for (i in 1:30) {
-options(digits.secs = 6)
-start.time1 <- Sys.time()
-tree2 <- J48(Diagnosis~., data = data_matrix)
-<<<<<<< Updated upstream
-e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
-=======
-e <- evaluate_Weka_classifier(tree2, numFolds = 40, class = TRUE)
->>>>>>> Stashed changes
-end.time1 <- Sys.time()
-
-cf <- as.data.frame(as.table(e$confusionMatrix))
-
-a <- sum(cf[1,3],cf[4,3])
-b <- sum(cf[1,3],cf[2,3],cf[3,3],cf[4,3])
-
-corrPred = (a/b)*100
-accuracy1[i] = corrPred
-
-
-
-time_taken1 <- end.time1 -start.time1
-time_taken1
-time1[i] <- time_taken1
-
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  tree2 <- J48(Diagnosis~., data = data_matrix)
+  e <- evaluate_Weka_classifier(tree2, numFolds = 20, class = TRUE)
+  end.time1 <- Sys.time()
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  
+  tp <- cf[1,3]
+  tn <- cf[4,3]
+  fp <- cf[3,3]
+  fn <- cf[2,3]
+  
+  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  accuracy[i] = corrPred
+  
+  mccNum <- (tp*tn)-(fp*fn)
+  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+  
+  numMcc <- mccNum/mccDen
+  mcc[i] = numMcc
+  
+  time_taken1 <- end.time1 -start.time1
+  time_taken1
+  time[i] <- time_taken1
+  
 }
 
-sum(accuracy1)/30
-sum(time1)/30
+sum(accuracy)/30
+sum(time)/30
+sum(mcc)/30
+
 ###########################################
-#####################################################
+######################################################################################
