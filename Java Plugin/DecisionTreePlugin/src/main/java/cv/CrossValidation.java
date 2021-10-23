@@ -16,7 +16,10 @@ import node.TreeNode;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+
+import evaluate.EvaluateTree;
 
 public class CrossValidation {
 	private ArrayList<Attribute> attributes;
@@ -31,7 +34,8 @@ public class CrossValidation {
 	Random rand;
 	String impurity; 
 	private ArrayList<Double> cvGenerationTime;
-	
+	private ArrayList<Double> mccArray;
+	private double mccAverage;
 	
 	/**
 	 * Constructor which process the csv file 
@@ -51,6 +55,8 @@ public class CrossValidation {
 		this.testBundles = new ArrayList<ArrayList<Instance>>();
 
 		this.totalInstances = input.getInstanceSet();
+		
+		this.mccArray = new ArrayList<Double>();
 
 		rand = new Random(totalInstances.size());
 	}
@@ -73,6 +79,8 @@ public class CrossValidation {
 		this.testBundles = new ArrayList<ArrayList<Instance>>();
 
 		this.totalInstances = input.getInstanceSet();
+		
+		this.mccArray = new ArrayList<Double>();
 
 		rand = new Random(totalInstances.size());
 		
@@ -144,6 +152,71 @@ public class CrossValidation {
 	}
 	
 	/**
+	 * This function creates the confusion matrix from actual and predicted arrays
+	 * @param act
+	 * @param pred
+	 */
+	public ArrayList<Integer> calculateConfusionMatrix(ArrayList<String> act, ArrayList<String> pred) {
+		 ArrayList<Integer> conMatrixArray = new ArrayList<Integer>();
+		 int truePositive = 0;
+		 int trueNegative = 0;
+		 int falsePositive = 0;
+		 int falseNegative = 0;
+		 String confusionMatrix = "";
+		
+		 List<String> categories = target.getValues();
+		 int matrixSize = categories.size();
+		 int [][] confMatrix = new int[matrixSize][matrixSize];
+		 for(int i=0; i<act.size(); i++) {
+			 String predLabel = pred.get(i);
+	         String actualLabel = act.get(i);
+	         if(predLabel == null) {
+	        	 continue;
+	         }
+	         int outLabelIndex = categories.indexOf(predLabel);
+	         int actualLabelIndex = categories.indexOf(actualLabel);
+	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
+		 }
+		 
+		 if(matrixSize==2) {
+			 truePositive = confMatrix[0][0]; 
+			 trueNegative = confMatrix[1][1];
+			 falseNegative = confMatrix[1][0];
+			 falsePositive = confMatrix[0][1];
+		 }else {
+			 for(int row=0; row<matrixSize; row++)
+			 {
+			    for(int col=0; col<matrixSize; col++)
+			    {
+			    	if(row==0 && col==0) {
+			    		truePositive = confMatrix[row][col];
+			    	}else if(row==0 && col>0) {
+			    		falsePositive += confMatrix[row][col];
+			    	}else if(col==0 && row>0) {
+			    		falseNegative += confMatrix[row][col];
+			    	}
+			    	if(row>0 && col>0) {
+			    		trueNegative += confMatrix[row][col];
+			    	}
+			    }
+			 }
+		 }
+		 
+		 //System.out.println(Arrays.deepToString(confMatrix));
+		 String tp=String.format("TP: %d",truePositive);
+		 String tn=String.format("TN: %d",trueNegative);
+		 String fp=String.format("FP: %d",falsePositive);
+		 String fn=String.format("FN: %d",falseNegative);
+		
+		 conMatrixArray.add(truePositive);
+		 conMatrixArray.add(trueNegative);
+		 conMatrixArray.add(falsePositive);
+		 conMatrixArray.add(falseNegative);
+		 
+		 return conMatrixArray;
+	}
+	
+	/**
 	 * Get result of mined data.
 	 * @return the result of mined data.
 	 */
@@ -161,7 +234,7 @@ public class CrossValidation {
 	public ArrayList<Double> validate(int crossValidationN, String algorithmType) throws IOException {
 		shuffle(crossValidationN);
 		scores = new ArrayList<Double>();
-
+		System.out.println("Test bundle size:" + testBundles.size());
 		for(int i = 0; i < testBundles.size(); i++) {
 			trainInstances = new ArrayList<Instance>();
 
@@ -201,20 +274,57 @@ public class CrossValidation {
 
 			int correct = 0;
 			ArrayList<Instance> res = getResult();
+			ArrayList<String> actual = new ArrayList<String>();
+			ArrayList<String> prec = new ArrayList<String>();
 			
 			for (Instance item : res) {				
 				String testLabel = item.getAttributeValuePairs().get("Test" + target.getName());
 				String label = item.getAttributeValuePairs().get(target.getName());
+				prec.add(testLabel);
+				actual.add(label);
 				if(testLabel.equals(label)) {
 					correct++;
 				}
 			}
+			ArrayList<Integer> conMatrixArray = calculateConfusionMatrix(actual, prec);
+			double mcc = mccCalculation(conMatrixArray);
+			mccArray.add(mcc);
 			scores.add(correct * 1.0 / res.size());
 		}
-
 		return scores;
 	}
-
+	
+	public Double getMccAverage()
+	{
+		double total = 0.0;
+		for(double i : mccArray)
+		{
+			total = total + i;
+		}
+		mccAverage = total/mccArray.size();
+		return mccAverage;
+	}
+	
+	public Double mccCalculation(ArrayList<Integer> conMatrixArray)
+	{
+		double mcc = 0.0;
+		int TP = conMatrixArray.get(0);
+		int TN = conMatrixArray.get(1);
+		int FP = conMatrixArray.get(2);
+		int FN = conMatrixArray.get(3);
+		double numerator = ((TP * TN) - (FP * FN));
+		double denominator = Math.sqrt((TP + FP)*(TP + FN)*(TN + FP)*(TN + FN));
+		if(denominator != 0)
+		{
+			mcc = numerator/denominator;
+		}
+		else
+		{
+			mcc = 0.0;
+		}
+		return mcc;
+	}
+	
 	public ArrayList<Double> getCvGenerationTime() {
 		return cvGenerationTime;
 	}

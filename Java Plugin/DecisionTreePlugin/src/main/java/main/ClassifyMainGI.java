@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import cv.CrossValidation;
 import gini.EvaluateTreeGI;
 import input.ProcessInputData;
 import output.PrintTree;
@@ -29,6 +31,14 @@ public class ClassifyMainGI {
 		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
+		
+		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/flu_classification.csv");
+		CrossValidation cv = new CrossValidation(customList, "Diagnosis");
+		
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("50"), "InfoGain");
+		double mcc = cv.getMccAverage();
+		System.out.println("calculated mcc: " + mcc);
+		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
 
 	
 	    mine.calculateAccuracy();
