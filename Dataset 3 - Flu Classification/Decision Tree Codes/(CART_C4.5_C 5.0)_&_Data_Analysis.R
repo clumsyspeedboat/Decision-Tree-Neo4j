@@ -150,7 +150,7 @@ for (i in 1:30) {
   fn <- cf[2,3]
   
   corrPred = (tp+tn)/(tp+tn+fp+fn)
-  accuracy[i] = corrPred/100
+  accuracy[i] = corrPred*100
   
   mccNum <- (tp*tn)-(fp*fn)
   mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
@@ -164,9 +164,9 @@ for (i in 1:30) {
   
 }
 
-sum(accuracy)/30
-sum(time)/30
-sum(mcc)/30
+mean(accuracy)
+mean(mcc)
+mean(time)
 
 ###########################################
 
@@ -199,7 +199,7 @@ for (i in 1:30) {
   fn <- cf[2,3]
   
   corrPred = (tp+tn)/(tp+tn+fp+fn)
-  accuracy[i] = corrPred/100
+  accuracy[i] = corrPred*100
   
   mccNum <- (tp*tn)-(fp*fn)
   mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
@@ -213,9 +213,9 @@ for (i in 1:30) {
   
 }
 
-sum(accuracy)/30
-sum(time)/30
-sum(mcc)/30
+mean(accuracy)
+mean(mcc)
+mean(time)
 
 ###########################################
 
@@ -224,8 +224,10 @@ sum(mcc)/30
 # C4.5 # --> Gain Ratio
 ########
 
-accuracy = vector("numeric",30)
-time = vector("numeric",30)
+accuracy = vector("numeric")
+time = vector("numeric")
+mcc = vector("numeric")
+cf = matrix("numeric")
 
 for (i in 1:30) {
   
@@ -257,9 +259,9 @@ for (i in 1:30) {
   
 }
 
-sum(accuracy)/30
-sum(time)/30
-sum(mcc)/30
+mean(accuracy)
+mean(mcc)
+mean(time)
 
 ###########################################
 ######################################################################################
