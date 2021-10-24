@@ -765,22 +765,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			
-	        CrossValidation cv = new CrossValidation(autoSplitDataList, target);
-		       
-
+			CrossValidation cv = new CrossValidation(autoSplitDataList, target);
+   			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "InfoGain");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
-				 
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
+			 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result;
 		}
 	}
     
@@ -799,22 +793,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 	        
-	        CrossValidation cv = new CrossValidation(autoSplitDataList, target);
-		       
-
+			CrossValidation cv = new CrossValidation(autoSplitDataList, target);
+   			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "GainRatio");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
-				 
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
+			 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result;
 		}
 	}
     
@@ -830,21 +818,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			 
 	        CrossValidation cv = new CrossValidation(autoSplitDataList, target);
-	       
-
+	       			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "GiniIndex");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
-				 
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
+			 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result;
 		}
 	}
 	
@@ -859,22 +841,16 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
-
 			CrossValidation cv = new CrossValidation(customList, target);
-
+			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "InfoGain");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
 				 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result ;
 		}
 	}
     
@@ -906,23 +882,17 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			
-	        ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
-
+			ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
 			CrossValidation cv = new CrossValidation(customList, target);
-
+			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "GainRatio");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
 				 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result ;
 		}
 	}
     
@@ -936,23 +906,18 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		}
 		else
 		{
-	        ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
-
+			
+			ArrayList<String> customList = ProcessInputData.CustomListFromCSV(path);
 			CrossValidation cv = new CrossValidation(customList, target);
-
+			
 			ArrayList<Double> final_score = cv.validate(Integer.parseInt(numberOfFold), "GiniIndex");
-			ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-
-			double accuracy = calculateAverage(final_score);
-			double gTime = calculateAverage(totalGenerationTime);
-
-		
-
-			String accuracyPruning = "Cross Validation Accuracy : " +  accuracy * 100 + "%";
-			String timePruning = "Cross Validation Generation Time : " + gTime  + "sec";
+			double mcc = cv.getMccAverage();
+			double generateTime = cv.getCvGenerationTimeAverage();
+			double score = cv.getScoreAverage();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
 				 
 	       
-	        return accuracyPruning + " \n " + timePruning ;
+	        return result ;
 		}
 	}
 
