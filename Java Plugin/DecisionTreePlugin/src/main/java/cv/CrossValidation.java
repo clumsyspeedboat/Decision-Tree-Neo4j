@@ -180,7 +180,6 @@ public class CrossValidation {
 	         int actualLabelIndex = categories.indexOf(actualLabel);
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
 		 }
-		 System.out.println(matrixSize);
 		 if(matrixSize==2) {
 			 truePositive = confMatrix[0][0]; 
 			 trueNegative = confMatrix[1][1];
@@ -234,7 +233,7 @@ public class CrossValidation {
 			 {
 				 mcc = numerator/denominator;
 			 }
-			 System.out.println(mcc);
+			 mccArray.add(mcc);
 		 }
 		 		 
 		 return conMatrixArray;
@@ -258,7 +257,6 @@ public class CrossValidation {
 	public ArrayList<Double> validate(int crossValidationN, String algorithmType) throws IOException {
 		shuffle(crossValidationN);
 		scores = new ArrayList<Double>();
-		System.out.println("Test bundle size:" + testBundles.size());
 		for(int i = 0; i < testBundles.size(); i++) {
 			trainInstances = new ArrayList<Instance>();
 

@@ -35,7 +35,7 @@ public class ClassifyMainIG {
 	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/Metaprotein_50.csv");
 		CrossValidation cv = new CrossValidation(customList, "Patient_Type");
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("20"), "GainRatio");
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("10"), "GainRatio");
 		double mcc = cv.getMccAverage();
 		double generateTime = cv.getCvGenerationTimeAverage();
 		double score = cv.getScoreAverage();
