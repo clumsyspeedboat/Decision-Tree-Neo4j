@@ -31,17 +31,9 @@ library("RWeka")
 # Creating a data matrix #
 
 data1 <- file.choose()
-data1
-
 data_matrix <- read.csv(data1, header = TRUE, sep = ",")
 
-
-###################
-## Data Analysis ##
-###################
-
-## Variable Conversion ##
-
+## Transforming variables ##
 data_matrix$age <- as.numeric(data_matrix$age)
 data_matrix$anaemia <- as.factor(data_matrix$anaemia)
 data_matrix$creatinine_phosphokinase <- as.numeric(data_matrix$creatinine_phosphokinase)
@@ -56,6 +48,10 @@ data_matrix$smoking <- as.factor(data_matrix$smoking)
 data_matrix$time <- as.numeric(data_matrix$time)
 data_matrix$DEATH_EVENT <- as.factor(data_matrix$DEATH_EVENT)
 
+
+###################
+## Data Analysis ##
+###################
 
 ## Histograms of Numeric Variables ##
 
