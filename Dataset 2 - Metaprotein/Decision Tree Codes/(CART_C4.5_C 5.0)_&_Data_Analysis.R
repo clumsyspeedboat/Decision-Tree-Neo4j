@@ -154,7 +154,7 @@ for (i in 1:30) {
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  train.control <- trainControl(method = 'cv', number = 20)
+  train.control <- trainControl(method = 'cv', number = 10)
   tree1 <- train(Patient.Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
   end.time1 <- Sys.time()
   
@@ -170,7 +170,7 @@ for (i in 1:30) {
   fn <- cf[2,3]
   
   corrPred = (tp+tn)/(tp+tn+fp+fn)
-  accuracy[i] = corrPred/100
+  accuracy[i] = corrPred*100
   
   mccNum <- (tp*tn)-(fp*fn)
   mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
@@ -203,7 +203,7 @@ for (i in 1:30) {
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  train.control <- trainControl(method = 'cv', number = 20)
+  train.control <- trainControl(method = 'cv', number = 10)
   tree1 <- train(Patient.Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
   end.time1 <- Sys.time()
   
@@ -219,7 +219,7 @@ for (i in 1:30) {
   fn <- cf[2,3]
   
   corrPred = (tp+tn)/(tp+tn+fp+fn)
-  accuracy[i] = corrPred/100
+  accuracy[i] = corrPred*100
   
   mccNum <- (tp*tn)-(fp*fn)
   mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
@@ -254,7 +254,7 @@ for (i in 1:30) {
   options(digits.secs = 6)
   start.time1 <- Sys.time()
   tree2 <- J48(Patient.Type~., data = data_matrix)
-  e <- evaluate_Weka_classifier(tree2, numFolds = 20, class = TRUE)
+  e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
   end.time1 <- Sys.time()
   
   cf <- as.data.frame(as.table(Prediction1$table))
@@ -265,7 +265,7 @@ for (i in 1:30) {
   fn <- cf[2,3]
   
   corrPred = (tp+tn)/(tp+tn+fp+fn)
-  accuracy[i] = corrPred
+  accuracy[i] = corrPred*100
   
   mccNum <- (tp*tn)-(fp*fn)
   mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
