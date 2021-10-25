@@ -15,6 +15,7 @@ import node.TreeNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -179,42 +180,63 @@ public class CrossValidation {
 	         int actualLabelIndex = categories.indexOf(actualLabel);
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
 		 }
-		 
+		 System.out.println(matrixSize);
 		 if(matrixSize==2) {
 			 truePositive = confMatrix[0][0]; 
 			 trueNegative = confMatrix[1][1];
 			 falseNegative = confMatrix[1][0];
 			 falsePositive = confMatrix[0][1];
-		 }else {
+			 
+			 String tp=String.format("TP: %d",truePositive);
+			 String tn=String.format("TN: %d",trueNegative);
+			 String fp=String.format("FP: %d",falsePositive);
+			 String fn=String.format("FN: %d",falseNegative);
+			
+			 conMatrixArray.add(truePositive);
+			 conMatrixArray.add(trueNegative);
+			 conMatrixArray.add(falsePositive);
+			 conMatrixArray.add(falseNegative);
+		 }else 
+		 {
+			 System.out.println(Arrays.deepToString(confMatrix));
+			 double[] predictedArray = new double[matrixSize];
+			 double[] actualArray = new double[matrixSize];
+			 double s = 0.0;
+			 double c = 0.0;
 			 for(int row=0; row<matrixSize; row++)
 			 {
 			    for(int col=0; col<matrixSize; col++)
 			    {
-			    	if(row==0 && col==0) {
-			    		truePositive = confMatrix[row][col];
-			    	}else if(row==0 && col>0) {
-			    		falsePositive += confMatrix[row][col];
-			    	}else if(col==0 && row>0) {
-			    		falseNegative += confMatrix[row][col];
-			    	}
-			    	if(row>0 && col>0) {
-			    		trueNegative += confMatrix[row][col];
+			    	predictedArray[row] = predictedArray[row] + confMatrix[row][col];
+			    	actualArray[col] = actualArray[col] + confMatrix[row][col];
+			    	if(row == col)
+			    	{
+			    		c = c + confMatrix[row][col];
 			    	}
 			    }
+			    s = s + predictedArray[row];
 			 }
+			 double numerator = 0.0;
+			 double denominator = 0.0;
+			 double denominator1 = s*s;
+			 double denominator2 = s*s;
+			 //calculate numerator and denominator1 and 2
+			 numerator = s*c;
+			 for (int i = 0; i < actualArray.length; i ++)
+			 {
+				 numerator = numerator - actualArray[i]*predictedArray[i];
+				 denominator1 = denominator1 - actualArray[i]*actualArray[i];
+				 denominator2 = denominator2 - predictedArray[i]*predictedArray[i];
+			 }
+			 denominator = Math.sqrt(denominator1)*Math.sqrt(denominator2);
+			 double mcc = 0.0;
+			 if(denominator!=0)
+			 {
+				 mcc = numerator/denominator;
+			 }
+			 System.out.println(mcc);
 		 }
-		 
-		 //System.out.println(Arrays.deepToString(confMatrix));
-		 String tp=String.format("TP: %d",truePositive);
-		 String tn=String.format("TN: %d",trueNegative);
-		 String fp=String.format("FP: %d",falsePositive);
-		 String fn=String.format("FN: %d",falseNegative);
-		
-		 conMatrixArray.add(truePositive);
-		 conMatrixArray.add(trueNegative);
-		 conMatrixArray.add(falsePositive);
-		 conMatrixArray.add(falseNegative);
-		 
+		 		 
 		 return conMatrixArray;
 	}
 	
@@ -289,8 +311,11 @@ public class CrossValidation {
 				}
 			}
 			ArrayList<Integer> conMatrixArray = calculateConfusionMatrix(actual, prec);
-			double mcc = mccCalculation(conMatrixArray);
-			mccArray.add(mcc);
+			if(conMatrixArray.size()!=0)
+			{
+				double mcc = mccCalculation(conMatrixArray);
+				mccArray.add(mcc);
+			}
 			scores.add(correct * 1.0 / res.size());
 		}
 		return scores;

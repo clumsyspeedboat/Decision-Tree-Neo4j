@@ -32,8 +32,8 @@ public class ClassifyMainIG {
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/test.csv");
 		//EvaluateTree mine = new EvaluateTree(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
 	    
-	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/heart_failure_original.csv");
-		CrossValidation cv = new CrossValidation(customList, "DEATH_EVENT");
+	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/Metaprotein_50.csv");
+		CrossValidation cv = new CrossValidation(customList, "Patient_Type");
 		
 		ArrayList<Double> final_score = cv.validate(Integer.parseInt("20"), "GainRatio");
 		double mcc = cv.getMccAverage();
@@ -42,11 +42,11 @@ public class ClassifyMainIG {
 		System.out.println("calculated average mcc: " + mcc);
 		System.out.println("calculated average generateTime: " + generateTime);
 		System.out.println("calculated average accuracy: " + score);
-		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+		//ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
 	    
 		//mine.calculateAccuracy();
 
-	    PrintTree tree = new PrintTree();
+	    //PrintTree tree = new PrintTree();
 	    //System.out.println(tree.printDFS(mine.getRoot()));
 	    
 		//tree.createNodesForGraph(mine.getRoot());
