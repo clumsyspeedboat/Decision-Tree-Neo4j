@@ -1,40 +1,43 @@
-tree,dataset,language,splitting_criterion,rows,columns,k-fold,accuracy,generation_time
-d1,heart failure prediction,r,gini,299,13,20,80.71,0.603
-d2,heart failure prediction,r,gain ratio,299,13,20,82.05,0.064
-d3,heart failure prediction,python,gini,299,13,20,73.77,0.065
-d4,heart failure prediction,python,info gain,299,13,20,72.35,0.068
-d5,heart failure prediction,java,gini,299,13,20,76.29,0.1
-d6,heart failure prediction,java,gain ratio,299,13,20,78.28,0.052
-d7,heart failure prediction,java,info gain,299,13,20,76.85,0.054
-d8,heart failure prediction,neo4j_csv,gini,299,13,20,76.29,0.094
-d9,heart failure prediction,neo4j_csv,info gain,299,13,20,76.85,0.055
-d10,heart failure prediction,neo4j_csv,gain ratio,299,13,20,78.28,0.049
-d11,heart failure prediction,neo4j_db,gini,299,13,20,75.93,0.095
-d12,heart failure prediction,neo4j_db,info gain,299,13,20,76.55,0.055
-d13,heart failure prediction,neo4j_db,gain ratio,299,13,20,76.45,0.05
-d14,metaprotein,r,gini,48,50,10,42.36,0.612
-d15,metaprotein,r,gain ratio,48,50,10,88.5,0.047
-d16,metaprotein,python,gini,48,50,10,68.53,0.03
-d17,metaprotein,python,info gain,48,50,10,67.78,0.032
-d18,metaprotein,java,gini,48,50,10,75.83,0.045
-d19,metaprotein,java,gain ratio,48,50,10,78.33,0.019
-d20,metaprotein,java,info gain,48,50,10,75.83,0.018
-d21,metaprotein,neo4j_csv,gini,48,50,10,75.83,0.028
-d22,metaprotein,neo4j_csv,info gain,48,50,10,75.83,0.014
-d23,metaprotein,neo4j_csv,gain ratio,48,50,10,78.33,0.014
-d24,metaprotein,neo4j_db,gini,48,50,10,72.5,0.029
-d25,metaprotein,neo4j_db,info gain,48,50,10,78.33,0.014
-d26,metaprotein,neo4j_db,gain ratio,48,50,10,79.17,0.014
-d27,flu,r,gini,1485,13,40,85.07,1.041
-d28,flu,r,gain ratio,1485,13,40,93.43,0.189
-d29,flu,python,gini,1485,13,40,89.03,0.186
-d30,flu,python,info gain,1485,13,40,89.35,0.189
-d31,flu,java,gini,1485,13,40,90.63,0.19
-d32,flu,java,info gain,1485,13,40,81.64,0.119
-d33,flu,java,gain ratio,1485,13,40,91.03,0.183
-d34,flu,neo4j_csv,gini,1485,13,40,90.63,0.178
-d35,flu,neo4j_csv,info gain,1485,13,40,81.64,0.111
-d36,flu,neo4j_csv,gain ratio,1485,13,40,91.03,0.167
-d37,flu,neo4j_db,gini,1485,13,40,90.79,0.173
-d38,flu,neo4j_db,info gain,1485,13,40,80.93,0.108
-d39,flu,neo4j_db,gain ratio,1485,13,40,89.3,0.16
+tree,dataset,language,splitting_criterion,rows,columns,k-fold,accuracy,mcc,generation_time
+d1,heart failure prediction,r,gini,299,13,20,81.17,0.56,0.623
+d2,heart failure prediction,r,info gain,299,13,20,82.05,0.584,0.633
+d3,heart failure prediction,r,gain ratio,299,13,20,81.94,0.579,0.076
+d4,heart failure prediction,python,gini,299,13,20,78.68,0.163,0.086
+d5,heart failure prediction,python,info gain,299,13,20,76.63,0.111,0.088
+d6,heart failure prediction,java,gini,299,13,20,76.29,0.45,0.1
+d7,heart failure prediction,java,info gain,299,13,20,76.85,0.472,0.054
+d8,heart failure prediction,java,gain ratio,299,13,20,78.28,0.462,0.055
+d9,heart failure prediction,neo4j_csv,gini,299,13,20,76.29,0.45,0.108
+d10,heart failure prediction,neo4j_csv,info gain,299,13,20,76.85,0.472,0.054
+d11,heart failure prediction,neo4j_csv,gain ratio,299,13,20,78.28,0.462,0.055
+d12,heart failure prediction,neo4j_db,gini,299,13,20,75.93,0.42,0.095
+d13,heart failure prediction,neo4j_db,info gain,299,13,20,76.55,0.401,0.052
+d14,heart failure prediction,neo4j_db,gain ratio,299,13,20,76.45,0.412,0.057
+d15,metaprotein,r,gini,48,50,10,74.79,0.61,0.598
+d16,metaprotein,r,info gain,48,50,10,74.375,0.6096,0.6047
+d17,metaprotein,r,gain ratio,48,50,10,79.17,0.6819,0.0564
+d18,metaprotein,python,gini,48,50,10,62.55,0.01,0.041
+d19,metaprotein,python,info gain,48,50,10,62.316,0.018,0.042
+d20,metaprotein,java,gini,48,50,10,75.83,0.694,0.049
+d21,metaprotein,java,gain ratio,48,50,10,78.33,0.661,0.021
+d22,metaprotein,java,info gain,48,50,10,75.83,0.696,0.021
+d23,metaprotein,neo4j_csv,gini,48,50,10,75.83,0.694,0.027
+d24,metaprotein,neo4j_csv,info gain,48,50,10,75.83,0.696,0.013
+d25,metaprotein,neo4j_csv,gain ratio,48,50,10,78.33,0.661,0.013
+d26,metaprotein,neo4j_db,gini,48,50,10,72.5,0.59,0.034
+d27,metaprotein,neo4j_db,info gain,48,50,10,77.5,0.647,0.028
+d28,metaprotein,neo4j_db,gain ratio,48,50,10,76.66,0.644,0.02
+d29,flu,r,gini,1485,13,40,85.13,0.64,1.025
+d30,flu,r,info gain,1485,13,40,85.8,0.66,1.0314
+d31,flu,r,gain ratio,1485,13,40,85.58,0.6588,0.1813
+d32,flu,python,gini,1485,13,40,86.313,0.0318,0.11408
+d33,flu,python,info gain,1485,13,40,86.447,0.0312,0.1143
+d34,flu,java,gini,1485,13,40,90.63,0.752,0.206
+d35,flu,java,info gain,1485,13,40,81.64,0.61,0.119
+d36,flu,java,gain ratio,1485,13,40,91.03,0.77,0.185
+d37,flu,neo4j_csv,gini,1485,13,40,90.63,0.752,0.179
+d38,flu,neo4j_csv,info gain,1485,13,40,81.64,0.61,0.114
+d39,flu,neo4j_csv,gain ratio,1485,13,40,91.03,0.77,0.175
+d40,flu,neo4j_db,gini,1485,13,40,90.79,0.77,0.176
+d41,flu,neo4j_db,info gain,1485,13,40,80.93,0.585,0.112
+d42,flu,neo4j_db,gain ratio,1485,13,40,89.3,0.728,0.169
