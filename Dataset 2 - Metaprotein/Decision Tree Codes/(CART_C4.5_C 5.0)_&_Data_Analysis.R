@@ -26,11 +26,12 @@ library("C50")
 library("RWeka")
 
 # Creating a data matrix #
-
 data1 <- file.choose()
-data1
-
 data_matrix <- read.csv(data1, header = TRUE, sep = ",")
+
+# Transforming variables
+data_matrix[,1:50] <- as.numeric(unlist(data_matrix[,1:50])) 
+data_matrix[,51] <- as.factor(data_matrix[,51])
 
 
 ####################
@@ -138,9 +139,6 @@ colnames(gini_ind) <- "Gini Index"
 ## Decision Tree ##
 ###################
 
-data_matrix[,1:50] <- as.numeric(unlist(data_matrix[,1:50])) 
-data_matrix[,51] <- as.factor(data_matrix[,51])
-  
 ###########################################
 # CART # --> Gini Index
 ########
@@ -155,7 +153,7 @@ for (i in 1:30) {
   options(digits.secs = 6)
   start.time1 <- Sys.time()
   train.control <- trainControl(method = 'cv', number = 10)
-  tree1 <- train(Patient.Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
+  tree1 <- train(Patient_Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
   end.time1 <- Sys.time()
   
   Prediction1 <- confusionMatrix(tree1)
@@ -164,17 +162,21 @@ for (i in 1:30) {
   
   cf <- as.data.frame(as.table(Prediction1$table))
   
-  tp <- cf[1,3]
-  tn <- cf[4,3]
-  fp <- cf[3,3]
-  fn <- cf[2,3]
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
   
-  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  corrPred = diagonal/total
   accuracy[i] = corrPred*100
   
-  mccNum <- (tp*tn)-(fp*fn)
-  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
-  
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
+
   numMcc <- mccNum/mccDen
   mcc[i] = numMcc
   
@@ -204,7 +206,7 @@ for (i in 1:30) {
   options(digits.secs = 6)
   start.time1 <- Sys.time()
   train.control <- trainControl(method = 'cv', number = 10)
-  tree1 <- train(Patient.Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
+  tree1 <- train(Patient_Type ~. ,data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
   end.time1 <- Sys.time()
   
   Prediction1 <- confusionMatrix(tree1)
@@ -213,16 +215,20 @@ for (i in 1:30) {
   
   cf <- as.data.frame(as.table(Prediction1$table))
   
-  tp <- cf[1,3]
-  tn <- cf[4,3]
-  fp <- cf[3,3]
-  fn <- cf[2,3]
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
   
-  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  corrPred = diagonal/total
   accuracy[i] = corrPred*100
   
-  mccNum <- (tp*tn)-(fp*fn)
-  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
   
   numMcc <- mccNum/mccDen
   mcc[i] = numMcc
@@ -253,22 +259,26 @@ for (i in 1:30) {
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  tree2 <- J48(Patient.Type~., data = data_matrix)
+  tree2 <- J48(Patient_Type~., data = data_matrix)
   e <- evaluate_Weka_classifier(tree2, numFolds = 10, class = TRUE)
   end.time1 <- Sys.time()
   
   cf <- as.data.frame(as.table(Prediction1$table))
   
-  tp <- cf[1,3]
-  tn <- cf[4,3]
-  fp <- cf[3,3]
-  fn <- cf[2,3]
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
   
-  corrPred = (tp+tn)/(tp+tn+fp+fn)
+  corrPred = diagonal/total
   accuracy[i] = corrPred*100
   
-  mccNum <- (tp*tn)-(fp*fn)
-  mccDen <- sqrt((tp+fp)*(tp+fn)*(tn+fp)*(tn+fn))
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
   
   numMcc <- mccNum/mccDen
   mcc[i] = numMcc
