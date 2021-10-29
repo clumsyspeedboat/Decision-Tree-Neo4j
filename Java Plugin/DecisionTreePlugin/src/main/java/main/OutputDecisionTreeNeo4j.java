@@ -62,7 +62,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
 	
 	/**
-	 * Empty constructor
+	 * Empty constructor 
 	 */
 	public OutputDecisionTreeNeo4j()
     {
@@ -1030,6 +1030,14 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		}
 	}
     
+    /**
+     * Procedure for k-means clustering and visualization in neo4j
+     * @param nodeType type of node
+     * @param numberOfCentroid 
+     * @param numberOfInteration
+     * @return cluster result and visualize
+     * @throws Exception
+     */
     @UserFunction
     @Description("Kmean clustering function")
 	public String kmean(@Name("nodeType") String nodeType, @Name("numberOfCentroid") String numberOfCentroid, @Name("numberOfInteration") String numberOfInteration) throws Exception

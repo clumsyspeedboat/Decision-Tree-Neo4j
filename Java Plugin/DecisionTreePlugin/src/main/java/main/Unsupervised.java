@@ -29,20 +29,29 @@ public class Unsupervised {
 		return data;
 	}
 	
-	public static HashMap<String, ArrayList<String>> KmeanClust (ArrayList<String> inputData, int centroidNumbers, int numberOfInteration)
+	/**
+	 * This is the main method to perform k-means clustering.
+	 * @param inputData is a variable where the nodes from Neo4j are stored
+	 * @param numberOfCentroids store the number of centroids specified by user for clustering
+	 * @param numberOfInteration saves user specified iteration to find convergence
+	 * @return
+	 */
+	public static HashMap<String, ArrayList<String>> KmeanClust (ArrayList<String> inputData, int numberOfCentroids, int numberOfInteration)
 	{
 		HashMap<String, ArrayList<String>> kmeanAssign = new HashMap<String, ArrayList<String>>();
 		ArrayList<String> listOfCentroid = new ArrayList<String>();
-//		inputData = dummyData();
 		ArrayList<String> listOfRemain = new ArrayList<String>(inputData);
-		for(int i = 0; i < centroidNumbers; i++)
+		// Initializing centroid by random choice
+		for(int i = 0; i < numberOfCentroids; i++)
 		{
 			Random rand = new Random();
 			int randomNum = rand.nextInt((listOfRemain.size()-1 - 0) + 1) + 0;
 			listOfCentroid.add(listOfRemain.get(randomNum));
 			listOfRemain.remove(randomNum);
 		}
+		// First clusters
 		HashMap<String, ArrayList<String>> hashClusterAssign = distanceAssign(listOfCentroid,listOfRemain);
+		// All iterations
 		kmeanAssign = kmeanInteration(hashClusterAssign,numberOfInteration,inputData);
 		for (String name: kmeanAssign.keySet()) {
 		    ArrayList<String> something = kmeanAssign.get(name);
@@ -52,6 +61,13 @@ public class Unsupervised {
 		return kmeanAssign;
 	}
 	
+	/**
+	 * Method to perform the iterations of k-means
+	 * @param clusterAssign contains the first cluster assignments
+	 * @param numberOfInteration specified by user
+	 * @param inputData specified by user
+	 * @return
+	 */
 	public static HashMap<String, ArrayList<String>> kmeanInteration (HashMap<String, ArrayList<String>> clusterAssign, int numberOfInteration, ArrayList<String> inputData)
 	{
 		ArrayList<String> listOfCentroid = new ArrayList<String>();
@@ -80,6 +96,11 @@ public class Unsupervised {
 		return clusterAssign;
 	}
 	
+	/**
+	 * Method to calculate new centroid points after each iteration
+	 * @param listOfNodesInCluster nodes assigned to each cluster
+	 * @return returns new centroids after each iteration
+	 */
 	public static String calculateNewCentroid (ArrayList<String> listOfNodesInCluster)
 	{
 		String[] atrributeName = new String[listOfNodesInCluster.get(0).split(",").length];
@@ -115,9 +136,16 @@ public class Unsupervised {
 		return newCentroid;
 	}
 	
+	/**
+	 * This is the first iteration of k-means clustering algorithm
+	 * @param listOfCentroid contains all the initial centroid points 
+	 * @param listOfRemain contains the points which have been initialized as centroids
+	 * @return
+	 */
 	public static HashMap<String, ArrayList<String>> distanceAssign (ArrayList<String> listOfCentroid, ArrayList<String> listOfRemain)
 	{
 		HashMap<String, ArrayList<String>> hashClusterAssign = new HashMap<String, ArrayList<String>>();
+		// Calculate distance and assign points to clusters
 		for(int i = 0; i < listOfRemain.size(); i++)
 		{
 			double minDistance = 0;
@@ -152,6 +180,12 @@ public class Unsupervised {
 		return hashClusterAssign;
 	}
 	
+	/**
+	 * Euclidean distance calculation from point A to point B
+	 * @param start point A
+	 * @param end point B
+	 * @return
+	 */
 	public static double calculateDistance (String start, String end)
 	{
 		double distance = 0;
