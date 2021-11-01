@@ -36,7 +36,7 @@ public class Unsupervised {
 	 * @param numberOfInteration saves user specified iteration to find convergence
 	 * @return
 	 */
-	public static HashMap<String, ArrayList<String>> KmeanClust (ArrayList<String> inputData, int numberOfCentroids, int numberOfInteration)
+	public static HashMap<String, ArrayList<String>> KmeanClust (ArrayList<String> inputData, int numberOfCentroids, int numberOfInteration, String distanceMeasure)
 	{
 		HashMap<String, ArrayList<String>> kmeanAssign = new HashMap<String, ArrayList<String>>();
 		ArrayList<String> listOfCentroid = new ArrayList<String>();
@@ -50,7 +50,7 @@ public class Unsupervised {
 			listOfRemain.remove(randomNum);
 		}
 		// First clusters
-		HashMap<String, ArrayList<String>> hashClusterAssign = distanceAssign(listOfCentroid,listOfRemain);
+		HashMap<String, ArrayList<String>> hashClusterAssign = distanceAssign(listOfCentroid,listOfRemain, distanceMeasure);
 		// All iterations
 		kmeanAssign = kmeanInteration(hashClusterAssign,numberOfInteration,inputData);
 		for (String name: kmeanAssign.keySet()) {
@@ -142,7 +142,7 @@ public class Unsupervised {
 	 * @param listOfRemain contains the points which have been initialized as centroids
 	 * @return
 	 */
-	public static HashMap<String, ArrayList<String>> distanceAssign (ArrayList<String> listOfCentroid, ArrayList<String> listOfRemain)
+	public static HashMap<String, ArrayList<String>> distanceAssign (ArrayList<String> listOfCentroid, ArrayList<String> listOfRemain, String distanceMeasure)
 	{
 		HashMap<String, ArrayList<String>> hashClusterAssign = new HashMap<String, ArrayList<String>>();
 		// Calculate distance and assign points to clusters
@@ -153,7 +153,21 @@ public class Unsupervised {
 			String clusterNode = "";
 			for(int j = 0; j < listOfCentroid.size(); j++)
 			{
-				double distance = calculateDistance(listOfRemain.get(i),listOfCentroid.get(j));
+				double distance = 0.0;
+				
+				if(distanceMeasure == "euclidean") {
+					distance = calEuclideanDist(listOfRemain.get(i),listOfCentroid.get(j));	
+				}
+				else if(distanceMeasure == "manhattan") {
+					distance = calManhattanDist(listOfRemain.get(i),listOfCentroid.get(j));	
+				}
+				else if(distanceMeasure == "cosine") {
+					distance = calCosineSimilarity(listOfRemain.get(i),listOfCentroid.get(j));
+				}
+				else if(distanceMeasure == "bray-curtis") {
+					distance = calBrayCurtis(listOfRemain.get(i),listOfCentroid.get(j));
+				}
+				
 				if(minDistance == 0)
 				{
 					minDistance = distance;
@@ -186,9 +200,9 @@ public class Unsupervised {
 	 * @param end point B
 	 * @return
 	 */
-	public static double calculateDistance (String start, String end)
+	public static double calEuclideanDist (String start, String end)
 	{
-		double distance = 0;
+		double distance = 0.00;
 		String[] startSplit =  start.split(",");
 		String[] endSplit = end.split(",");
 		for(int i = 0; i < startSplit.length; i++)
@@ -198,6 +212,77 @@ public class Unsupervised {
 			distance = distance + Math.pow((startValue-endValue),2);
 		}
 		distance = Math.sqrt(distance);
+		return distance;
+		
+	}
+	/**
+	 * Calculate Manhattan distance between point A and B
+	 * @param start point A
+	 * @param end point B
+	 * @return
+	 */
+	public static double calManhattanDist (String start, String end)
+	{
+		double distance = 0.00;
+		String[] startSplit =  start.split(",");
+		String[] endSplit = end.split(",");
+		for(int i = 0; i < startSplit.length; i++)
+		{
+			float startValue = Float.parseFloat(startSplit[i].split(":")[1]);
+			float endValue = Float.parseFloat(endSplit[i].split(":")[1]);
+			distance = distance + Math.abs(startValue - endValue);
+		}
+		return distance;
+		
+	}
+	/**
+	 * Calculate Cosine similarity between point A and B
+	 * @param start point A
+	 * @param end point B
+	 * @return
+	 */
+	public static double calCosineSimilarity (String start, String end)
+	{
+		double distance = 0.00;
+		double dotProduct = 0.00;
+		double normA = 0.00;
+		double normB = 0.00;
+		String[] startSplit =  start.split(",");
+		String[] endSplit = end.split(",");
+		for(int i = 0; i < startSplit.length; i++)
+		{
+			float startValue = Float.parseFloat(startSplit[i].split(":")[1]);
+			float endValue = Float.parseFloat(endSplit[i].split(":")[1]);
+			dotProduct += startValue * endValue;
+			normA += Math.pow(startValue, 2);
+			normB += Math.pow(endValue, 2);
+		}
+		distance = dotProduct/ (Math.sqrt(normA) * Math.sqrt(normB));
+		return distance;
+		
+	}
+	/**
+	 * Calculate Bray-Curtis dissimilarity between point A and B
+	 * @param start point A
+	 * @param end point B
+	 * @return
+	 */
+	public static double calBrayCurtis (String start, String end)
+	{
+		double distance = 0.00;
+		double num = 0.00;
+		double den = 0.00;
+		
+		String[] startSplit =  start.split(",");
+		String[] endSplit = end.split(",");
+		for(int i = 0; i < startSplit.length; i++)
+		{
+			float startValue = Float.parseFloat(startSplit[i].split(":")[1]);
+			float endValue = Float.parseFloat(endSplit[i].split(":")[1]);
+			num = num + Math.abs(startValue - endValue);
+			den = den + Math.abs(startValue + endValue);
+		}
+		distance = num/den;
 		return distance;
 		
 	}

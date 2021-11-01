@@ -202,7 +202,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
        	autoSplitDataList.clear();
        	testDataList.clear();
    		trainDataList.clear();
-       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
            {
        		queryData(nodeType);
        		for (Record key : dataKey) {
@@ -324,7 +324,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
    	{
        	String listOfData = "";
        	testDataList.clear();
-       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
            {
        		queryData(nodeType);
        		for (Record key : dataKey) {
@@ -390,7 +390,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	{
     	String listOfData = "";
     	trainDataList.clear();
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     		queryData(nodeType);
     		for (Record key : dataKey) {
@@ -452,7 +452,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
    	{
        	String listOfData = "";
        	int countLine = 0;
-       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+       	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
            {
        		if(dataType.equals("train"))
        		{
@@ -500,7 +500,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeIG(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     	
     		boolean isTrainListEmpty = trainDataList.isEmpty();
@@ -542,7 +542,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeGI(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     	
     		boolean isTrainListEmpty = trainDataList.isEmpty();
@@ -584,7 +584,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeGR(@Name("target") String target) throws Exception {
     	
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     	
     		boolean isTrainListEmpty = trainDataList.isEmpty();
@@ -627,7 +627,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeGICsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 
@@ -668,7 +668,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeGRCsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 
@@ -710,7 +710,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     public String createTreeIGCsv(@Name("path") String path) throws Exception
 	{
     	String confusionMatrix = "";
-    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 
@@ -1040,7 +1040,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("Kmean clustering function")
-	public String kmean(@Name("nodeType") String nodeType, @Name("numberOfCentroid") String numberOfCentroid, @Name("numberOfInteration") String numberOfInteration) throws Exception
+	public String kmean(@Name("nodeType") String nodeType, @Name("numberOfCentroid") String numberOfCentroid, @Name("numberOfInteration") String numberOfInteration, @Name("distanceMeasure") String distanceMeasure) throws Exception
 	{
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:11003", "neo4j", "123" ) )
         {
@@ -1048,7 +1048,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			HashMap<String, ArrayList<String>> kmeanAssign = new HashMap<String, ArrayList<String>>();
 			int numberOfCentroidInt = Integer.parseInt(numberOfCentroid);
 			int numberOfInterationInt = Integer.parseInt(numberOfInteration);
-			kmeanAssign = Unsupervised.KmeanClust(mapNodeList, numberOfCentroidInt, numberOfInterationInt);
+			kmeanAssign = Unsupervised.KmeanClust(mapNodeList, numberOfCentroidInt, numberOfInterationInt, distanceMeasure);
 			for (String centroid: kmeanAssign.keySet()) {
         		ArrayList<String> clusterNode = kmeanAssign.get(centroid);
         		for (String node : clusterNode)
