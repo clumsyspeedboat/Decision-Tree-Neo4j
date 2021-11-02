@@ -155,17 +155,18 @@ public class Unsupervised {
 			{
 				double distance = 0.0;
 				
-				if(distanceMeasure == "euclidean") {
-					distance = calEuclideanDist(listOfRemain.get(i),listOfCentroid.get(j));	
-				}
-				else if(distanceMeasure == "manhattan") {
+
+				if(distanceMeasure == "manhattan") {
 					distance = calManhattanDist(listOfRemain.get(i),listOfCentroid.get(j));	
 				}
 				else if(distanceMeasure == "cosine") {
 					distance = calCosineSimilarity(listOfRemain.get(i),listOfCentroid.get(j));
 				}
-				else if(distanceMeasure == "bray-curtis") {
+				else if (distanceMeasure == "bray-curtis") {
 					distance = calBrayCurtis(listOfRemain.get(i),listOfCentroid.get(j));
+				}
+				else {
+					distance = calEuclideanDist(listOfRemain.get(i),listOfCentroid.get(j));	
 				}
 				
 				if(minDistance == 0)
