@@ -28,6 +28,6 @@ validation, validate the classifier and visualize tree.
 ![DTP_Methodology](https://user-images.githubusercontent.com/19682074/141226264-6815a517-2221-42a6-b393-44725b89afbc.PNG)
 
 
-## [Compile the JAR file Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
-## [Download the JAR file](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
+## [Compile the JAR File Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
+## [Download the JAR File](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
 
