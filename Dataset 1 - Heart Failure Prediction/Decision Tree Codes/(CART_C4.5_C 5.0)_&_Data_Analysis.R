@@ -313,12 +313,11 @@ for (i in 1:30) {
   
 options(digits.secs = 6)
 start.time1 <- Sys.time()
-tree2 <- J48(DEATH_EVENT~., data = data_matrix)
-e <- evaluate_Weka_classifier(tree2, numFolds = 20, class = TRUE)
+tree1 <- J48(DEATH_EVENT~., data = data_matrix)
 end.time1 <- Sys.time()
 
-
-cf <- as.data.frame(as.table(Prediction1$table))
+Prediction1 <- evaluate_Weka_classifier(tree1, numFolds = 20, class = TRUE)
+cf <- as.data.frame(as.table(Prediction1$confusionMatrix))
 
 tp <- cf[1,3]
 tn <- cf[4,3]

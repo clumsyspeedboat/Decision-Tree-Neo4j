@@ -217,11 +217,11 @@ for (i in 1:30) {
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  tree2 <- J48(Diagnosis~., data = data_matrix)
-  e <- evaluate_Weka_classifier(tree2, numFolds = 40, class = TRUE)
+  tree1 <- J48(Diagnosis~., data = data_matrix)
   end.time1 <- Sys.time()
   
-  cf <- as.data.frame(as.table(Prediction1$table))
+  Predictions1 <- evaluate_Weka_classifier(tree1, numFolds = 40, class = TRUE)
+  cf <- as.data.frame(as.table(Prediction1$confusionMatrix))
   
   tp <- cf[1,3]
   tn <- cf[4,3]
