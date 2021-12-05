@@ -33,4 +33,9 @@ validation, validate the classifier and visualize tree.
 
 ## [Compile the JAR File of DTP Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
 ## [Download the JAR File of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
-## [View Procedures of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-Plugin---Procedure-Document)
+
+# Procdures to create decision tree 
+## [Decision Tree from Nodes](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
+## [Decision Tree from CSV files](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-CSV-files)
+## [Cross validation (nodes or CSV files)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Cross-validation-(nodes-or-CSV-files))
+## [Confusion matrix (from CSV files without tree visualization)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Confusion-matrix-(from-CSV-files-without-tree-visualization))
