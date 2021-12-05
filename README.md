@@ -4,6 +4,14 @@ A plug-in to create decision tree algorithms in Neo4j with the following splitti
 * **Information Gain**
 * **Gain Ratio**
 
+## Methodology
+
+![DTP_Methodology](https://user-images.githubusercontent.com/19682074/141226264-6815a517-2221-42a6-b393-44725b89afbc.PNG)
+
+
+### [Compile the JAR File of DTP Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
+### [Download the JAR File of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
+
 ## About
 
 Graph databases enable efficient storage of heterogeneous, highly-interlinked
@@ -25,14 +33,6 @@ time and should be applied to a variety of use cases including clinical environm
 DTP comprises of 19 procedures, which read CSV-files, map nodes, split data,
 generate decision tree using 3 different metrics , perform k-fold cross
 validation, validate the classifier and visualize tree.
-
-## Methodology
-
-![DTP_Methodology](https://user-images.githubusercontent.com/19682074/141226264-6815a517-2221-42a6-b393-44725b89afbc.PNG)
-
-
-### [Compile the JAR File of DTP Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
-### [Download the JAR File of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
 
 ## Procdures to create decision tree 
 ### [Decision Tree from Nodes](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
