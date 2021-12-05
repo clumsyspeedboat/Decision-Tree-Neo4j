@@ -20,8 +20,8 @@ DTP comprises of 19 procedures, which read CSV-files, map nodes, split data,
 generate decision tree using 3 different metrics , perform k-fold cross
 validation, validate the classifier and visualize tree.
 
-## Procdures to create decision tree 
-### [Decision Tree from Nodes](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
-### [Decision Tree from CSV files](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-CSV-files)
+## Procdures to create Decision Tree
+### [from Nodes in Neo4j](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
+### [from CSV file paths](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-CSV-files)
 ### [Cross validation (nodes or CSV files)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Cross-validation-(nodes-or-CSV-files))
 ### [Confusion matrix (from CSV files without tree visualization)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Confusion-matrix-(from-CSV-files-without-tree-visualization))
