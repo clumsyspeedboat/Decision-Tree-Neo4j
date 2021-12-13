@@ -4,7 +4,7 @@ A plug-in to create decision tree algorithms in Neo4j with the following splitti
 * **Information Gain**
 * **Gain Ratio**
 
-## [About](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki)
+## [About](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki#About)
 ## Methodology
 
 ![DTP_Methodology](https://user-images.githubusercontent.com/19682074/141226264-6815a517-2221-42a6-b393-44725b89afbc.PNG)
