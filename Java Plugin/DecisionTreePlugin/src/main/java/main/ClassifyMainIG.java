@@ -39,9 +39,6 @@ public class ClassifyMainIG {
 		double mcc = cv.getMccAverage();
 		double generateTime = cv.getCvGenerationTimeAverage();
 		double score = cv.getScoreAverage();
-		System.out.println("calculated average mcc: " + mcc);
-		System.out.println("calculated average generateTime: " + generateTime);
-		System.out.println("calculated average accuracy: " + score);
 		//ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
 	    
 		//mine.calculateAccuracy();

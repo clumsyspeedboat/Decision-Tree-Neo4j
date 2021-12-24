@@ -15,8 +15,8 @@ import output.PrintTree;
 import static org.neo4j.driver.Values.parameters;
 
 import java.util.List;
-import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
@@ -45,6 +45,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	private static ArrayList<String> testDataList =  new ArrayList<String>();
 	private static ArrayList<String> trainDataList =  new ArrayList<String>();
 	private static ArrayList<String> autoSplitDataList =  new ArrayList<String>();
+	private static ArrayList<String> classificationDataList = new ArrayList<String>();
 	
 	/**
 	 * Creation of driver object using bolt protocol
@@ -75,6 +76,63 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
         driver.close();
     }
 	
+	
+	public HashMap<String, ArrayList<String>> createDummmyDataHashMap ()
+	{
+		HashMap<String, ArrayList<String>> hashMapClassify = new HashMap<String, ArrayList<String>>();
+		ArrayList<String> arrayList1 = new ArrayList<String>();
+		arrayList1.add("anaemia:0, serum_creatinine:1.9, sex:1, ejection_fraction:20, creatinine_phosphokinase:582, platelets:265000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:0, time:4, serum_sodium:130, diabetes:0, age:75");
+		arrayList1.add("anaemia:0, serum_creatinine:1.1, sex:1, ejection_fraction:38, creatinine_phosphokinase:7861, platelets:263358.03, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:6, serum_sodium:136, diabetes:0, age:55");
+		arrayList1.add("anaemia:0, serum_creatinine:1.3, sex:1, ejection_fraction:20, creatinine_phosphokinase:146, platelets:162000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:1, time:7, serum_sodium:129, diabetes:0, age:65");
+		hashMapClassify.put("classLabel:1", arrayList1);
+		ArrayList<String> arrayList2 = new ArrayList<String>();
+		arrayList2.add("anaemia:1, serum_creatinine:1.9, sex:1, ejection_fraction:20, creatinine_phosphokinase:111, platelets:210000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:7, serum_sodium:137, diabetes:0, age:50");
+		arrayList2.add("anaemia:1, serum_creatinine:2.7, sex:0, ejection_fraction:20, creatinine_phosphokinase:160, platelets:327000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:8, serum_sodium:116, diabetes:1, age:65");
+		hashMapClassify.put("classLabel:0", arrayList2);
+		return hashMapClassify;
+	}
+	
+	public void connectNodeToClassLabel(final String message, final String classLabel, final String node)
+    {
+        try ( Session session = driver.session() )
+        {
+            String greeting = session.writeTransaction( new TransactionWork<String>()
+            {
+                @Override
+                public String execute( Transaction tx )
+                {
+                	//a is present for the node
+            		Result result = tx.run( "MERGE (a {" + node +"}) " +
+            				"MERGE (b {" + classLabel +"}) " +
+            				"MERGE (a)-[:link]->(b) "
+            				+ "RETURN a.message");
+				    return result.single().get( 0 ).asString();
+                }
+            } );
+        }
+    }
+	
+	 @UserFunction
+	    public String classifyOfNodes(@Name("nodeType") String nodeType, @Name("classLabel") String targetAttribute ) throws Exception
+	    {
+	    	String output = "";
+	    	classificationDataList.clear();
+	    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+	        {
+	    		HashMap<String, ArrayList<String>> hashMapClassify = new HashMap<String, ArrayList<String>>();
+		    	hashMapClassify = createDummmyDataHashMap();
+		    	for (String classLabel: hashMapClassify.keySet()) {
+	        		ArrayList<String> arrayNodes = hashMapClassify.get(classLabel);
+	        		for (String node : arrayNodes)
+	        		{
+	        			connector.connectNodeToClassLabel("create relationship in classification of nodes",classLabel,node);
+	        		}
+		    	}
+		    	output = "classify successfully";
+	        }
+	 
+	    	return output;
+	    }
 	
 	
 	/**
@@ -163,6 +221,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
             } );
         }
     }
+    
+    
     /** 
      * This function is used to split the nodes from database based on training ratio given 
      * @param nodeType
