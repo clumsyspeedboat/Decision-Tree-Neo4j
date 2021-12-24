@@ -63,6 +63,9 @@ public class EvaluateTreeGI extends EvaluateTree{
 		ArrayList<Instance> res = getResult();
 		
 		
+		createClassificationResults(res);
+		
+		
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 		

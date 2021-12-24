@@ -197,7 +197,6 @@ public class CrossValidation {
 			 conMatrixArray.add(falseNegative);
 		 }else 
 		 {
-			 System.out.println(Arrays.deepToString(confMatrix));
 			 double[] predictedArray = new double[matrixSize];
 			 double[] actualArray = new double[matrixSize];
 			 double s = 0.0;

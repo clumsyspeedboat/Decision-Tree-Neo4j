@@ -20,6 +20,7 @@ import node.TreeNode;
 
 
 public class EvaluateTree {
+	HashMap<String, ArrayList<String>> predictedResults = new HashMap<String, ArrayList<String>>();
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
 	private ArrayList<Instance> trainInstances;
@@ -69,20 +70,17 @@ public class EvaluateTree {
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();	
 		
-		
 		result.addAll(testInstances);
 	}
 	
 	
-	
-	
-	
+
 	
 
 	/**
 	 * Loop through the entire tree 
 	 */
-	protected void mine(){
+	protected void traverseTree(){
 		for (int i = 0; i < testInstances.size(); i++) {
 			TreeNode node = root;
 			Instance currInstance = testInstances.get(i);
@@ -143,7 +141,7 @@ public class EvaluateTree {
 	
 	
 	public ArrayList<Instance> getResult(){
-		mine();
+		traverseTree();
 		return result;
 	}
 	
@@ -238,8 +236,7 @@ public class EvaluateTree {
 		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target);
 		root = tree.construct();
 		
-		
-		
+
 		long teTime = System.currentTimeMillis();
 		
 		//double generationTime = calculateTime(tstTime, teTime);
@@ -254,8 +251,14 @@ public class EvaluateTree {
 		
 		
 		int correct = 0;
+		
 		ArrayList<Instance> res = getResult();
+		
+		createClassificationResults(res);
+		
+		
 		//System.out.println(res);
+		
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 		
@@ -288,6 +291,52 @@ public class EvaluateTree {
 		
 		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
 	}
+	
+	
+	/**
+	 * This function is to create classifications for Neo4j
+	 */
+	public void createClassificationResults(ArrayList<Instance> result) {
+	
+		for(Instance res: result) {
+			StringBuilder patient = new StringBuilder();
+		
+			ArrayList<Attribute> attributes = getAttributes();
+			for(Attribute att: attributes) {
+				
+				String attValue = res.getAttributeValuePairs().get(att.getName());
+				
+				patient.append(attValue);
+				patient.append(",");
+			}
+			
+			String r = patient.length() > 0 ? patient.substring(0, patient.length() - 1): "";
+			
+			String testLabel = res.getAttributeValuePairs().get("Test" + getTarget().getName());
+			
+			addToList(testLabel, r);
+			
+
+		}
+	}
+	
+	
+	public void addToList(String mapKey, String myItem) {
+		ArrayList<String> itemsList = predictedResults.get(mapKey);
+		
+		if(itemsList == null) {
+			itemsList = new ArrayList<String>(); 
+			itemsList.add(myItem);
+			predictedResults.put(mapKey, itemsList);
+		}else {
+			if(!itemsList.contains(myItem)) itemsList.add(myItem);
+		}
+
+	}
+	
+	
+	
+	
 	
 	/**
 	 * Setter for members
