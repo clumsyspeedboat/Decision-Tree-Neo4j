@@ -2,12 +2,18 @@ package gainratio;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
+import definition.Attribute;
 import definition.Instance;
 import evaluate.EvaluateTree;
 
 
 public class EvaluateTreeGR extends EvaluateTree{
+	
+	
 	
 	
 	public EvaluateTreeGR(String trainData, String testData, String targetAtt) throws IOException {
@@ -44,6 +50,20 @@ public class EvaluateTreeGR extends EvaluateTree{
 		int correct = 0;
 		ArrayList<Instance> res = getResult();
 		
+		createClassificationResults(res);
+		
+//		System.out.println(predictedResults);
+		
+	
+		
+//		for (HashMap.Entry<String, ArrayList<String>> entry : predictedResults.entrySet()) {
+//		    String key = entry.getKey();
+//		    ArrayList<String> value = entry.getValue();
+//		    System.out.println(value.size());
+//		}
+		
+		
+		
 		ArrayList<String> actual = new ArrayList<>();
 		ArrayList<String> predictions = new ArrayList<>();
 
@@ -73,6 +93,18 @@ public class EvaluateTreeGR extends EvaluateTree{
 
 		//System.out.println("Accuracy:" + getScore() * 100 + "%");
 		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
-
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
