@@ -20,7 +20,7 @@ import node.TreeNode;
 
 
 public class EvaluateTree {
-	HashMap<String, ArrayList<String>> predictedResults = new HashMap<String, ArrayList<String>>();
+	public HashMap<String, ArrayList<String>> predictedResults = new HashMap<String, ArrayList<String>>();
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
 	private ArrayList<Instance> trainInstances;
@@ -305,8 +305,7 @@ public class EvaluateTree {
 			for(Attribute att: attributes) {
 				
 				String attValue = res.getAttributeValuePairs().get(att.getName());
-				
-				patient.append(attValue);
+				patient.append(att.getName()+":"+attValue);
 				patient.append(",");
 			}
 			

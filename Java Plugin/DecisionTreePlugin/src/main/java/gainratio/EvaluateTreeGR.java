@@ -52,7 +52,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		
 		createClassificationResults(res);
 		
-//		System.out.println(predictedResults);
+		System.out.println(predictedResults);
 		
 	
 		

@@ -92,7 +92,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		return hashMapClassify;
 	}
 	
-	public void connectNodeToClassLabel(final String message, final String classLabel, final String node)
+	public void connectNodeToClassLabel(final String nodeType, final String classLabel, final String node)
     {
         try ( Session session = driver.session() )
         {
@@ -102,8 +102,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
                 public String execute( Transaction tx )
                 {
                 	//a is present for the node
-            		Result result = tx.run( "MERGE (a {" + node +"}) " +
-            				"MERGE (b {" + classLabel +"}) " +
+            		Result result = tx.run( "MERGE (a:" + nodeType + "{" + node +"}) " +
+            				"MERGE (b {" + "predictedLabel:"+ classLabel +"}) " +
             				"MERGE (a)-[:link]->(b) "
             				+ "RETURN a.message");
 				    return result.single().get( 0 ).asString();
@@ -113,22 +113,44 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
 	
 	 @UserFunction
-	    public String classifyOfNodes(@Name("nodeType") String nodeType, @Name("classLabel") String targetAttribute ) throws Exception
+	    public String classifyOfNodes(@Name("nodeType") String nodeType, @Name("decisionTreeType") String decisionTreeType , @Name("classLabel") String targetAttribute ) throws Exception
 	    {
 	    	String output = "";
 	    	classificationDataList.clear();
 	    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
 	        {
-	    		HashMap<String, ArrayList<String>> hashMapClassify = new HashMap<String, ArrayList<String>>();
-		    	hashMapClassify = createDummmyDataHashMap();
-		    	for (String classLabel: hashMapClassify.keySet()) {
-	        		ArrayList<String> arrayNodes = hashMapClassify.get(classLabel);
-	        		for (String node : arrayNodes)
-	        		{
-	        			connector.connectNodeToClassLabel("create relationship in classification of nodes",classLabel,node);
-	        		}
-		    	}
-		    	output = "classify successfully";
+	    		boolean isTrainListEmpty = trainDataList.isEmpty();
+	    		boolean isTestListEmpty = testDataList.isEmpty();
+	    		if(isTrainListEmpty && isTestListEmpty) {
+	    			return targetAttribute + "False";
+	    		}else {
+	    			
+	    			EvaluateTree mine;
+	    			if(decisionTreeType == "IG")
+	    			{
+	    				mine = new EvaluateTree(trainDataList, testDataList, targetAttribute);
+	    			}
+	    			else if (decisionTreeType == "GI")
+	    			{
+	    				mine = new EvaluateTreeGI(trainDataList, testDataList, targetAttribute);
+	    			}
+	    			else
+	    			{
+	    				mine = new EvaluateTreeGR(trainDataList, testDataList, targetAttribute);
+	    			}
+	    			
+	    			mine.calculateAccuracy();
+		    		HashMap<String, ArrayList<String>> hashMapClassify = mine.predictedResults;
+			    	for (String classLabel: hashMapClassify.keySet()) {
+		        		ArrayList<String> arrayNodes = hashMapClassify.get(classLabel);
+		        		for (String node : arrayNodes)
+		        		{
+		        			connector.connectNodeToClassLabel(nodeType,classLabel,node);
+		        		}
+			    	}
+			    	output = hashMapClassify.values().toString();
+			    	
+	    		}
 	        }
 	 
 	    	return output;
