@@ -13,6 +13,10 @@ A plug-in to create decision tree algorithms in Neo4j with the following splitti
 ### [Compile the JAR File of DTP Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
 ### [Download the JAR File of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
 
+## Data
+* [Dataset 1 : Heart Failure Prediction](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%201%20-%20Heart%20Failure%20Prediction/Heart%20Failure%20Prediction.csv)
+* [Dataset 2 : Prediction of Inflammatory BowelDisease from Microbiome](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%202%20-%20Metaprotein/Metaprotein_50.csv)
+* [Dataset 3 : H1N1 COVID19 Classification](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%203%20-%20Flu%20Classification/Flu_Classification.csv)
 
 ## Features
 
