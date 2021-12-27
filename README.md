@@ -37,7 +37,7 @@ BMC Medical Informatics and Decision Making 20, 16 (2020).
 License
 CC BY 4.0
 ``` 
-* [Dataset 2 : Prediction of Inflammatory BowelDisease from Microbiome](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%202%20-%20Metaprotein/Metaprotein_50.csv)
+* [Dataset 2 : Prediction of Inflammatory Bowel Disease from Microbiome](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%202%20-%20Metaprotein/Metaprotein_50.csv)
 ```
 Citation
 Lehmann, T et al. “Metaproteomics of fecal samples of Crohn's disease and Ulcerative Colitis.” 
