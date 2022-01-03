@@ -106,7 +106,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
             				"MERGE (b {" + "predictedLabel:"+ classLabel +"}) " +
             				"MERGE (a)-[:link]->(b) "
             				+ "RETURN a.message");
-				    return result.single().get( 0 ).asString();
+				    return "connected";
                 }
             } );
         }
