@@ -7,6 +7,10 @@ import java.util.HashMap;
 
 import scala.util.Random;
 
+/**
+ * @author 49171
+ *
+ */
 public class Unsupervised {
 	
 	public static ArrayList<String> dummyData(){
@@ -28,6 +32,18 @@ public class Unsupervised {
 		data.add(line5);
 		return data;
 	}
+	
+	
+	/*
+	 * public static HashMap<String, ArrayList<String>> DbClust (ArrayList<String>
+	 * inputData, int eps, int minPts, String distanceMeasure) { HashMap<String,
+	 * ArrayList<String>> dbscanAssign = new HashMap<String, ArrayList<String>>();
+	 * ArrayList<String> listOfAllNodes = new ArrayList<String>(); ArrayList<String>
+	 * listOfRemain = new ArrayList<String>(inputData);
+	 * 
+	 * 
+	 * }
+	 */
 	
 	/**
 	 * This is the main method to perform k-means clustering.
@@ -227,6 +243,7 @@ public class Unsupervised {
 		double distance = 0.00;
 		String[] startSplit =  start.split(",");
 		String[] endSplit = end.split(",");
+		
 		for(int i = 0; i < startSplit.length; i++)
 		{
 			float startValue = Float.parseFloat(startSplit[i].split(":")[1]);
@@ -248,6 +265,7 @@ public class Unsupervised {
 		double dotProduct = 0.00;
 		double normA = 0.00;
 		double normB = 0.00;
+		
 		String[] startSplit =  start.split(",");
 		String[] endSplit = end.split(",");
 		for(int i = 0; i < startSplit.length; i++)
