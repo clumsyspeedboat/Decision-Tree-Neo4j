@@ -77,21 +77,6 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     }
 	
 	
-	public HashMap<String, ArrayList<String>> createDummmyDataHashMap ()
-	{
-		HashMap<String, ArrayList<String>> hashMapClassify = new HashMap<String, ArrayList<String>>();
-		ArrayList<String> arrayList1 = new ArrayList<String>();
-		arrayList1.add("anaemia:0, serum_creatinine:1.9, sex:1, ejection_fraction:20, creatinine_phosphokinase:582, platelets:265000.0, DEATH_EVENT:1, high_blood_pressure:1, smoking:0, time:4, serum_sodium:130, diabetes:0, age:75");
-		arrayList1.add("anaemia:0, serum_creatinine:1.1, sex:1, ejection_fraction:38, creatinine_phosphokinase:7861, platelets:263358.03, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:6, serum_sodium:136, diabetes:0, age:55");
-		arrayList1.add("anaemia:0, serum_creatinine:1.3, sex:1, ejection_fraction:20, creatinine_phosphokinase:146, platelets:162000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:1, time:7, serum_sodium:129, diabetes:0, age:65");
-		hashMapClassify.put("classLabel:1", arrayList1);
-		ArrayList<String> arrayList2 = new ArrayList<String>();
-		arrayList2.add("anaemia:1, serum_creatinine:1.9, sex:1, ejection_fraction:20, creatinine_phosphokinase:111, platelets:210000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:7, serum_sodium:137, diabetes:0, age:50");
-		arrayList2.add("anaemia:1, serum_creatinine:2.7, sex:0, ejection_fraction:20, creatinine_phosphokinase:160, platelets:327000.0, DEATH_EVENT:1, high_blood_pressure:0, smoking:0, time:8, serum_sodium:116, diabetes:1, age:65");
-		hashMapClassify.put("classLabel:0", arrayList2);
-		return hashMapClassify;
-	}
-	
 	public void connectNodeToClassLabel(final String nodeType, final String classLabel, final String node)
     {
         try ( Session session = driver.session() )
@@ -112,49 +97,49 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
         }
     }
 	
-	 @UserFunction
-	    public String classifyOfNodes(@Name("nodeType") String nodeType, @Name("decisionTreeType") String decisionTreeType , @Name("classLabel") String targetAttribute ) throws Exception
-	    {
-	    	String output = "";
-	    	classificationDataList.clear();
-	    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
-	        {
-	    		boolean isTrainListEmpty = trainDataList.isEmpty();
-	    		boolean isTestListEmpty = testDataList.isEmpty();
-	    		if(isTrainListEmpty && isTestListEmpty) {
-	    			return targetAttribute + "False";
-	    		}else {
-	    			
-	    			EvaluateTree mine;
-	    			if(decisionTreeType == "IG")
-	    			{
-	    				mine = new EvaluateTree(trainDataList, testDataList, targetAttribute);
-	    			}
-	    			else if (decisionTreeType == "GI")
-	    			{
-	    				mine = new EvaluateTreeGI(trainDataList, testDataList, targetAttribute);
-	    			}
-	    			else
-	    			{
-	    				mine = new EvaluateTreeGR(trainDataList, testDataList, targetAttribute);
-	    			}
-	    			
-	    			mine.calculateAccuracy();
-		    		HashMap<String, ArrayList<String>> hashMapClassify = mine.predictedResults;
-			    	for (String classLabel: hashMapClassify.keySet()) {
-		        		ArrayList<String> arrayNodes = hashMapClassify.get(classLabel);
-		        		for (String node : arrayNodes)
-		        		{
-		        			connector.connectNodeToClassLabel(nodeType,classLabel,node);
-		        		}
-			    	}
-			    	output = hashMapClassify.values().toString();
-			    	
-	    		}
-	        }
-	 
-	    	return output;
-	    }
+	@UserFunction
+    public String classifyOfNodes(@Name("nodeType") String nodeType, @Name("decisionTreeType") String decisionTreeType , @Name("classLabel") String targetAttribute ) throws Exception
+    {
+    	String output = "";
+    	classificationDataList.clear();
+    	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
+        {
+    		boolean isTrainListEmpty = trainDataList.isEmpty();
+    		boolean isTestListEmpty = testDataList.isEmpty();
+    		if(isTrainListEmpty && isTestListEmpty) {
+    			return targetAttribute + "False";
+    		}else {
+    			
+    			EvaluateTree mine;
+    			if(decisionTreeType == "IG")
+    			{
+    				mine = new EvaluateTree(trainDataList, testDataList, targetAttribute);
+    			}
+    			else if (decisionTreeType == "GI")
+    			{
+    				mine = new EvaluateTreeGI(trainDataList, testDataList, targetAttribute);
+    			}
+    			else
+    			{
+    				mine = new EvaluateTreeGR(trainDataList, testDataList, targetAttribute);
+    			}
+    			
+    			mine.calculateAccuracy();
+	    		HashMap<String, ArrayList<String>> hashMapClassify = mine.predictedResults;
+		    	for (String classLabel: hashMapClassify.keySet()) {
+	        		ArrayList<String> arrayNodes = hashMapClassify.get(classLabel);
+	        		for (String node : arrayNodes)
+	        		{
+	        			connector.connectNodeToClassLabel(nodeType,classLabel,node);
+	        		}
+		    	}
+		    	output = hashMapClassify.values().toString();
+		    	
+    		}
+        }
+ 
+    	return output;
+    }
 	
 	
 	/**
@@ -758,7 +743,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confmIG(@Name("path") String path,@Name("target") String target) throws Exception
+	public String confmIGcsv(@Name("path") String path,@Name("target") String target) throws Exception
 	{
 		if(path == null)
 		{
@@ -788,7 +773,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
-	public String confmGR(@Name("path") String path) throws Exception
+	public String confmGRcsv(@Name("path") String path,@Name("target") String target) throws Exception
 	{
 		if(path == null)
 		{
@@ -800,7 +785,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], target);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
@@ -817,7 +802,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
-	public String confmGI(@Name("path") String path) throws Exception
+	public String confmGIcsv(@Name("path") String path,@Name("target") String target) throws Exception
 	{
 		if(path == null)
 		{
@@ -829,8 +814,81 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			Scanner in = new Scanner(System.in);
 
 			String[] paths = path.split(",");
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], target);
 
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;
+		}
+	}
+    
+    /**
+     * This function retrieves the confusion matrix of decision tree based on information gain
+     * @param path
+     * @param target
+     * @return
+     * @throws Exception
+     */
+    @UserFunction
+    @Description("retrieve the confusion matrix Information Gain Decision Tree")
+	public String confmIG(@Name("target") String target) throws Exception
+	{
+    	boolean isTrainListEmpty = trainDataList.isEmpty();
+		boolean isTestListEmpty = testDataList.isEmpty();
+		if(isTrainListEmpty && isTestListEmpty) {
+			return "Need to query to data";
+		}
+		else
+		{
+			String confusionMatrix = "";
+			EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target);
+
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
+		}
+	}
+     
+    @UserFunction
+    @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
+	public String confmGR(@Name("target") String target) throws Exception
+	{
+    	boolean isTrainListEmpty = trainDataList.isEmpty();
+		boolean isTestListEmpty = testDataList.isEmpty();
+		if(isTrainListEmpty && isTestListEmpty) {
+			return "Need to query to data";
+		}
+		else
+		{
+			String confusionMatrix = "";
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target);
+
+			confusionMatrix = mine.calculateAccuracy();
+			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
+		}
+	}
+    
+    /**
+     * 
+     * This function retrieves the confusion matrix of decision tree based on gini index 
+     * @param path - The path is composed of 3 parts, 1st-training dataset, 2nd-test dataset, 3rd- target attribute(as string)
+     * @return A string with confusion matrix
+     * @throws Exception
+     */
+    
+    @UserFunction
+    @Description("retrieve the confusion matrix Gini Index Decision Tree")
+	public String confmGI(@Name("target") String target) throws Exception
+	{
+    	boolean isTrainListEmpty = trainDataList.isEmpty();
+		boolean isTestListEmpty = testDataList.isEmpty();
+		if(isTrainListEmpty && isTestListEmpty) {
+			return "Need to query to data";
+		}
+		else
+		{
+			String confusionMatrix = "";
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target);
+			
+			
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;
 		}
@@ -1002,5 +1060,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	        return result ;
 		}
 	}
+
+    
+    
 
 }
