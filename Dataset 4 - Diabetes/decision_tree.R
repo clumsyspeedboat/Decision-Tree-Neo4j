@@ -36,6 +36,8 @@ data1
 data_matrix <- read.csv(data1, header = TRUE, sep = ",")
 
 
+# Transform variables
+
 data_matrix$Diabetes_012 <- as.factor(data_matrix$Diabetes_012)
 data_matrix$HighBP <- as.factor(data_matrix$HighBP)
 data_matrix$HighChol <- as.factor(data_matrix$HighChol)
@@ -59,47 +61,122 @@ data_matrix$Age <- as.numeric(data_matrix$Age)
 data_matrix$Education <- as.factor(data_matrix$Education)
 data_matrix$Income <- as.numeric(data_matrix$Income)
 
-sapply(data_matrix, class)
+# sapply(data_matrix, class)
 
-n = nrow(data_matrix)
-trainIndex = sample(1:n, size = round(0.75*n), replace=FALSE)
-train = data_matrix[trainIndex ,]
-test = data_matrix[-trainIndex ,]
+###################
+## Decision Tree ##
+###################
+
+###########################################
+# CART # --> Gini Index
+########
+
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  train.control <- trainControl(method = 'cv', number = 80)
+  tree1 <- train(Diabetes_012 ~., data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
+  end.time1 <- Sys.time()
+  
+  Prediction1 <- confusionMatrix(tree1)
+  
+  print(Prediction1)
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
+  
+  corrPred = diagonal/total
+  accuracy1 = corrPred*100
+  
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
+  
+  mcc1 <- mccNum/mccDen
+  
+  time_taken1 <- as.numeric(end.time1 - start.time1) * 60
+  
 
 
+###########################################
 
-start.time1 <- Sys.time()
-# train.control <- trainControl(method = 'cv', number = 20)
-tree1 <- train(Diabetes_012 ~. ,data = train, method = "rpart", parms=list(split="gini"))
-end.time1 <- Sys.time()
+###########################################
+# ID3 # --> Information Gain
+########
 
-plot(tree1)
-rpart.plot(tree1)
-fancyRpartPlot(tree1)
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  train.control <- trainControl(method = 'cv', number = 80)
+  tree2 <- train(Diabetes_012 ~., data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
+  end.time1 <- Sys.time()
+  
+  Prediction1 <- confusionMatrix(tree2)
+  
+  print(Prediction1)
+  
+  cf <- as.data.frame(as.table(Prediction1$table))
+  
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
+  
+  corrPred = diagonal/total
+  accuracy2 = corrPred*100
+  
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
+  
+  mcc2 <- mccNum/mccDen
+  
+  time_taken2 <- as.numeric(end.time1 - start.time1) * 60
 
-Prediction1 <- predict(tree1, test[2:22])
 
-print(Prediction1)
+###########################################
 
-test$predictions <- Prediction1
-cf <- table(test$predictions, test$Diabetes_012)
-cf <- as.matrix(cf)
-cf <- as.data.frame(cf)
 
-a = sum(as.numeric(cf[1,3],cf[2,3],cf[3,3]))
-b = sum(as.numeric(cf[4,3],cf[5,3],cf[6,3]))
-c = sum(as.numeric(cf[7,3],cf[8,3],cf[9,3]))
-d = sum(as.numeric(cf[1,3],cf[4,3],cf[7,3]))
-e = sum(as.numeric(cf[2,3],cf[5,3],cf[8,3]))
-f = sum(as.numeric(cf[3,3],cf[6,3],cf[9,3]))
-diagonal = sum(as.numeric(cf[1,3],cf[5,3],cf[9,3]))
-total = sum(as.numeric(cf$Freq))
+###########################################
+# C4.5 # --> Gain Ratio
+########
+  
+  options(digits.secs = 6)
+  start.time1 <- Sys.time()
+  tree3 <- J48(Diabetes_012~., data = data_matrix)
+  end.time1 <- Sys.time()
+  
+  Predictions1 <- evaluate_Weka_classifier(tree3, numFolds = 80, class = TRUE)
+  cf <- as.data.frame(as.table(Prediction1$confusionMatrix))
+  
+  a = sum(cf[1,3],cf[2,3],cf[3,3])
+  b = sum(cf[4,3],cf[5,3],cf[6,3])
+  c = sum(cf[7,3],cf[8,3],cf[9,3])
+  d = sum(cf[1,3],cf[4,3],cf[7,3])
+  e = sum(cf[2,3],cf[5,3],cf[8,3])
+  f = sum(cf[3,3],cf[6,3],cf[9,3])
+  diagonal = sum(cf[1,3],cf[5,3],cf[9,3])
+  total = sum(cf$Freq)
+  
+  corrPred = diagonal/total
+  accuracy3 = corrPred*100
+  
+  mccNum <- (diagonal*total)-(c*f)-(b*e)-(a*d)
+  mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
+  
+  mcc3 <- mccNum/mccDen
+  
+  time_taken3 <- as.numeric(end.time1 - start.time1) * 60
 
-corrPred = diagonal/total
-accuracy = corrPred*100
 
-mccNum <- diagonal*total-c*f-b*e-a*d
-mccDen <- sqrt(total**2 - a**2 -b**2 -c**2) * sqrt(total**2 - d**2 - e**2 - f**2)
-
-numMcc <- mccNum/mccDen
-
+###########################################
+######################################################################################
