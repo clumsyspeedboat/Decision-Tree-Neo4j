@@ -23,7 +23,7 @@ validation, validate the classifier and visualize tree.
 ### [- from Nodes in Neo4j](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
 ### [- from CSV file paths](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-CSV-files)
 ### [- Cross validation (nodes or CSV files)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Cross-validation-(nodes-or-CSV-files))
-### [- Confusion matrix (from CSV files without tree visualization)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Confusion-matrix-(from-CSV-files-without-tree-visualization))
+### [- Confusion matrix (from nodes or CSV files without tree visualization)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Confusion-matrix-(from-nodes--or-CSV-files-without-tree-visualization))
 
 ## Data [(check wiki)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki)
 * [Dataset 1 : Heart Failure Prediction](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%201%20-%20Heart%20Failure%20Prediction/Heart%20Failure%20Prediction.csv)
