@@ -918,10 +918,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		}
 	}
     
-   
-    
-    
-  
+
     @UserFunction
     @Description("cross validation time for data from graph database for GainRatio")
 	public String cvGR(@Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
