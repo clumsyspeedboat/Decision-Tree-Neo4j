@@ -29,15 +29,15 @@ library("RWeka")
 
 
 # Creating a data matrix #
-
+options(digits.secs = 6)
 data1 <- file.choose()
-data1
-
+time1 <- Sys.time()
 data_matrix <- read.csv(data1, header = TRUE, sep = ",")
+time2 <- Sys.time()
+time1-time2
 
 
 # Transform variables
-
 data_matrix$Diabetes_012 <- as.factor(data_matrix$Diabetes_012)
 data_matrix$HighBP <- as.factor(data_matrix$HighBP)
 data_matrix$HighChol <- as.factor(data_matrix$HighChol)
@@ -70,7 +70,6 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
 ###########################################
 # CART # --> Gini Index
 ########
-
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
@@ -103,7 +102,6 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   
   time_taken1 <- as.numeric(end.time1 - start.time1) * 60
   
-
 
 ###########################################
 
