@@ -19,11 +19,19 @@ DTP comprises of 19 procedures, which read CSV-files, map nodes, split data,
 generate decision tree using 3 different metrics , perform k-fold cross
 validation, validate the classifier and visualize tree.
 
-## Procdures to create Decision Tree
+## Procdures to 
+### > map data into training and testing
+### [- Query data for training and testing](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Query-nodes-from-Neo4j#query-data)
+### [- Display training and testing data after mapping]()
+
+### > create Decision Tree
 ### [- from Nodes in Neo4j](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-Nodes)
 ### [- from CSV file paths](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Decision-Tree-from-CSV-files)
-### [- Cross validation (nodes or CSV files)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Cross-validation-(nodes-or-CSV-files))
 ### [- Confusion matrix (from nodes or CSV files without tree visualization)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Confusion-matrix-(from-nodes--or-CSV-files-without-tree-visualization))
+
+### > Cross-validation
+### [- Cross validation (nodes or CSV files)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Cross-validation-(nodes-or-CSV-files))
+
 
 ## Data [(check wiki)](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki)
 * [Dataset 1 : Heart Failure Prediction](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/blob/main/Dataset%201%20-%20Heart%20Failure%20Prediction/Heart%20Failure%20Prediction.csv)
