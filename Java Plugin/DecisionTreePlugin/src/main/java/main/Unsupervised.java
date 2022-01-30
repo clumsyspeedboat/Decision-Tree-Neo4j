@@ -33,18 +33,139 @@ public class Unsupervised {
 		return data;
 	}
 	
+	public static void main(String[] args)
+	{
+		  ArrayList<String> inputData = dummyData(); 
+		  HashMap<String, ArrayList<String>> dbScan = DbClust(inputData, 0.9, 2, "euclidean");
+		  System.out.println(dbScan.toString());
+
+	}
 	
-	/*
-	 * public static HashMap<String, ArrayList<String>> DbClust (ArrayList<String>
-	 * inputData, int eps, int minPts, String distanceMeasure) { HashMap<String,
-	 * ArrayList<String>> dbscanAssign = new HashMap<String, ArrayList<String>>();
-	 * ArrayList<String> listOfAllNodes = new ArrayList<String>(); ArrayList<String>
-	 * listOfRemain = new ArrayList<String>(inputData);
-	 * 
-	 * 
-	 * }
-	 */
+	/**
+	-------------------------------------------------------------------------------DBSCAN Clustering ------------------------------------------------------------------------------------------
+	*/
 	
+	/**
+     * Determines the neighbours of a given input value.
+     * 
+     * @param inputValue value for which neighbours are to be calculated
+     * @return list of neighbours
+     */
+    public static ArrayList<String> getNeighbours(final String inputValue, final String distanceMetric) 
+    {
+        ArrayList<String> neighbours = new ArrayList<String>();
+        double distance = 0;
+        
+        for(int i=0; i<inputValues.size(); i++) {
+        	
+            String candidate = inputValues.get(i);
+            
+            if(distanceMetric == "bray-curtis")
+            {
+            	distance = calBrayCurtis(inputValue, candidate);
+            }
+            else if(distanceMetric == "manhattan")
+            {
+            	distance = calManhattanDist(inputValue, candidate);
+            }
+            else if(distanceMetric == "cosine")
+            {
+            	distance = calCosineSimilarity(inputValue, candidate);
+            }
+            else
+            {
+            	distance = calEuclideanDist(inputValue, candidate);
+            }
+            
+            if (distance <= epsilon) {
+                neighbours.add(candidate);
+            }
+        }
+        return neighbours;
+    }
+    
+    /**
+     * Merges the elements of the right collection to the left one and returns
+     * the combination.
+     * 
+     * @param neighbours1 left collection
+     * @param neighbours2 right collection
+     * @return Modified left collection
+     */
+    public static ArrayList<String> mergeRightToLeftCollection(final ArrayList<String> neighbours1,
+            final ArrayList<String> neighbours2) {
+        for (int i = 0; i < neighbours2.size(); i++) {
+            String tempPt = neighbours2.get(i);
+            if (!neighbours1.contains(tempPt)) {
+                neighbours1.add(tempPt);
+            }
+        }
+        return neighbours1;
+    }
+    
+    /**
+     * Applies the clustering and returns a collection of clusters (i.e. a list
+     * of lists of the respective cluster members).
+     * 
+     * @return
+     */
+    
+	public static double epsilon;
+	public static ArrayList<String> inputValues;
+	
+    public static HashMap<String, ArrayList<String>> DbClust(final ArrayList<String> inputData, double eps, int minPts, String distanceMetric )
+    {
+
+    	inputValues = inputData;
+    	epsilon = eps;
+    	
+    	HashMap<String, ArrayList<String>> resultHashmap = new HashMap<String, ArrayList<String>>();
+        ArrayList<ArrayList<String>> resultList = new ArrayList<ArrayList<String>>();
+        ArrayList<String> visitedPoints = new ArrayList<String>();
+		visitedPoints.clear();
+
+        ArrayList<String> neighbours;
+        int index = 0;
+
+        while (inputValues.size() > index) {
+            String p = inputValues.get(index);
+            if (!visitedPoints.contains(p)) {
+                visitedPoints.add(p);
+                neighbours = getNeighbours(p , distanceMetric);
+
+                if (neighbours.size() >= minPts) {
+                    int ind = 0;
+                    while (neighbours.size() > ind) {
+                        String r = neighbours.get(ind);
+                        if (!visitedPoints.contains(r)) {
+                            visitedPoints.add(r);
+                            ArrayList<String> individualNeighbours = getNeighbours(r, distanceMetric);
+                            if (individualNeighbours.size() >= minPts) {
+                                neighbours = mergeRightToLeftCollection(
+                                        neighbours,
+                                        individualNeighbours);
+                            }
+                        }
+                        ind++;
+                    }
+                    resultList.add(neighbours);
+                }
+            }
+            index++;
+        }
+        for (ArrayList<String> cluster : resultList)
+        {
+        	String newCentroid = calculateNewCentroid(cluster);
+        	resultHashmap.put(newCentroid, cluster);
+        }
+        return resultHashmap;
+    }
+    
+    
+	/**
+	-------------------------------------------------------------------------------K-MEANS Clustering ------------------------------------------------------------------------------------------
+	*/
+	 
 	/**
 	 * This is the main method to perform k-means clustering.
 	 * @param inputData is a variable where the nodes from Neo4j are stored
@@ -211,6 +332,11 @@ public class Unsupervised {
 		return hashClusterAssign;
 	}
 	
+	
+	/**
+	--------------------------------------------------------------------------Distance Measures for Clustering ------------------------------------------------------------------------------------------
+	*/
+	
 	/**
 	 * Euclidean distance calculation from point A to point B
 	 * @param start point A
@@ -305,9 +431,4 @@ public class Unsupervised {
 		return distance;
 		
 	}
-
-//	public static void main(String[] args) {
-//		ArrayList<String> inputData = dummyData();
-//		KmeanClust(inputData,2,5);
-//	}
 }
