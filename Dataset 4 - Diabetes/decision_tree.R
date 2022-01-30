@@ -115,11 +115,11 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   tree2 <- train(Diabetes_012 ~., data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
   end.time1 <- Sys.time()
   
-  Prediction1 <- confusionMatrix(tree2)
+  Prediction2 <- confusionMatrix(tree2)
   
-  print(Prediction1)
+  print(Prediction2)
   
-  cf <- as.data.frame(as.table(Prediction1$table))
+  cf <- as.data.frame(as.table(Prediction2$table))
   
   a = sum(cf[1,3],cf[2,3],cf[3,3])
   b = sum(cf[4,3],cf[5,3],cf[6,3])
@@ -153,8 +153,9 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   tree3 <- J48(Diabetes_012~., data = data_matrix)
   end.time1 <- Sys.time()
   
-  Predictions1 <- evaluate_Weka_classifier(tree3, numFolds = 80, class = TRUE)
-  cf <- as.data.frame(as.table(Prediction1$confusionMatrix))
+  Prediction3 <- evaluate_Weka_classifier(tree3, numFolds = 40, complexity = TRUE, class = TRUE)
+  
+  cf <- as.data.frame(as.table(Prediction3$confusionMatrix))
   
   a = sum(cf[1,3],cf[2,3],cf[3,3])
   b = sum(cf[4,3],cf[5,3],cf[6,3])
