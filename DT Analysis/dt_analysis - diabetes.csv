@@ -1,0 +1,14 @@
+tree,dataset,language,splitting_criterion,k-fold,accuracy,mcc,gen_time,upload_time
+d1,Diabetes,r,gini,80,84.65,0.1914,286.68,2.326
+d2,Diabetes,r,info gain,80,84.72,0.2163,288.25,2.326
+d4,Diabetes,python,gini,80,76.87,0.1782,102,0.3102
+d5,Diabetes,python,info gain,80,77.24,0.1827,108.13,0.3102
+d6,Diabetes,java,gini,80,76.29,0.164,0.1389,1.044
+d7,Diabetes,java,info gain,80,76.29,0.1606,0.2109,1.044
+d8,Diabetes,java,gain ratio,80,76.29,0.152,0.007,1.044
+d9,Diabetes,neo4j (csv),gini,80,77.72,0.16433,29.22,1.044
+d10,Diabetes,neo4j (csv),info gain,80,77.6,0.1606,17.524,1.044
+d11,Diabetes,neo4j (csv),gain ratio,80,81.26,0.16627,36.143,1.044
+d12,Diabetes,neo4j (nodes),gini,80,77.72,0.1643,36.641,6.627
+d13,Diabetes,neo4j (nodes),info gain,80,77.61,0.1606,21.4,6.627
+d14,Diabetes,neo4j (nodes),gain ratio,80,81.26,0.16627,44.56,6.627
