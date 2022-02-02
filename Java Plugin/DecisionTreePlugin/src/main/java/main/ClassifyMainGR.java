@@ -28,24 +28,30 @@ public class ClassifyMainGR {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
+//		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
 		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGR mine = new EvaluateTreeGR(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
 		
-		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/heart_failure_original.csv");
-		CrossValidation cv = new CrossValidation(customList,"DEATH_EVENT");
+		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
+		CrossValidation cv = new CrossValidation(customList,"Diabetes_012");
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("20"), "InfoGain");
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "GainRatio");
+		
 		double mcc = cv.getMccAverage();
 		System.out.println("calculated mcc: " + mcc);
-		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+		double totalGenerationTime = cv.getCvGenerationTimeAverage();
+		System.out.println("calculated generation time: " + totalGenerationTime);
+
+		double score = cv.getScoreAverage();
 		
-	    mine.calculateAccuracy();
+		System.out.println("calculated accuracy: " + score);
+		
+//	    mine.calculateAccuracy();
 	    	    
 	    PrintTree tree = new PrintTree();
 	    		 
-		tree.createNodesForGraph(mine.getRoot());
+//		tree.createNodesForGraph(mine.getRoot());
 
 		in.close();
 	}

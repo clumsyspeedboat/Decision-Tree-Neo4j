@@ -32,21 +32,22 @@ public class ClassifyMainIG {
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/test.csv");
 		//EvaluateTree mine = new EvaluateTree(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
 	    
-	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/Metaprotein_50.csv");
-		CrossValidation cv = new CrossValidation(customList, "Patient_Type");
+	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
+		CrossValidation cv = new CrossValidation(customList, "Diabetes_012");
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("10"), "GainRatio");
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "InfoGain");
 		double mcc = cv.getMccAverage();
-		double generateTime = cv.getCvGenerationTimeAverage();
+		System.out.println("calculated mcc: " + mcc);
+		double totalGenerationTime = cv.getCvGenerationTimeAverage();
+		System.out.println("calculated generation time: " + totalGenerationTime);
+		
 		double score = cv.getScoreAverage();
-		//ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
-	    
-		//mine.calculateAccuracy();
-
-	    //PrintTree tree = new PrintTree();
-	    //System.out.println(tree.printDFS(mine.getRoot()));
-	    
-		//tree.createNodesForGraph(mine.getRoot());
+		System.out.println("calculated accuracy: " + score);
+		
+//	    mine.calculateAccuracy();
+//	    PrintTree tree = new PrintTree();
+	
+//		tree.createNodesForGraph(mine.getRoot());
 		
 		in.close();
 	}

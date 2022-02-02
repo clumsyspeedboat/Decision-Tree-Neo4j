@@ -27,7 +27,7 @@ public class ClassifyMainGI {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],Constants.TARGET_ATTRIBUTE);
+//		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],Constants.TARGET_ATTRIBUTE);
 		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
@@ -38,16 +38,15 @@ public class ClassifyMainGI {
 		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "Gini");
 		double mcc = cv.getMccAverage();
 		System.out.println("calculated mcc: " + mcc);
-		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();
+		double totalGenerationTime = cv.getCvGenerationTimeAverage();
+		System.out.println("calculated generation time: " + totalGenerationTime);
 
-	
-	    mine.calculateAccuracy();
-
+		double score = cv.getScoreAverage();
+		
+		System.out.println("calculated accuracy: " + score);
+		
 	    PrintTree tree = new PrintTree();
 	    
-		
-		tree.createNodesForGraph(mine.getRoot());
-		
 		in.close();
 	}
 }

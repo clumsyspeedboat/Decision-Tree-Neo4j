@@ -40,6 +40,8 @@ public class CrossValidation {
 	private ArrayList<Double> mccArray;
 	private double mccAverage;
 	
+	String cfmDiabetes;
+	
 	/**
 	 * Constructor which process the csv file 
 	 * @param trainData
@@ -181,7 +183,18 @@ public class CrossValidation {
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
 	     
 		 }
+		 cfmDiabetes = Arrays.deepToString(confMatrix);
 		 System.out.println(Arrays.deepToString(confMatrix));
+		 
+//		 for (int[] x : confMatrix)
+//		 {
+//		    for (int y : x)
+//		    {
+//		         System.out.print(y + " ");
+//		    }
+//		    System.out.println();
+//		 }
+		 
 		 if(matrixSize==2) {
 			 truePositive = confMatrix[0][0]; 
 			 trueNegative = confMatrix[1][1];
@@ -375,6 +388,11 @@ public class CrossValidation {
 		}
 		scoresAverage = score/scores.size();
 		return scoresAverage;
+	}
+	
+	public String getCfmDiabetes()
+	{
+		return cfmDiabetes;
 	}
 	
 
