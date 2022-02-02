@@ -617,16 +617,14 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGICsv(@Name("path") String path) throws Exception
+    public String createTreeGICsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute ) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
-
-			String[] paths = path.split(",");
 			
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], paths[2]);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -658,16 +656,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeGRCsv(@Name("path") String path) throws Exception
+    public String createTreeGRCsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute ) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 
-			String[] paths = path.split(",");
 			
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], paths[2]);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -700,16 +697,14 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeIGCsv(@Name("path") String path) throws Exception
+    public String createTreeIGCsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute )throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
-
-			String[] paths = path.split(",");
 			
-			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], paths[2]);
+			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -743,9 +738,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confmIGcsv(@Name("path") String path,@Name("target") String target) throws Exception
+	public String confmIGcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
 	{
-		if(path == null)
+		if(trainPath == null || testPath == null )
 		{
 			return null;
 		}
@@ -754,8 +749,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
 
-			String[] paths = path.split(",");
-			EvaluateTree mine = new EvaluateTree(paths[0], paths[1], target);
+			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
@@ -773,9 +767,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
-	public String confmGRcsv(@Name("path") String path,@Name("target") String target) throws Exception
+	public String confmGRcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
 	{
-		if(path == null)
+		if(trainPath == null || testPath == null)
 		{
 			return null;
 		}
@@ -784,8 +778,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
 
-			String[] paths = path.split(",");
-			EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], target);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
@@ -802,9 +795,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
-	public String confmGIcsv(@Name("path") String path,@Name("target") String target) throws Exception
+	public String confmGIcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
 	{
-		if(path == null)
+		if(trainPath == null || testPath == null)
 		{
 			return null;
 		}
@@ -813,8 +806,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
 
-			String[] paths = path.split(",");
-			EvaluateTreeGI mine = new EvaluateTreeGI(paths[0], paths[1], target);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;

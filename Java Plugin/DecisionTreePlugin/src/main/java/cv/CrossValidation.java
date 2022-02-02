@@ -272,7 +272,6 @@ public class CrossValidation {
 				}
 			}
             
-			long startTime = System.currentTimeMillis();
 			ConstructTree tree;
 			if(algorithmType == "InfoGain")
 			{
@@ -286,6 +285,7 @@ public class CrossValidation {
 			{
 				tree = new ConstructTreeGI(trainInstances, attributes, target);
 			}
+			long startTime = System.currentTimeMillis();
 			root = tree.construct();
 			
 			long endTime = System.currentTimeMillis();
