@@ -32,10 +32,10 @@ public class ClassifyMainGI {
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
 		
-		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/flu_classification.csv");
-		CrossValidation cv = new CrossValidation(customList, "Diagnosis");
+		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
+		CrossValidation cv = new CrossValidation(customList, "Diabetes_012");
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("40"), "InfoGain");
+		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "Gini");
 		double mcc = cv.getMccAverage();
 		System.out.println("calculated mcc: " + mcc);
 		ArrayList<Double> totalGenerationTime = cv.getCvGenerationTime();

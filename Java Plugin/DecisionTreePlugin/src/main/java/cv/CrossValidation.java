@@ -179,7 +179,9 @@ public class CrossValidation {
 	         int outLabelIndex = categories.indexOf(predLabel);
 	         int actualLabelIndex = categories.indexOf(actualLabel);
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
+	     
 		 }
+		 System.out.println(Arrays.deepToString(confMatrix));
 		 if(matrixSize==2) {
 			 truePositive = confMatrix[0][0]; 
 			 trueNegative = confMatrix[1][1];
@@ -309,11 +311,12 @@ public class CrossValidation {
 				}
 			}
 			ArrayList<Integer> conMatrixArray = calculateConfusionMatrix(actual, prec);
-			if(conMatrixArray.size()!=0)
-			{
-				double mcc = mccCalculation(conMatrixArray);
-				mccArray.add(mcc);
-			}
+//			if(conMatrixArray.size()!=0)
+//			{
+//				System.out.println(conMatrixArray.toString());
+//				double mcc = mccCalculation(conMatrixArray);
+//				mccArray.add(mcc);
+//			}
 			scores.add(correct * 1.0 / res.size());
 		}
 		return scores;
