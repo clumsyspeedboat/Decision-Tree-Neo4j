@@ -262,7 +262,8 @@ public class CrossValidation {
 			testInstances = new ArrayList<Instance>();
 
 			result = new ArrayList<Instance>();
-
+			long startTime = System.currentTimeMillis();
+			
 			for(int j = 0; j < testBundles.size(); j++) {
 				if(i == j) {
 					result.addAll(testBundles.get(j));
@@ -285,7 +286,7 @@ public class CrossValidation {
 			{
 				tree = new ConstructTreeGI(trainInstances, attributes, target);
 			}
-			long startTime = System.currentTimeMillis();
+			
 			root = tree.construct();
 			
 			long endTime = System.currentTimeMillis();
