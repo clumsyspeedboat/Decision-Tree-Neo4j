@@ -275,7 +275,7 @@ public class CrossValidation {
 			trainInstances = new ArrayList<Instance>();
 
 			testInstances = new ArrayList<Instance>();
-
+			
 			result = new ArrayList<Instance>();
 			long startTime = System.currentTimeMillis();
 			
@@ -287,6 +287,10 @@ public class CrossValidation {
 					trainInstances.addAll(testBundles.get(j));
 				}
 			}
+			
+			System.out.println(trainInstances.size());
+			System.out.println(testInstances.size());
+		
             
 			ConstructTree tree;
 			if(algorithmType == "InfoGain")
