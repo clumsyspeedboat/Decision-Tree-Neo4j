@@ -73,7 +73,7 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  train.control <- trainControl(method = 'cv', number = 80)
+  train.control <- trainControl(method = 'cv', number = 5)
   tree1 <- train(Diabetes_012 ~., data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="gini"))
   end.time1 <- Sys.time()
   
@@ -111,7 +111,7 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
 
   options(digits.secs = 6)
   start.time1 <- Sys.time()
-  train.control <- trainControl(method = 'cv', number = 80)
+  train.control <- trainControl(method = 'cv', number = 5)
   tree2 <- train(Diabetes_012 ~., data = data_matrix, method = "rpart", trControl = train.control, parms=list(split="information"))
   end.time1 <- Sys.time()
   
@@ -153,7 +153,7 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   tree3 <- J48(Diabetes_012~., data = data_matrix)
   end.time1 <- Sys.time()
   
-  Prediction3 <- evaluate_Weka_classifier(tree3, numFolds = 40, complexity = TRUE, class = TRUE)
+  Prediction3 <- evaluate_Weka_classifier(tree3, numFolds = 5, complexity = TRUE, class = TRUE)
   
   cf <- as.data.frame(as.table(Prediction3$confusionMatrix))
   
