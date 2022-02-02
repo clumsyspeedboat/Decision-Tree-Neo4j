@@ -100,7 +100,7 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   
   mcc1 <- mccNum/mccDen
   
-  time_taken1 <- as.numeric(end.time1 - start.time1) * 60
+  time_taken1 <- as.numeric(end.time1 - start.time1)
   
 
 ###########################################
@@ -138,7 +138,7 @@ data_matrix$Income <- as.numeric(data_matrix$Income)
   
   mcc2 <- mccNum/mccDen
   
-  time_taken2 <- as.numeric(end.time1 - start.time1) * 60
+  time_taken2 <- as.numeric(end.time1 - start.time1)
 
 
 ###########################################
