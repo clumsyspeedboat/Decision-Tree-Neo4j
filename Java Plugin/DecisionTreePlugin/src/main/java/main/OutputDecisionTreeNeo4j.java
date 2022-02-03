@@ -903,8 +903,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-			 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score; 
 	       
 	        return result;
 		}
@@ -928,8 +930,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-			 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score;
 	       
 	        return result;
 		}
@@ -952,8 +956,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-			 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score;
 	       
 	        return result;
 		}
@@ -976,8 +982,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-				 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score;	 
 	       
 	        return result ;
 		}
@@ -1018,8 +1026,10 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-				 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score;	 
 	       
 	        return result ;
 		}
@@ -1043,8 +1053,11 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 			double mcc = cv.getMccAverage();
 			double generateTime = cv.getCvGenerationTimeAverage();
 			double score = cv.getScoreAverage();
-			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + "\n" + "calculated average accuracy: " + score;
-				 
+			String cfm = cv.getCfmDiabetes();
+			String result = "calculated average mcc: " + mcc + "\n" + "calculated average generateTime: " + generateTime + 
+					"\n" + "confusion matrix: " + cfm + 
+					"\n" + "calculated average accuracy: " + score;
+			
 	       
 	        return result ;
 		}

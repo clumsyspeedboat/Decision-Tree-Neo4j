@@ -33,19 +33,20 @@ public class ClassifyMainGI {
 		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
 		
 		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
+
 		CrossValidation cv = new CrossValidation(customList, "Diabetes_012");
 		
 		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "Gini");
-		double mcc = cv.getMccAverage();
-		System.out.println("calculated mcc: " + mcc);
-		double totalGenerationTime = cv.getCvGenerationTimeAverage();
-		System.out.println("calculated generation time: " + totalGenerationTime);
-
-		double score = cv.getScoreAverage();
-		
-		System.out.println("calculated accuracy: " + score);
-		
-	    PrintTree tree = new PrintTree();
+//		double mcc = cv.getMccAverage();
+//		System.out.println("calculated mcc: " + mcc);
+//		double totalGenerationTime = cv.getCvGenerationTimeAverage();
+//		System.out.println("calculated generation time: " + totalGenerationTime);
+//
+//		double score = cv.getScoreAverage();
+//		
+//		System.out.println("calculated accuracy: " + score);
+//		
+//	    PrintTree tree = new PrintTree();
 	    
 		in.close();
 	}

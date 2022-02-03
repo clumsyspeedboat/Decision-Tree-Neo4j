@@ -40,7 +40,7 @@ public class CrossValidation {
 	private ArrayList<Double> mccArray;
 	private double mccAverage;
 	
-	String cfmDiabetes;
+	String cfmDiabetes = "";
 	
 	/**
 	 * Constructor which process the csv file 
@@ -108,10 +108,12 @@ public class CrossValidation {
 				curBundle.add(totalInstances.get(curIndex));
 				totalInstances.remove(curIndex);
 			}
-			testBundles.add(curBundle);
+			testBundles.add(curBundle);	
 		}
 		
+
 		ArrayList<Instance> lastBundle = new ArrayList<Instance>();
+		
 		for(int i = 0; i < totalInstances.size(); i++) {
 			lastBundle.add(totalInstances.get(i));
 		}
@@ -183,8 +185,8 @@ public class CrossValidation {
 	         confMatrix[actualLabelIndex][outLabelIndex] += 1;
 	     
 		 }
-		 cfmDiabetes = Arrays.deepToString(confMatrix);
-		 System.out.println(Arrays.deepToString(confMatrix));
+		 cfmDiabetes = cfmDiabetes + "|" + Arrays.deepToString(confMatrix);
+		 System.out.println(cfmDiabetes);
 		 
 //		 for (int[] x : confMatrix)
 //		 {
@@ -273,7 +275,7 @@ public class CrossValidation {
 		scores = new ArrayList<Double>();
 		for(int i = 0; i < testBundles.size(); i++) {
 			trainInstances = new ArrayList<Instance>();
-
+		
 			testInstances = new ArrayList<Instance>();
 			
 			result = new ArrayList<Instance>();
@@ -288,10 +290,7 @@ public class CrossValidation {
 				}
 			}
 			
-			System.out.println(trainInstances.size());
-			System.out.println(testInstances.size());
-		
-            
+			
 			ConstructTree tree;
 			if(algorithmType == "InfoGain")
 			{
