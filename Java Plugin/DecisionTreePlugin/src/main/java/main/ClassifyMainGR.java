@@ -51,10 +51,11 @@ public class ClassifyMainGR {
 		
 	    PrintTree tree = new PrintTree();
 	    System.out.println(mine.getRoot());
-	
+	    
 	    //System.out.println(tree.printDFS(mine.getRoot()));
-		//tree.createNodesForGraph(mine.getRoot());
-
+		tree.createNodesForGraph(mine.getRoot());
+		System.out.println(tree.nodesBucket);
+	    
 		in.close();
 	}
 
