@@ -47,13 +47,13 @@ public class ClassifyMainGR {
 		
 //		System.out.println("calculated accuracy: " + score);
 		
-//	    mine.calculateAccuracy();
-		String confusionMatrix = mine.calculateAccuracy();
+	    mine.calculateAccuracy();
 		
 	    PrintTree tree = new PrintTree();
-	    
-	    		 
-		tree.createNodesForGraph(mine.getRoot());
+	    System.out.println(mine.getRoot());
+	
+	    //System.out.println(tree.printDFS(mine.getRoot()));
+		//tree.createNodesForGraph(mine.getRoot());
 
 		in.close();
 	}

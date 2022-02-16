@@ -23,9 +23,9 @@ public class TreeNode {
 	private int parentLevel;
 	private int currentLevel;
 	
-
-	
 	private int index;
+	
+	public TreeNode() {}
 	
 
 	public TreeNode(Attribute attribute) {
