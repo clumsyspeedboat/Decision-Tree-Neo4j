@@ -136,7 +136,9 @@ public class PrintTree{
 				temp.add(Integer.toString(relationNames.get(tl)));
 				
 				//edge value
-				//temp.add(tmp.replaceAll("[^\\d.]", ""));
+				if (tmp.contains("."))
+					temp.add(tmp.replace(".", "_"));
+					//tmp = tmp.split(".")[0] + "_" + tmp.split(".")[1];
 				temp.add(tmp);
 				
 				//add direction left or right
@@ -170,8 +172,11 @@ public class PrintTree{
 				//add duplicates
 				temp.add(Integer.toString(relationNames.get(rootAtt)));
 				//edge value
-				//temp.add(tmp.replaceAll("[^\\d.]", ""));
+				if (tmp.contains("."))
+					temp.add(tmp.replace(".", "_"));
+					//tmp = tmp.split(".")[0] + "_" + tmp.split(".")[1];
 				temp.add(tmp);
+				//temp.add(tmp);
 				
 				int ind = root.getIndex();
 				if(ind == 0) {
