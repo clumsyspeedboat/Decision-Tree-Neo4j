@@ -28,7 +28,7 @@ public class ClassifyMainGR {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-		EvaluateTreeGR mine = new EvaluateTreeGR(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
+		EvaluateTreeGR mine = new EvaluateTreeGR("data/diabetes_train.csv", "data/diabetes_test.csv", "Diabetes_012");
 		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
 		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
 		//EvaluateTreeGR mine = new EvaluateTreeGR(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
