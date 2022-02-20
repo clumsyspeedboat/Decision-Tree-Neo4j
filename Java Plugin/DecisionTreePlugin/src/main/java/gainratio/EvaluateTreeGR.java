@@ -12,16 +12,23 @@ import evaluate.EvaluateTree;
 
 
 public class EvaluateTreeGR extends EvaluateTree{
+	String isPruned = "True";
+	int max_depth = 3;
 	
-	public EvaluateTreeGR(String trainData, String testData, String targetAtt) throws IOException {
-		super(trainData,testData, targetAtt);
+	public EvaluateTreeGR(String trainData, String testData, String targetAtt, String isPruned, int max_depth) throws IOException {
+		super(trainData,testData, targetAtt, isPruned, max_depth);
+		this.isPruned=isPruned;
+		this.max_depth=max_depth;
 	}
 	
-	public EvaluateTreeGR(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr) throws IOException {
-		super(trainDataList, testDataList, targetAttr);
+	public EvaluateTreeGR(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr, String isPruned, int max_depth) throws IOException {
+		super(trainDataList, testDataList, targetAttr, isPruned, max_depth);
+		this.isPruned=isPruned;
+		this.max_depth=max_depth;
 	}
 	
 	
+
 	/**
 	 * Evaluate the decision tree on the test set 
 	 * 
@@ -32,7 +39,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		long tstTime = System.currentTimeMillis();
 		String confusionMatrix = "";
 
-		ConstructTreeGR tree = new ConstructTreeGR(getTrainInstances(), getAttributes(), getTarget());
+		ConstructTreeGR tree = new ConstructTreeGR(getTrainInstances(), getAttributes(), getTarget(), isPruned, max_depth);
 		//root = tree.construct();
 		super.setRoot(tree.construct());
 

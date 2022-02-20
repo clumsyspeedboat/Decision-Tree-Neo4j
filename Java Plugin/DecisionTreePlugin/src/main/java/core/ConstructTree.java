@@ -16,11 +16,12 @@ public class ConstructTree {
 	protected ArrayList<Attribute> attributes;
 	protected ArrayList<Instance> instances;
 	protected Attribute target;
-	private int level = 0;
-	private int parentLevel = 0; 
+	int count = 0; 
+	private int max_depth = 3;
+	private String isPruned = "True";
 	
 	
-	public ConstructTree(String fileName, String targetAttr) throws IOException {
+	public ConstructTree(String fileName, String targetAttr, String isPruned, int max_depth) throws IOException {
 		ProcessInputData input = new ProcessInputData(fileName, targetAttr);
 		this.attributes = input.getAttributeSet();
 		this.instances = input.getInstanceSet();
@@ -28,11 +29,12 @@ public class ConstructTree {
 	}
 
 	
-	public ConstructTree(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
-                         Attribute target) {
+	public ConstructTree(ArrayList<Instance> instances, ArrayList<Attribute> attributes, Attribute target, String isPruned, int max_depth) {
 		this.instances = instances;
 		this.attributes = attributes;
 		this.target = target;
+		this.setIsPruned(isPruned);
+		this.setMax_depth(max_depth);
 	}
 	
 	/**
@@ -98,15 +100,31 @@ public class ConstructTree {
 		}else {
 			for (String valueName : valueSubsets.keySet()) {
 				ArrayList<Instance> subset = valueSubsets.get(valueName);
-				if (subset.size() == 0) {
-					String leafLabel = getMajorityLabel(target, instances);
-					TreeNode leaf = new TreeNode(leafLabel);
-					root.addChild(valueName, leaf);
-					
-				} else {
-					TreeNode child = constructTree(target, attributes, subset);
-					root.addChild(valueName, child);
-				}			
+				if(getIsPruned().equals("True"))
+				{
+					if (count < this.getMax_depth()) {
+						count += 1;
+						TreeNode child = constructTree(target, attributes, subset);
+						root.addChild(valueName, child);
+					}
+					else {
+						String leafLabel = getMajorityLabel(target, instances);
+						TreeNode leaf = new TreeNode(leafLabel);
+						root.addChild(valueName, leaf);
+					}
+				}
+				else
+				{
+					if (subset.size() == 0) 
+					{
+						String leafLabel = getMajorityLabel(target, instances);
+						TreeNode leaf = new TreeNode(leafLabel);
+						root.addChild(valueName, leaf);
+					} else {
+						TreeNode child = constructTree(target, attributes, subset);
+						root.addChild(valueName, child);
+					}
+				}		
 			}	
 		}
 		
@@ -151,5 +169,25 @@ public class ConstructTree {
 			}
 		}
 		return maxLabel;
+	}
+
+
+	public int getMax_depth() {
+		return max_depth;
+	}
+
+
+	public void setMax_depth(int max_depth) {
+		this.max_depth = max_depth;
+	}
+
+
+	public String getIsPruned() {
+		return isPruned;
+	}
+
+
+	public void setIsPruned(String isPruned) {
+		this.isPruned = isPruned;
 	}
 }

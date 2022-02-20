@@ -108,7 +108,7 @@ public class GainRatioTreeTester {
 		ArrayList<Attribute> attList = createAttributes();
 		
 		
-		ConstructTreeGR tree = new ConstructTreeGR(instances, attList, target);
+		ConstructTreeGR tree = new ConstructTreeGR(instances, attList, target, "False", 0);
 		TreeNode root = tree.construct();
 	    
 		PrintTree p = new PrintTree();

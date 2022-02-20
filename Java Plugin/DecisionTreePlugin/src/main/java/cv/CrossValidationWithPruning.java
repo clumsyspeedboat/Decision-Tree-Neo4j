@@ -149,7 +149,7 @@ public class CrossValidationWithPruning {
 			for(; index < allTrainInstances.size(); index++) {
 				pruningInstances.add(allTrainInstances.get(index));
 			}
-			ConstructTree tree = new ConstructTree(trainInstances, attributes, target);
+			ConstructTree tree = new ConstructTree(trainInstances, attributes, target, "False", 0);
 			root = tree.construct();
 			rootBefore = root;
 			

@@ -24,6 +24,8 @@ public class EvaluateTree {
 	private ArrayList<Attribute> attributes;
 	private ArrayList<Instance> testInstances;
 	private ArrayList<Instance> trainInstances;
+	private String isPruned;
+	private int max_depth;
 	private Attribute target;
 	private TreeNode root;
 	protected ArrayList<Instance> result;
@@ -36,7 +38,7 @@ public class EvaluateTree {
 	 * @param testData
 	 * @throws IOException
 	 */
-	public EvaluateTree(String trainData, String testData, String targetAttr) throws IOException {
+	public EvaluateTree(String trainData, String testData, String targetAttr, String isPruned, int max_depth) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainData, targetAttr);
 		ProcessInputData test = new ProcessInputData(testData, targetAttr);	
@@ -46,6 +48,9 @@ public class EvaluateTree {
 	
 		this.trainInstances = train.getInstanceSet();
 		this.testInstances = test.getInstanceSet();
+		
+		this.isPruned = isPruned;
+		this.max_depth = max_depth;
 		
 		
 		result.addAll(testInstances);
@@ -59,7 +64,7 @@ public class EvaluateTree {
 	 * @param targetAttr- The target Attribute
 	 * @throws IOException
 	 */
-	public EvaluateTree(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr) throws IOException {
+	public EvaluateTree(ArrayList<String> trainDataList, ArrayList<String> testDataList, String targetAttr, String isPruned, int max_depth) throws IOException {
 		result = new ArrayList<Instance>();
 		ProcessInputData train = new ProcessInputData(trainDataList, targetAttr);
 		ProcessInputData test = new ProcessInputData(testDataList, targetAttr);	
@@ -233,7 +238,7 @@ public class EvaluateTree {
 		long tstTime = System.currentTimeMillis();
 		
 		
-		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target);
+		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target, this.isPruned, this.max_depth);
 		root = tree.construct();
 		
 

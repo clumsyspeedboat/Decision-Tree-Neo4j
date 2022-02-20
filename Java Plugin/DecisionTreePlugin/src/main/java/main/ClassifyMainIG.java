@@ -27,27 +27,14 @@ public class ClassifyMainIG {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-	    //EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE);
-		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/train.csv");
-		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/test.csv");
-		//EvaluateTree mine = new EvaluateTree(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
+	    EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE, Constants.IS_PRUNED, Constants.MAX_DEPTH);
+
+	    mine.calculateAccuracy();
+		
+	    PrintTree tree = new PrintTree();
+	    System.out.println(mine.getRoot());
 	    
-	    ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
-		CrossValidation cv = new CrossValidation(customList, "Diabetes_012");
-		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "InfoGain");
-		double mcc = cv.getMccAverage();
-		System.out.println("calculated mcc: " + mcc);
-		double totalGenerationTime = cv.getCvGenerationTimeAverage();
-		System.out.println("calculated generation time: " + totalGenerationTime);
-		
-		double score = cv.getScoreAverage();
-		System.out.println("calculated accuracy: " + score);
-		
-//	    mine.calculateAccuracy();
-//	    PrintTree tree = new PrintTree();
-	
-//		tree.createNodesForGraph(mine.getRoot());
+		tree.createNodesForGraph(mine.getRoot());
 		
 		in.close();
 	}

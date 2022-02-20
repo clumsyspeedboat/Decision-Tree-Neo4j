@@ -113,15 +113,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     			EvaluateTree mine;
     			if(decisionTreeType == "IG")
     			{
-    				mine = new EvaluateTree(trainDataList, testDataList, targetAttribute);
+    				mine = new EvaluateTree(trainDataList, testDataList, targetAttribute,"False",0);
     			}
     			else if (decisionTreeType == "GI")
     			{
-    				mine = new EvaluateTreeGI(trainDataList, testDataList, targetAttribute);
+    				mine = new EvaluateTreeGI(trainDataList, testDataList, targetAttribute,"False",0);
     			}
     			else
     			{
-    				mine = new EvaluateTreeGR(trainDataList, testDataList, targetAttribute);
+    				mine = new EvaluateTreeGR(trainDataList, testDataList, targetAttribute,"False",0);
     			}
     			
     			mine.calculateAccuracy();
@@ -490,7 +490,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeIG(@Name("target") String target) throws Exception {
+    public String createTreeIG(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -501,8 +501,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		if(isTrainListEmpty && isTestListEmpty) {
     			return target + "False";
     		}else {
-		
-				EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target);
+    			int maxDepth = Integer.parseInt(max_depth);
+				EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target, isPruned, maxDepth);
 
 				confusionMatrix = mine.calculateAccuracy();
 
@@ -532,7 +532,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGI(@Name("target") String target) throws Exception {
+    public String createTreeGI(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -543,8 +543,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		if(isTrainListEmpty && isTestListEmpty) {
     			return target + "False";
     		}else {
-		
-				EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target);
+    			int maxDepth = Integer.parseInt(max_depth);
+				EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target, isPruned, maxDepth);
 
 				confusionMatrix = mine.calculateAccuracy();
 
@@ -574,7 +574,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGR(@Name("target") String target) throws Exception {
+    public String createTreeGR(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth) throws Exception {
     	
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
@@ -585,8 +585,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     		if(isTrainListEmpty && isTestListEmpty) {
     			return target + "False";
     		}else {
-		
-				EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target);
+    			int maxDepth = Integer.parseInt(max_depth);
+				EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target, isPruned, maxDepth);
 
 				confusionMatrix = mine.calculateAccuracy();
 
@@ -617,14 +617,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      * @throws Exception
      */
     @UserFunction
-    public String createTreeGICsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute ) throws Exception
+    public String createTreeGIcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
-			
-			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute);
+    		
+    		int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -656,15 +657,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeGRCsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute ) throws Exception
+    public String createTreeGRcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth) throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 
-			
-			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute);
+    		int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -697,14 +698,15 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     
     @UserFunction
-    public String createTreeIGCsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute )throws Exception
+    public String createTreeIGcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth )throws Exception
 	{
     	String confusionMatrix = "";
     	try ( OutputDecisionTreeNeo4j connector = new OutputDecisionTreeNeo4j( "bolt://localhost:7687", "neo4j", "123" ) )
         {
     		Scanner in = new Scanner(System.in);
 			
-			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute);
+    		int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 
@@ -738,7 +740,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confmIGcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
+	public String confmIGcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute , @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
 		if(trainPath == null || testPath == null )
 		{
@@ -748,8 +750,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
-
-			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute);
+			
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTree mine = new EvaluateTree(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
@@ -767,7 +770,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
-	public String confmGRcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
+	public String confmGRcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
 		if(trainPath == null || testPath == null)
 		{
@@ -777,8 +780,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
-
-			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute);
+			
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
@@ -795,7 +799,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
-	public String confmGIcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute) throws Exception
+	public String confmGIcsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath, @Name("targetAttribute") String targetAttribute, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth) throws Exception
 	{
 		if(trainPath == null || testPath == null)
 		{
@@ -805,8 +809,9 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			String confusionMatrix = "";
 			Scanner in = new Scanner(System.in);
-
-			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute);
+			
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, targetAttribute, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gini Index DT: " + confusionMatrix;
@@ -822,7 +827,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      */
     @UserFunction
     @Description("retrieve the confusion matrix Information Gain Decision Tree")
-	public String confmIG(@Name("target") String target) throws Exception
+	public String confmIG(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
     	boolean isTrainListEmpty = trainDataList.isEmpty();
 		boolean isTestListEmpty = testDataList.isEmpty();
@@ -832,7 +837,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			String confusionMatrix = "";
-			EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target);
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Information Gain DT : " + confusionMatrix;
@@ -841,7 +847,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
      
     @UserFunction
     @Description("retrieve the confusion matrix Gain Ratio Decision Tree")
-	public String confmGR(@Name("target") String target) throws Exception
+	public String confmGR(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
     	boolean isTrainListEmpty = trainDataList.isEmpty();
 		boolean isTestListEmpty = testDataList.isEmpty();
@@ -851,7 +857,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			String confusionMatrix = "";
-			EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target);
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target, isPruned, maxDepth);
 
 			confusionMatrix = mine.calculateAccuracy();
 			return "The confusion Matrix for Gain Ratio DT: " + confusionMatrix;
@@ -868,7 +875,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("retrieve the confusion matrix Gini Index Decision Tree")
-	public String confmGI(@Name("target") String target) throws Exception
+	public String confmGI(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth ) throws Exception
 	{
     	boolean isTrainListEmpty = trainDataList.isEmpty();
 		boolean isTestListEmpty = testDataList.isEmpty();
@@ -878,7 +885,8 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		else
 		{
 			String confusionMatrix = "";
-			EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target);
+			int maxDepth = Integer.parseInt(max_depth);
+			EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target, isPruned, maxDepth);
 			
 			
 			confusionMatrix = mine.calculateAccuracy();
@@ -967,7 +975,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	
     @UserFunction
     @Description("cross validation time for data from csv for InfoGain")
-	public String cvIGCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvIGcsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
@@ -1010,7 +1018,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from csv for GainRatio")
-	public String cvGRCsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvGRcsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{
@@ -1037,7 +1045,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
     
     @UserFunction
     @Description("cross validation time for data from csv for GiniIndex")
-	public String cvGICsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
+	public String cvGIcsv(@Name("path") String path, @Name("target") String target, @Name("numberOfFold") String numberOfFold) throws Exception
 	{
 		if(path == null)
 		{

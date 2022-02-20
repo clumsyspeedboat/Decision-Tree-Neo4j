@@ -4,6 +4,7 @@ import definition.Attribute;
 import core.ConstructTree;
 import definition.Instance;
 import node.TreeNode;
+import scala.reflect.api.Trees.SuperExtractor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,10 +12,12 @@ import java.util.HashMap;
 
 
 public class ConstructTreeGI extends ConstructTree{
+	int count =0;
 	
-	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes,
-                         Attribute target){
-		super(instances,attributes,target);
+	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes, Attribute target, String isPruned, int max_depth){
+		super(instances,attributes,target,isPruned,max_depth);
+		setMax_depth(max_depth);
+		this.setIsPruned(isPruned);
 	}
 	
 	/**
@@ -72,14 +75,31 @@ public class ConstructTreeGI extends ConstructTree{
 			
 			for (String valueName : valueSubsets.keySet()) {
 				ArrayList<Instance> subset = valueSubsets.get(valueName);
-				if (subset.size() == 0) {
-					String leafLabel = getMajorityLabel(target, instances);
-					TreeNode leaf = new TreeNode(leafLabel);
-					root.addChild(valueName, leaf);
-				} else {
-					TreeNode child = constructTree(target, attributes, subset);
-					root.addChild(valueName, child);
-				}			
+				if(getIsPruned().equals("True"))
+				{
+					if (count < this.getMax_depth()) {
+						count += 1;
+						TreeNode child = constructTree(target, attributes, subset);
+						root.addChild(valueName, child);
+					}
+					else {
+						String leafLabel = getMajorityLabel(target, instances);
+						TreeNode leaf = new TreeNode(leafLabel);
+						root.addChild(valueName, leaf);
+					}
+				}
+				else
+				{
+					if (subset.size() == 0) 
+					{
+						String leafLabel = getMajorityLabel(target, instances);
+						TreeNode leaf = new TreeNode(leafLabel);
+						root.addChild(valueName, leaf);
+					} else {
+						TreeNode child = constructTree(target, attributes, subset);
+						root.addChild(valueName, child);
+					}
+				}		
 			}	
 		}
 		

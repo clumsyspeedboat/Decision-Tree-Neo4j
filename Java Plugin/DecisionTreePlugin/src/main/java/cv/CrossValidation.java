@@ -294,15 +294,15 @@ public class CrossValidation {
 			ConstructTree tree;
 			if(algorithmType == "InfoGain")
 			{
-				tree = new ConstructTree(trainInstances, attributes, target);
+				tree = new ConstructTree(trainInstances, attributes, target, "False", 0);
 			}
 			else if(algorithmType == "GainRatio")
 			{
-				tree = new ConstructTreeGR(trainInstances, attributes, target);
+				tree = new ConstructTreeGR(trainInstances, attributes, target, "False", 0);
 			}
 			else
 			{
-				tree = new ConstructTreeGI(trainInstances, attributes, target);
+				tree = new ConstructTreeGI(trainInstances, attributes, target, "False", 0);
 			}
 			
 			root = tree.construct();

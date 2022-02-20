@@ -132,7 +132,7 @@ public class GiniTreeTester {
 		Attribute target = createTarget();
 		ArrayList<Attribute> attList = createAttributes();
 		
-		ConstructTreeGI tree = new ConstructTreeGI(instances, attList, target);
+		ConstructTreeGI tree = new ConstructTreeGI(instances, attList, target,"False",0);
 		TreeNode root = tree.construct();
 	    
 		PrintTree p = new PrintTree();

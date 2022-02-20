@@ -27,26 +27,14 @@ public class ClassifyMainGI {
 		
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
-//		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],Constants.TARGET_ATTRIBUTE);
-		//ArrayList<String> trainFile = ProcessInputData.CustomListFromCSV("data/flu_train.csv");
-		//ArrayList<String> testFile = ProcessInputData.CustomListFromCSV("data/flu_test.csv");
-		//EvaluateTreeGI mine = new EvaluateTreeGI(trainFile,testFile,Constants.TARGET_ATTRIBUTE);
-		
-		ArrayList<String> customList = ProcessInputData.CustomListFromCSV("data/diabetes_health_indicators.csv");
+		EvaluateTreeGI mine = new EvaluateTreeGI(paths[0],paths[1],Constants.TARGET_ATTRIBUTE, Constants.IS_PRUNED, Constants.MAX_DEPTH);
 
-		CrossValidation cv = new CrossValidation(customList, "Diabetes_012");
+		mine.calculateAccuracy();
 		
-		ArrayList<Double> final_score = cv.validate(Integer.parseInt("5"), "Gini");
-//		double mcc = cv.getMccAverage();
-//		System.out.println("calculated mcc: " + mcc);
-//		double totalGenerationTime = cv.getCvGenerationTimeAverage();
-//		System.out.println("calculated generation time: " + totalGenerationTime);
-//
-//		double score = cv.getScoreAverage();
-//		
-//		System.out.println("calculated accuracy: " + score);
-//		
-//	    PrintTree tree = new PrintTree();
+	    PrintTree tree = new PrintTree();
+	    System.out.println(mine.getRoot());
+	    
+		tree.createNodesForGraph(mine.getRoot());
 	    
 		in.close();
 	}
