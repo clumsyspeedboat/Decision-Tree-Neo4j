@@ -1077,7 +1077,7 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 		{
 			String dbscanAfterClustering = "";
 			HashMap<String,ArrayList<String>> dbAssign = new HashMap<String,ArrayList<String>>();
-			double eps = Integer.parseInt(epsilon);
+			double eps = Double.parseDouble(epsilon);
 			int minPts = Integer.parseInt(minimumPoints);
 			dbAssign = Unsupervised.DbClust(mapNodeList, eps, minPts, distanceMeasure);
 			for (String centroid: dbAssign.keySet()) {

@@ -15,16 +15,16 @@ public class Unsupervised {
 	
 	public static ArrayList<String> dummyData(){
 		ArrayList<String> data = new ArrayList<String>();
-//		String line1 ="anaemia:0,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:582,platelets:265000.0,DEATH_EVENT:1,high_blood_pressure:1,smoking:0,time:4,serum_sodium:130,diabetes:0,age:75";
-//		String line2 ="anaemia:0,serum_creatinine:1.1,sex:1,ejection_fraction:38,creatinine_phosphokinase:7861,platelets:263358.03,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:6,serum_sodium:136,diabetes:0,age:55";
-//		String line3 ="anaemia:0,serum_creatinine:1.3,sex:1,ejection_fraction:20,creatinine_phosphokinase:146,platelets:162000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:1,time:7,serum_sodium:129,diabetes:0,age:65";
-//		String line4 ="anaemia:1,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:111,platelets:210000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:7,serum_sodium:137,diabetes:0,age:50";
-//		String line5 ="anaemia:1,serum_creatinine:2.7,sex:0,ejection_fraction:20,creatinine_phosphokinase:160,platelets:327000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:8,serum_sodium:116,diabetes:1,age:65|anaemia:1,serum_creatinine:2.1,sex:1,ejection_fraction:40,creatinine_phosphokinase:47,platelets:204000.0,DEATH_EVENT:1,high_blood_pressure:1,smoking:1,time:8,serum_sodium:132,diabetes:0,age:90";
-		String line1 = "anaemia:0,serum_creatinine:1.9";
-		String line2 = "anaemia:0,serum_creatinine:1.1";
-		String line3 = "anaemia:0,serum_creatinine:1.3";
-		String line4 = "anaemia:1,serum_creatinine:1.9";
-		String line5 = "anaemia:1,serum_creatinine:2.7";
+		String line1 ="anaemia:0,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:582,platelets:265000.0,DEATH_EVENT:1,high_blood_pressure:1,smoking:0,time:4,serum_sodium:130,diabetes:0,age:75";
+		String line2 ="anaemia:0,serum_creatinine:1.1,sex:1,ejection_fraction:38,creatinine_phosphokinase:7861,platelets:263358.03,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:6,serum_sodium:136,diabetes:0,age:55";
+		String line3 ="anaemia:0,serum_creatinine:1.3,sex:1,ejection_fraction:20,creatinine_phosphokinase:146,platelets:162000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:1,time:7,serum_sodium:129,diabetes:0,age:65";
+		String line4 ="anaemia:1,serum_creatinine:1.9,sex:1,ejection_fraction:20,creatinine_phosphokinase:111,platelets:210000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:7,serum_sodium:137,diabetes:0,age:50";
+		String line5 ="anaemia:1,serum_creatinine:2.7,sex:0,ejection_fraction:20,creatinine_phosphokinase:160,platelets:327000.0,DEATH_EVENT:1,high_blood_pressure:0,smoking:0,time:8,serum_sodium:116,diabetes:1,age:65";
+//		String line1 = "anaemia:0,serum_creatinine:1.9";
+//		String line2 = "anaemia:0,serum_creatinine:1.1";
+//		String line3 = "anaemia:0,serum_creatinine:1.3";
+//		String line4 = "anaemia:1,serum_creatinine:1.9";
+//		String line5 = "anaemia:1,serum_creatinine:2.7";
 		data.add(line1);
 		data.add(line2);
 		data.add(line3);
@@ -36,8 +36,14 @@ public class Unsupervised {
 	public static void main(String[] args)
 	{
 		  ArrayList<String> inputData = dummyData(); 
-		  HashMap<String, ArrayList<String>> dbScan = DbClust(inputData, 0.9, 2, "euclidean");
-		  System.out.println(dbScan.toString());
+		  HashMap<String, ArrayList<String>> dbAssign = DbClust(inputData, 20000, 2, "manhattan");		  
+		  for (String centroid: dbAssign.keySet()) {
+			  System.out.println("1");
+      		ArrayList<String> clusterNode = dbAssign.get(centroid);
+      		System.out.println(centroid);
+      		System.out.println(clusterNode.toString());
+  		    
+  		}
 
 	}
 	
@@ -76,7 +82,7 @@ public class Unsupervised {
             {
             	distance = calEuclideanDist(inputValue, candidate);
             }
-            
+            System.out.println(distance);
             if (distance <= epsilon) {
                 neighbours.add(candidate);
             }
@@ -92,8 +98,8 @@ public class Unsupervised {
      * @param neighbours2 right collection
      * @return Modified left collection
      */
-    public static ArrayList<String> mergeRightToLeftCollection(final ArrayList<String> neighbours1,
-            final ArrayList<String> neighbours2) {
+    public static ArrayList<String> mergeRightToLeftCollection(final ArrayList<String> neighbours1,final ArrayList<String> neighbours2) 
+    {
         for (int i = 0; i < neighbours2.size(); i++) {
             String tempPt = neighbours2.get(i);
             if (!neighbours1.contains(tempPt)) {
@@ -126,13 +132,15 @@ public class Unsupervised {
 
         ArrayList<String> neighbours;
         int index = 0;
-
         while (inputValues.size() > index) {
             String p = inputValues.get(index);
+            System.out.println(p);
+            System.out.println("------------------------------------");
             if (!visitedPoints.contains(p)) {
                 visitedPoints.add(p);
                 neighbours = getNeighbours(p , distanceMetric);
-
+                System.out.println("*********************************************");
+                System.out.println(neighbours.size());
                 if (neighbours.size() >= minPts) {
                     int ind = 0;
                     while (neighbours.size() > ind) {
@@ -141,9 +149,7 @@ public class Unsupervised {
                             visitedPoints.add(r);
                             ArrayList<String> individualNeighbours = getNeighbours(r, distanceMetric);
                             if (individualNeighbours.size() >= minPts) {
-                                neighbours = mergeRightToLeftCollection(
-                                        neighbours,
-                                        individualNeighbours);
+                                neighbours = mergeRightToLeftCollection(neighbours,individualNeighbours);
                             }
                         }
                         ind++;
