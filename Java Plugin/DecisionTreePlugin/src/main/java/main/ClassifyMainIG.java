@@ -28,11 +28,12 @@ public class ClassifyMainIG {
 		String[] paths = Constants.LOCAL_DATASET.split(",");
 		
 	    EvaluateTree mine = new EvaluateTree(paths[0], paths[1], Constants.TARGET_ATTRIBUTE, Constants.IS_PRUNED, Constants.MAX_DEPTH);
-
+	    
 	    mine.calculateAccuracy();
 		
 	    PrintTree tree = new PrintTree();
 	    System.out.println(mine.getRoot());
+	    System.out.println(mine.getFeatureTable());
 	    
 		tree.createNodesForGraph(mine.getRoot());
 		

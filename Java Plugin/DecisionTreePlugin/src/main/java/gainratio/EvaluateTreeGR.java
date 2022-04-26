@@ -14,6 +14,7 @@ import evaluate.EvaluateTree;
 public class EvaluateTreeGR extends EvaluateTree{
 	String isPruned = "True";
 	int max_depth = 3;
+	private String featureTable;
 	
 	public EvaluateTreeGR(String trainData, String testData, String targetAtt, String isPruned, int max_depth) throws IOException {
 		super(trainData,testData, targetAtt, isPruned, max_depth);
@@ -42,6 +43,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		ConstructTreeGR tree = new ConstructTreeGR(getTrainInstances(), getAttributes(), getTarget(), isPruned, max_depth);
 		//root = tree.construct();
 		super.setRoot(tree.construct());
+		featureTable = tree.getFeatureTable();
 
 		long teTime = System.currentTimeMillis();
 		double generationTime = (teTime-tstTime)/1000f;
@@ -55,9 +57,7 @@ public class EvaluateTreeGR extends EvaluateTree{
 		ArrayList<Instance> res = getResult();
 		
 		createClassificationResults(res);
-		
-		System.out.println(predictedResults);
-		
+				
 	
 		
 //		for (HashMap.Entry<String, ArrayList<String>> entry : predictedResults.entrySet()) {
@@ -99,16 +99,8 @@ public class EvaluateTreeGR extends EvaluateTree{
 		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public String getFeatureTable()
+	{
+		return featureTable;
+	}
 }

@@ -33,6 +33,7 @@ public class ClassifyMainGI {
 		
 	    PrintTree tree = new PrintTree();
 	    System.out.println(mine.getRoot());
+	    System.out.println(mine.getFeatureTable());
 	    
 		tree.createNodesForGraph(mine.getRoot());
 	    

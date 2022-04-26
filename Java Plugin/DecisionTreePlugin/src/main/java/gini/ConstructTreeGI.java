@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 public class ConstructTreeGI extends ConstructTree{
 	int count =0;
+	private String featureTable = "";
 	
 	public ConstructTreeGI(ArrayList<Instance> instances, ArrayList<Attribute> attributes, Attribute target, String isPruned, int max_depth){
 		super(instances,attributes,target,isPruned,max_depth);
@@ -57,7 +58,8 @@ public class ConstructTreeGI extends ConstructTree{
 		// Choose the root attribute
 		ChooseAttributeGI choose = new ChooseAttributeGI(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		
+		String feature = rootAttr.toString() + "; GiniValue: " + choose.getInfoGain();
+		featureTable = featureTable + "|" + feature;
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
@@ -108,5 +110,8 @@ public class ConstructTreeGI extends ConstructTree{
 		return root;
 	}
 	
-
+	public String getFeatureTable()
+	{
+		return featureTable;
+	}
 }

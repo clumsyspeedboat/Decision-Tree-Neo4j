@@ -9,6 +9,7 @@ import definition.*;
 public class EvaluateTreeGI extends EvaluateTree{
 	String isPruned = "True";
 	int max_depth = 3;
+	private String featureTable;
 	
 	/**
 	 * Constructor to process the csv path 
@@ -52,6 +53,7 @@ public class EvaluateTreeGI extends EvaluateTree{
 		long tstTime = System.currentTimeMillis();
 		ConstructTreeGI tree = new ConstructTreeGI(getTrainInstances(), getAttributes(), getTarget(), isPruned, max_depth);
 		super.setRoot(tree.construct());
+		featureTable = tree.getFeatureTable();
 		
 		
 		
@@ -103,5 +105,10 @@ public class EvaluateTreeGI extends EvaluateTree{
 		
 		//System.out.println("Accuracy:" + getScore()*100 + "%");
 		return "Time taken to generate tree: " + generationTime + " s\n" + "Time taken to generate prediction: " + predTime + " s\n" + confusionMatrix + "%";
+	}
+	
+	public String getFeatureTable()
+	{
+		return featureTable;
 	}
 }

@@ -30,6 +30,7 @@ public class EvaluateTree {
 	private TreeNode root;
 	protected ArrayList<Instance> result;
 	private Double score = 0.0;
+	private String featureTable;
 	
 
 	/**
@@ -240,7 +241,7 @@ public class EvaluateTree {
 		
 		ConstructTree tree = new ConstructTree(this.trainInstances, this.attributes, this.target, this.isPruned, this.max_depth);
 		root = tree.construct();
-		
+		featureTable = tree.getFeatureTable();
 
 		long teTime = System.currentTimeMillis();
 		
@@ -385,6 +386,10 @@ public class EvaluateTree {
 	public Double getScore() {
 		return score;
 	}
-
+	
+	public String getFeatureTable()
+	{
+		return featureTable;
+	}
 	
 }

@@ -19,6 +19,7 @@ public class ConstructTree {
 	int count = 0; 
 	private int max_depth = 3;
 	private String isPruned = "True";
+	private String featureTable = "";
 	
 	
 	public ConstructTree(String fileName, String targetAttr, String isPruned, int max_depth) throws IOException {
@@ -79,7 +80,8 @@ public class ConstructTree {
 		// Choose the root attribute
 		ChooseAttribute choose = new ChooseAttribute(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		System.out.println(rootAttr.toString());
+		String feature = rootAttr.toString() + "; InfoGainValue: " + choose.getInfoGain();
+		featureTable = featureTable + "|" + feature;
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
@@ -130,7 +132,6 @@ public class ConstructTree {
 		
 		
 		attributes.add(rootAttr);
-		System.out.println("------------------" + attributes.toString());
 		return root;
 	}
 
@@ -170,7 +171,11 @@ public class ConstructTree {
 		}
 		return maxLabel;
 	}
-
+	
+	public String getFeatureTable()
+	{
+		return featureTable;
+	}
 
 	public int getMax_depth() {
 		return max_depth;

@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 public class ConstructTreeGR extends ConstructTree{
 	int count = 0; 
+	private String featureTable = "";
 	
 	public ConstructTreeGR(ArrayList<Instance> instances, ArrayList<Attribute> attributes, Attribute target, String isPruned, int max_depth) {
 		super(instances, attributes, target, isPruned, max_depth);
@@ -63,7 +64,9 @@ public class ConstructTreeGR extends ConstructTree{
 		// Choose the root attribute
 		ChooseAttributeGR choose = new ChooseAttributeGR(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-
+		String feature = rootAttr.toString() + "; GainRatioValue: " + choose.getInfoGain();
+		featureTable = featureTable + "|" + feature;
+		
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 
@@ -116,5 +119,10 @@ public class ConstructTreeGR extends ConstructTree{
 		attributes.add(rootAttr);
 
 		return root;
+	}
+	
+	public String getFeatureTable()
+	{
+		return featureTable;
 	}
 }
