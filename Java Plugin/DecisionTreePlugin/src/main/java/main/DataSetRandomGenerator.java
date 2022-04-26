@@ -1,5 +1,6 @@
 package main;
 
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,6 +17,10 @@ public class DataSetRandomGenerator {
 			{
 				generatedRandomInstance = generatedRandomInstance + "," + "Columns" + (j+1) + ":" + Math.random();
 			}
+			Random r = new Random();
+			int max = 2;
+			int min = 1;
+			generatedRandomInstance = generatedRandomInstance + ",ClassLabel:" + (r.nextInt((max - min) + 1) + min);
 			generatedRandomDataList.add(generatedRandomInstance);
 		}
 		for(String part:generatedRandomDataList)
@@ -27,6 +32,6 @@ public class DataSetRandomGenerator {
 	
 	
 	public static void main(String[] args) {
-		RandomGenerateDataList(5,5);
+		RandomGenerateDataList(20,5);
 	}
 }

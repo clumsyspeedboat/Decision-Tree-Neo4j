@@ -79,7 +79,7 @@ public class ConstructTree {
 		// Choose the root attribute
 		ChooseAttribute choose = new ChooseAttribute(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		
+		System.out.println(rootAttr.toString());
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
@@ -130,7 +130,7 @@ public class ConstructTree {
 		
 		
 		attributes.add(rootAttr);
-		
+		System.out.println("------------------" + attributes.toString());
 		return root;
 	}
 
