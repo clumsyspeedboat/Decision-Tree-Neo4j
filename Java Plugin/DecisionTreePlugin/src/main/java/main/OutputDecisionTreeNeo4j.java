@@ -1070,7 +1070,77 @@ public class OutputDecisionTreeNeo4j implements AutoCloseable{
 	        return result ;
 		}
 	}
-
+    
+    @UserFunction
+    @Description("generate the feature table from neo4j dataset")
+	public String featureTable(@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth, @Name("Algorithm Type") String algoType) throws Exception
+	{
+    	boolean isTrainListEmpty = trainDataList.isEmpty();
+		boolean isTestListEmpty = testDataList.isEmpty();
+		if(isTrainListEmpty && isTestListEmpty) {
+			return "Need to query to data";
+		}
+		else
+		{
+			String featureTable = "";
+			int maxDepth = Integer.parseInt(max_depth);
+			if (algoType.equals("GR"))
+			{
+				EvaluateTreeGR mine = new EvaluateTreeGR(trainDataList, testDataList, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			else if (algoType.equals("GI"))
+			{
+				EvaluateTreeGI mine = new EvaluateTreeGI(trainDataList, testDataList, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			else
+			{
+				EvaluateTree mine = new EvaluateTree(trainDataList, testDataList, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			
+			return "The feature table: " + featureTable;
+		}
+	}
+    
+    @UserFunction
+    @Description("generate the feature table from neo4j dataset")
+	public String featureTableCsv(@Name("trainPath") String trainPath,@Name("testPath") String testPath,@Name("target") String target, @Name("isPruned") String isPruned, @Name("maxDepth") String max_depth, @Name("Algorithm Type") String algoType) throws Exception
+	{
+    	if(trainPath == null || testPath == null)
+		{
+			return null;
+		}
+		else
+		{
+			String featureTable = "";
+			int maxDepth = Integer.parseInt(max_depth);
+			if (algoType.equals("GR"))
+			{
+				EvaluateTreeGR mine = new EvaluateTreeGR(trainPath, testPath, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			else if (algoType.equals("GI"))
+			{
+				EvaluateTreeGI mine = new EvaluateTreeGI(trainPath, testPath, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			else
+			{
+				EvaluateTree mine = new EvaluateTree(trainPath, testPath, target, isPruned, maxDepth);
+				mine.calculateAccuracy();
+				featureTable = mine.getFeatureTable();
+			}
+			
+			return "The feature table: " + featureTable;
+		}
+	}
     
     
 

@@ -64,8 +64,11 @@ public class ConstructTreeGR extends ConstructTree{
 		// Choose the root attribute
 		ChooseAttributeGR choose = new ChooseAttributeGR(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		String feature = rootAttr.toString() + "; GainRatioValue: " + choose.getInfoGain();
-		featureTable = featureTable + "|" + feature;
+		if(rootAttr!=null)
+		{
+			String feature = rootAttr.toString() + "; GainRatioValue: " + choose.getInfoGain();
+			featureTable = featureTable + "|" + feature;	
+		}
 		
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);

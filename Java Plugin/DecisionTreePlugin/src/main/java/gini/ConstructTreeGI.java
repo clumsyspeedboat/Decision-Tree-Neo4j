@@ -58,8 +58,11 @@ public class ConstructTreeGI extends ConstructTree{
 		// Choose the root attribute
 		ChooseAttributeGI choose = new ChooseAttributeGI(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		String feature = rootAttr.toString() + "; GiniValue: " + choose.getInfoGain();
-		featureTable = featureTable + "|" + feature;
+		if(rootAttr!=null)
+		{
+			String feature = rootAttr.toString() + "; GiniValue: " + choose.getInfoGain();
+			featureTable = featureTable + "|" + feature;	
+		}
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		

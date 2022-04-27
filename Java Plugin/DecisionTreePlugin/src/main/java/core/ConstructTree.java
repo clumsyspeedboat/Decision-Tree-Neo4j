@@ -80,8 +80,11 @@ public class ConstructTree {
 		// Choose the root attribute
 		ChooseAttribute choose = new ChooseAttribute(target, attributes, instances);
 		Attribute rootAttr = choose.getChosen();
-		String feature = rootAttr.toString() + "; InfoGainValue: " + choose.getInfoGain();
-		featureTable = featureTable + "|" + feature;
+		if(rootAttr!=null)
+		{
+			String feature = rootAttr.toString() + "; InfoGainValue: " + choose.getInfoGain();
+			featureTable = featureTable + "|" + feature;	
+		}
 		// Remove the chosen attribute from attribute set
 		attributes.remove(rootAttr);
 		
