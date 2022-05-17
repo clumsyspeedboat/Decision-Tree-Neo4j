@@ -19,7 +19,7 @@ DTP comprises of 19 procedures, which read CSV-files, map nodes, split data,
 generate decision tree using 3 different metrics , perform k-fold cross
 validation, validate the classifier and visualize tree.
 
-## Procdures to 
+## Procedures to 
 ### -> map data into training and testing
 ### [- Query data for training and testing](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Query-nodes-from-Neo4j#query-data)
 ### [- Display training and testing data after mapping]()
