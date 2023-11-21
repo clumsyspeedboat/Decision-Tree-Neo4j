@@ -5,13 +5,14 @@ A plug-in to create decision tree algorithms in Neo4j with the following splitti
 * **Gain Ratio**
 
 ## [About](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki#About)
-## Methodology
+### Methodology
 
 ![DTP_Methodology](https://user-images.githubusercontent.com/57228346/155505999-9aae2aa8-c84e-45cc-b3d5-039c57600fa0.png)
-
-
 ### [- Compile the JAR File of DTP Yourself](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/wiki/Install-Decision-Tree-Plugin-in-Neo4j)
 ### [- Download the JAR File of DTP](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/tree/main/Jar%20File)
+
+### Procedure Stack
+![image](https://github.com/clumsyspeedboat/Decision-Tree-Neo4j/assets/57228346/d485ac24-7180-4945-8ba7-86f98c128806)
 
 ## Features
 
